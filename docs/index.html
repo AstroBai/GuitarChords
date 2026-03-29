@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guitar Chords (No Backend)</title>
+  <style>
+    :root {
+      --bg: #f4f7f3;
+      --card: #ffffff;
+      --ink: #1f2d1f;
+      --accent: #216c4a;
+      --accent-soft: #d9f0e5;
+      --line: #d5ded3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, #edf7f0 0%, transparent 35%),
+        radial-gradient(circle at 80% 0%, #e8f3ec 0%, transparent 28%),
+        var(--bg);
+      color: var(--ink);
+    }
+    .app { max-width: 1320px; margin: 0 auto; padding: 16px; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      position: sticky;
+      top: 8px;
+      z-index: 2;
+    }
+    input, select, button {
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #bccabf;
+      padding: 8px 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+    button {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .meta { margin: 10px 0; font-size: 14px; }
+    .jump { margin: 8px 0 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .jump a {
+      color: #0f5e3f;
+      text-decoration: none;
+      border: 1px solid #b9d6c9;
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 13px;
+    }
+    .group-title { margin: 16px 0 8px; font-size: 20px; font-weight: 700; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(460px, 1fr)); gap: 14px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .svg-wrap { border: 1px solid #e8efe8; border-radius: 8px; padding: 6px; overflow: auto; }
+    .notes { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .notes button { background: #fff; color: var(--ink); border-color: #b8c7ba; }
+    @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="toolbar">
+      <label>Chord <input id="chord" value="Cmaj" /></label>
+      <label>Inversion Filter
+        <select id="inversion-filter">
+          <option value="all" selected>All</option>
+          <option value="root">Root position</option>
+          <option value="1st">1st inversion</option>
+          <option value="2nd">2nd inversion</option>
+          <option value="3rd">3rd inversion</option>
+        </select>
+      </label>
+      <button id="search">Generate</button>
+    </div>
+    <div class="meta" id="meta">Loading Python engine...</div>
+    <div class="jump" id="jump"></div>
+    <div id="groups"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
+  <script>
+    let state = { chord: 'Cmaj', inversionFilter: 'all', page: 1, pageCount: 1 };
+    let pyodide = null;
+    let pyReady = null;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let sampleBuffer = null;
+    let sampleBaseFreq = 110.0;
+
+    async function ensureSampleLoaded() {
+      if (sampleBuffer) return sampleBuffer;
+      const res = await fetch('./guitar.wav');
+      if (!res.ok) throw new Error('guitar.wav not found in docs/.');
+      const arr = await res.arrayBuffer();
+      sampleBuffer = await audioCtx.decodeAudioData(arr);
+      return sampleBuffer;
+    }
+
+    async function playFreq(freq, when = 0, velocity = 0.95) {
+      const buf = await ensureSampleLoaded();
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      const loweredFreq = freq * 0.5;
+      const rate = Math.max(0.25, Math.min(4.0, loweredFreq / sampleBaseFreq));
+      src.playbackRate.value = rate;
+      const gain = audioCtx.createGain();
+      const t0 = audioCtx.currentTime + when;
+      const naturalDuration = buf.duration / rate;
+      const release = Math.min(0.03, naturalDuration * 0.2);
+      const releaseStart = Math.max(t0 + 0.01, t0 + naturalDuration - release);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(velocity, t0 + 0.01);
+      gain.gain.setValueAtTime(velocity, releaseStart);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + naturalDuration);
+      src.connect(gain).connect(audioCtx.destination);
+      src.start(t0);
+      src.stop(t0 + naturalDuration + 0.01);
+    }
+
+    async function playChord(freqs) {
+      await ensureSampleLoaded();
+      freqs.forEach(f => playFreq(f, 0, 0.9));
+    }
+
+    async function playArp(freqs) {
+      await ensureSampleLoaded();
+      freqs.forEach((f, i) => playFreq(f, i * 0.14, 0.9));
+    }
+
+    function noteButtons(names, freqs) {
+      return names.map((name, idx) => `<button data-f='${freqs[idx]}'>${name}</button>`).join('');
+    }
+
+    async function ensurePyReady() {
+      if (pyReady) return pyReady;
+      pyReady = (async () => {
+        pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.5/full/' });
+        const pySrc = await (await fetch('./GuitarChords.py')).text();
+        await pyodide.runPythonAsync(pySrc + '\nvisualizer_static = GuitarChords()\n');
+      })();
+      return pyReady;
+    }
+
+    async function fetchGroups() {
+      await ensurePyReady();
+      pyodide.globals.set('arg_chord', state.chord);
+      pyodide.globals.set('arg_filter', state.inversionFilter);
+      const payloadJson = await pyodide.runPythonAsync(`import json\njson.dumps(visualizer_static.get_shapes_grouped(chord_name=arg_chord, max_shapes=None, inversion_filter=arg_filter), ensure_ascii=False)`);
+      return JSON.parse(payloadJson);
+    }
+
+    function render(data) {
+      sampleBaseFreq = data.sample_base_freq || 110.0;
+      const filterLabelMap = { all: 'All', root: 'Root', '1st': '1st', '2nd': '2nd', '3rd': '3rd' };
+      const activeFilter = filterLabelMap[data.inversion_filter] || 'All';
+      document.getElementById('meta').textContent = `Chord ${data.chord} | Filter ${activeFilter} | Matched ${data.total_visible} shapes`;
+
+      const filterSelect = document.getElementById('inversion-filter');
+      const counts = data.inversion_counts || {};
+      const options = [
+        { value: 'all', label: 'All' },
+        { value: 'root', label: `Root position (${counts.root ?? 0})` },
+        { value: '1st', label: `1st inversion (${counts['1st'] ?? 0})` },
+        { value: '2nd', label: `2nd inversion (${counts['2nd'] ?? 0})` },
+        { value: '3rd', label: `3rd inversion (${counts['3rd'] ?? 0})` },
+      ];
+      filterSelect.innerHTML = options.map(opt => `<option value='${opt.value}'>${opt.label}</option>`).join('');
+      filterSelect.value = state.inversionFilter;
+
+      const groups = document.getElementById('groups');
+      const jump = document.getElementById('jump');
+      const order = ['C', 'A', 'G', 'E', 'D'];
+      const availableGroups = order.filter(key => (data.groups[key] || []).length > 0);
+      const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${key}-shape (${(data.groups[key] || []).length})</a>`);
+
+      state.pageCount = Math.max(1, availableGroups.length);
+      state.page = Math.max(1, Math.min(state.page, state.pageCount));
+      const activeGroup = availableGroups[state.page - 1] || null;
+      const pageItems = activeGroup ? (data.groups[activeGroup] || []) : [];
+
+      jump.innerHTML = groupLinks.join(' ');
+      jump.querySelectorAll('a[data-group]').forEach(link => {
+        link.onclick = (e) => {
+          e.preventDefault();
+          const target = link.getAttribute('data-group');
+          const idx = availableGroups.indexOf(target);
+          if (idx >= 0) {
+            state.page = idx + 1;
+            render(data);
+          }
+        };
+      });
+
+      groups.innerHTML = activeGroup ? (() => {
+        const cards = pageItems.map(item => `
+          <div class='card' id='${item.anchor}'>
+            <div>Fingering: ${item.fingering}</div>
+            ${item.is_inversion ? `<div>Inversion: ${item.inversion}</div>` : ''}
+            <div class='svg-wrap'>${item.svg}</div>
+            <div class='notes'>
+              <span>Shape Notes:</span>
+              <button class='play-shape-arp'>Arpeggio</button>
+              <button class='play-shape-chord'>Chord</button>
+              ${noteButtons(item.shape_note_names, item.shape_note_freqs)}
+            </div>
+          </div>
+        `).join('');
+        return `<div class='group-title'>${activeGroup}-shape (${pageItems.length})</div><div class='grid'>${cards}</div>`;
+      })() : '';
+
+      const allCards = groups.querySelectorAll('.card');
+      allCards.forEach((card, idx) => {
+        const item = pageItems[idx];
+        if (!item) return;
+        card.querySelector('.play-shape-arp').onclick = () => playArp(item.shape_note_freqs);
+        card.querySelector('.play-shape-chord').onclick = () => playChord(item.shape_note_freqs);
+        card.querySelectorAll('button[data-f]').forEach(btn => {
+          btn.onclick = () => playFreq(parseFloat(btn.dataset.f), 0, 0.95);
+        });
+      });
+    }
+
+    async function load() {
+      try {
+        const data = await fetchGroups();
+        render(data);
+      } catch (e) {
+        document.getElementById('meta').textContent = `Error: ${e.message}`;
+      }
+    }
+
+    function runSearch(resetPage = true) {
+      state.chord = document.getElementById('chord').value.trim() || 'C';
+      state.inversionFilter = document.getElementById('inversion-filter').value;
+      if (resetPage) state.page = 1;
+      load();
+    }
+
+    document.getElementById('search').onclick = () => runSearch(true);
+    document.getElementById('chord').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        runSearch(true);
+      }
+    });
+    document.getElementById('inversion-filter').addEventListener('change', () => runSearch(true));
+
+    load();
+  </script>
+</body>
+</html>
