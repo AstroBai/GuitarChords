@@ -118,6 +118,11 @@
     let sampleBaseFreq = 110.0;
     let audioUnlocked = false;
     let htmlAudioUnlocked = false;
+    const FIXED_NOTE_DURATION = 0.48;
+    const MOBILE_AUDIO_POOL_SIZE = 10;
+    let mobileAudioPool = [];
+    let mobileAudioPoolReady = false;
+    let mobilePoolIndex = 0;
 
     function setStatus(message, isError = false) {
       const el = document.getElementById('status');
@@ -178,18 +183,51 @@
         probe.pause();
         probe.currentTime = 0;
         htmlAudioUnlocked = true;
+        if (!mobileAudioPoolReady) {
+          mobileAudioPool = Array.from({ length: MOBILE_AUDIO_POOL_SIZE }, () => {
+            const a = new Audio('./guitar.wav?v=20260329c');
+            a.preload = 'auto';
+            a.setAttribute('playsinline', '');
+            a.playsInline = true;
+            return a;
+          });
+          mobileAudioPoolReady = true;
+        }
         setStatus('HTML audio unlocked');
       } catch (e) {
         throw new Error('Tap play button again to unlock mobile audio.');
       }
     }
 
+    function getMobileAudioVoice() {
+      if (!mobileAudioPoolReady || mobileAudioPool.length === 0) {
+        const fallback = new Audio('./guitar.wav?v=20260329c');
+        fallback.preload = 'auto';
+        fallback.setAttribute('playsinline', '');
+        fallback.playsInline = true;
+        return fallback;
+      }
+
+      const size = mobileAudioPool.length;
+      for (let i = 0; i < size; i += 1) {
+        const idx = (mobilePoolIndex + i) % size;
+        const a = mobileAudioPool[idx];
+        if (a.paused || a.ended) {
+          mobilePoolIndex = (idx + 1) % size;
+          return a;
+        }
+      }
+
+      const a = mobileAudioPool[mobilePoolIndex];
+      mobilePoolIndex = (mobilePoolIndex + 1) % size;
+      a.pause();
+      a.currentTime = 0;
+      return a;
+    }
+
     async function playFreqHtml(freq, when = 0, velocity = 0.95) {
       await ensureHtmlAudioReady();
-      const audio = new Audio('./guitar.wav?v=20260329c');
-      audio.preload = 'auto';
-      audio.setAttribute('playsinline', '');
-      audio.playsInline = true;
+      const audio = getMobileAudioVoice();
       const loweredFreq = freq * 0.5;
       const rate = Math.max(0.25, Math.min(4.0, loweredFreq / sampleBaseFreq));
       // Ensure playback rate changes pitch on mobile browsers (disable time-stretch pitch correction).
@@ -199,11 +237,21 @@
       audio.defaultPlaybackRate = rate;
       audio.playbackRate = rate;
       audio.volume = Math.max(0.05, Math.min(1.0, velocity));
-      audio.currentTime = 0;
-      if (when > 0) {
-        await new Promise(resolve => setTimeout(resolve, Math.round(when * 1000)));
-      }
-      await audio.play();
+      const startMs = Math.max(0, Math.round(when * 1000));
+      const stopMs = Math.max(120, Math.round((when + FIXED_NOTE_DURATION) * 1000));
+
+      setTimeout(() => {
+        audio.currentTime = 0;
+        const p = audio.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch((e) => setStatus(`Audio error: ${e.message || e}`, true));
+        }
+      }, startMs);
+
+      setTimeout(() => {
+        audio.pause();
+        audio.currentTime = 0;
+      }, stopMs);
     }
 
     async function playFreq(freq, when = 0, velocity = 0.95) {
@@ -221,16 +269,16 @@
       src.playbackRate.value = rate;
       const gain = audioCtx.createGain();
       const t0 = audioCtx.currentTime + when;
-      const naturalDuration = buf.duration / rate;
-      const release = Math.min(0.03, naturalDuration * 0.2);
-      const releaseStart = Math.max(t0 + 0.01, t0 + naturalDuration - release);
+      const duration = FIXED_NOTE_DURATION;
+      const release = Math.min(0.03, duration * 0.2);
+      const releaseStart = Math.max(t0 + 0.01, t0 + duration - release);
       gain.gain.setValueAtTime(0.0001, t0);
       gain.gain.exponentialRampToValueAtTime(velocity, t0 + 0.01);
       gain.gain.setValueAtTime(velocity, releaseStart);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + naturalDuration);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
       src.connect(gain).connect(audioCtx.destination);
       src.start(t0);
-      src.stop(t0 + naturalDuration + 0.01);
+      src.stop(t0 + duration + 0.01);
       if (when === 0) setStatus('Play command sent');
     }
 
