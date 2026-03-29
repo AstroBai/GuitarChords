@@ -143,7 +143,7 @@
     });
 
     async function ensureAudioReady() {
-      if (isMobileAudio && !mobileWebAudioReady) {
+      if (isMobileAudio) {
         return;
       }
       setStatus(`Audio state: ${audioCtx.state}`);
@@ -160,7 +160,7 @@
     }
 
     async function ensureSampleLoaded() {
-      if (isMobileAudio && !mobileWebAudioReady) {
+      if (isMobileAudio) {
         return null;
       }
       await ensureAudioReady();
@@ -348,7 +348,7 @@
     }
 
     async function playFreq(freq, when = 0, velocity = 0.95) {
-      if (isMobileAudio && !mobileWebAudioReady) {
+      if (isMobileAudio) {
         await playFreqHtml(freq, when, velocity);
         if (when === 0) setStatus('Play command sent (HTML audio mobile)');
         return;
@@ -366,7 +366,7 @@
     }
 
     async function playChord(freqs) {
-      if (isMobileAudio && !mobileWebAudioReady) {
+      if (isMobileAudio) {
         await playChordHtml(freqs, 0.9);
         setStatus('Play command sent (HTML chord mobile)');
         return;
@@ -386,7 +386,7 @@
     }
 
     async function playArp(freqs) {
-      if (isMobileAudio && !mobileWebAudioReady) {
+      if (isMobileAudio) {
         freqs.forEach((f, i) => playFreqHtml(f, i * 0.14, 0.9));
         setStatus('Play command sent (HTML arpeggio mobile)');
         return;
@@ -406,8 +406,6 @@
 
     async function autoUnlockAudio() {
       if (isMobileAudio) {
-        await ensureMobileWebAudioReady();
-        if (mobileWebAudioReady) return;
         await ensureHtmlAudioReady();
         return;
       }
