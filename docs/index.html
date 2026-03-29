@@ -53,13 +53,6 @@
       font-weight: 600;
     }
     .meta { margin: 10px 0; font-size: 14px; }
-    .audio-state {
-      font-size: 13px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: #eef3ee;
-      border: 1px solid #c9d6cc;
-    }
     .jump { margin: 8px 0 12px; display: flex; flex-wrap: wrap; gap: 8px; }
     .jump a {
       color: #0f5e3f;
@@ -93,8 +86,6 @@
         </select>
       </label>
       <button id="search">Generate</button>
-      <button id="audio-toggle" type="button">Enable Audio</button>
-      <span class="audio-state" id="audio-state">Audio: OFF</span>
     </div>
     <div class="meta" id="meta">Loading Python engine...</div>
     <div class="jump" id="jump"></div>
@@ -110,71 +101,32 @@
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let sampleBuffer = null;
     let sampleBaseFreq = 110.0;
-    let audioEnabled = false;
-    let sampleFailed = false;
-
-    function updateAudioStateUI() {
-      const btn = document.getElementById('audio-toggle');
-      const state = document.getElementById('audio-state');
-      if (audioEnabled) {
-        btn.textContent = 'Disable Audio';
-        state.textContent = 'Audio: ON';
-      } else {
-        btn.textContent = 'Enable Audio';
-        state.textContent = 'Audio: OFF';
-      }
-    }
+    let audioUnlocked = false;
 
     async function ensureAudioReady() {
-      if (!audioEnabled) {
-        throw new Error('Audio is OFF. Tap Enable Audio first.');
-      }
       if (audioCtx.state !== 'running') {
         try {
           await audioCtx.resume();
+          audioUnlocked = true;
         } catch (e) {
-          throw new Error('Audio is locked. Tap Enable Audio again.');
+          throw new Error('Audio is locked. Tap a play button again.');
         }
       }
     }
 
     async function ensureSampleLoaded() {
       await ensureAudioReady();
-      if (sampleFailed) return null;
       if (sampleBuffer) return sampleBuffer;
-      try {
-        const res = await fetch('./guitar.wav');
-        if (!res.ok) throw new Error('guitar.wav not found in docs/.');
-        const arr = await res.arrayBuffer();
-        sampleBuffer = await audioCtx.decodeAudioData(arr);
-        return sampleBuffer;
-      } catch (e) {
-        sampleFailed = true;
-        return null;
-      }
-    }
-
-    function playOscFallback(freq, when = 0, velocity = 0.22, duration = 0.45) {
-      const t0 = audioCtx.currentTime + when;
-      const osc = audioCtx.createOscillator();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, t0);
-      const gain = audioCtx.createGain();
-      gain.gain.setValueAtTime(0.0001, t0);
-      gain.gain.exponentialRampToValueAtTime(velocity, t0 + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
-      osc.connect(gain).connect(audioCtx.destination);
-      osc.start(t0);
-      osc.stop(t0 + duration + 0.01);
+      const res = await fetch('./guitar.wav');
+      if (!res.ok) throw new Error('guitar.wav not found in docs/.');
+      const arr = await res.arrayBuffer();
+      sampleBuffer = await audioCtx.decodeAudioData(arr);
+      return sampleBuffer;
     }
 
     async function playFreq(freq, when = 0, velocity = 0.95) {
       await ensureAudioReady();
       const buf = await ensureSampleLoaded();
-      if (!buf) {
-        playOscFallback(freq, when, 0.22, 0.5);
-        return;
-      }
       const src = audioCtx.createBufferSource();
       src.buffer = buf;
       const loweredFreq = freq * 0.5;
@@ -206,32 +158,10 @@
       freqs.forEach((f, i) => playFreq(f, i * 0.14, 0.9));
     }
 
-    async function toggleAudio() {
-      const btn = document.getElementById('audio-toggle');
-      if (audioEnabled) {
-        audioEnabled = false;
-        updateAudioStateUI();
-        return;
-      }
-
-      btn.disabled = true;
-      try {
-        audioEnabled = true;
-        await ensureAudioReady();
-        // iOS warm-up: run a near-silent short tone right after resume.
-        playOscFallback(440, 0, 0.0002, 0.03);
-        await ensureSampleLoaded();
-        updateAudioStateUI();
-        if (sampleFailed) {
-          document.getElementById('meta').textContent = 'Audio enabled (fallback tone mode).';
-        }
-      } catch (e) {
-        audioEnabled = false;
-        updateAudioStateUI();
-        document.getElementById('meta').textContent = `Audio error: ${e.message}`;
-      } finally {
-        btn.disabled = false;
-      }
+    async function autoUnlockAudio() {
+      if (audioUnlocked && audioCtx.state === 'running') return;
+      await ensureAudioReady();
+      await ensureSampleLoaded();
     }
 
     function noteButtons(names, freqs) {
@@ -327,6 +257,7 @@
         if (!item) return;
         card.querySelector('.play-shape-arp').onclick = async () => {
           try {
+            await autoUnlockAudio();
             await playArp(item.shape_note_freqs);
           } catch (e) {
             document.getElementById('meta').textContent = `Audio error: ${e.message}`;
@@ -334,6 +265,7 @@
         };
         card.querySelector('.play-shape-chord').onclick = async () => {
           try {
+            await autoUnlockAudio();
             await playChord(item.shape_note_freqs);
           } catch (e) {
             document.getElementById('meta').textContent = `Audio error: ${e.message}`;
@@ -342,6 +274,7 @@
         card.querySelectorAll('button[data-f]').forEach(btn => {
           btn.onclick = async () => {
             try {
+              await autoUnlockAudio();
               await playFreq(parseFloat(btn.dataset.f), 0, 0.95);
             } catch (e) {
               document.getElementById('meta').textContent = `Audio error: ${e.message}`;
@@ -368,7 +301,6 @@
     }
 
     document.getElementById('search').onclick = () => runSearch(true);
-    document.getElementById('audio-toggle').onclick = () => toggleAudio();
     document.getElementById('chord').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -377,7 +309,6 @@
     });
     document.getElementById('inversion-filter').addEventListener('change', () => runSearch(true));
 
-    updateAudioStateUI();
     load();
   </script>
 </body>
