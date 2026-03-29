@@ -1512,36 +1512,37 @@ visualizer_web = GuitarChords()
 app = Flask(__name__) if Flask is not None else None
 
 
-@app.route("/")
-def index():
-    return Response(HTML_TEMPLATE, mimetype="text/html")
+if app is not None:
+    @app.route("/")
+    def index():
+        return Response(HTML_TEMPLATE, mimetype="text/html")
 
 
-@app.route("/favicon.ico")
-def favicon():
-    return Response(status=204)
+    @app.route("/favicon.ico")
+    def favicon():
+        return Response(status=204)
 
 
-@app.route("/audio/guitar.wav")
-def audio_guitar():
-    audio_path = os.path.join(os.path.dirname(__file__), "guitar.wav")
-    if not os.path.exists(audio_path):
-        return Response("guitar.wav not found", status=404)
-    return send_file(audio_path, mimetype="audio/wav")
+    @app.route("/audio/guitar.wav")
+    def audio_guitar():
+        audio_path = os.path.join(os.path.dirname(__file__), "guitar.wav")
+        if not os.path.exists(audio_path):
+            return Response("guitar.wav not found", status=404)
+        return send_file(audio_path, mimetype="audio/wav")
 
 
-@app.route("/api/shapes-grouped")
-def api_shapes_grouped():
-    chord = request.args.get("chord", "Cmaj").strip()
-    inversion = request.args.get("inversion", "").strip() or None
-    inversion_filter = request.args.get("inversion_filter", "all").strip().lower() or "all"
-    payload = visualizer_web.get_shapes_grouped(
-        chord_name=chord,
-        max_shapes=None,
-        inversion=inversion,
-        inversion_filter=inversion_filter,
-    )
-    return jsonify(payload)
+    @app.route("/api/shapes-grouped")
+    def api_shapes_grouped():
+        chord = request.args.get("chord", "Cmaj").strip()
+        inversion = request.args.get("inversion", "").strip() or None
+        inversion_filter = request.args.get("inversion_filter", "all").strip().lower() or "all"
+        payload = visualizer_web.get_shapes_grouped(
+            chord_name=chord,
+            max_shapes=None,
+            inversion=inversion,
+            inversion_filter=inversion_filter,
+        )
+        return jsonify(payload)
 
 if __name__ == "__main__":
     if app is None:
