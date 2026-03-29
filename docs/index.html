@@ -102,7 +102,18 @@
     let sampleBuffer = null;
     let sampleBaseFreq = 110.0;
 
+    async function ensureAudioReady() {
+      if (audioCtx.state !== 'running') {
+        try {
+          await audioCtx.resume();
+        } catch (e) {
+          throw new Error('Audio is locked. Tap any play button again to enable sound.');
+        }
+      }
+    }
+
     async function ensureSampleLoaded() {
+      await ensureAudioReady();
       if (sampleBuffer) return sampleBuffer;
       const res = await fetch('./guitar.wav');
       if (!res.ok) throw new Error('guitar.wav not found in docs/.');
@@ -112,6 +123,7 @@
     }
 
     async function playFreq(freq, when = 0, velocity = 0.95) {
+      await ensureAudioReady();
       const buf = await ensureSampleLoaded();
       const src = audioCtx.createBufferSource();
       src.buffer = buf;
@@ -133,14 +145,27 @@
     }
 
     async function playChord(freqs) {
+      await ensureAudioReady();
       await ensureSampleLoaded();
       freqs.forEach(f => playFreq(f, 0, 0.9));
     }
 
     async function playArp(freqs) {
+      await ensureAudioReady();
       await ensureSampleLoaded();
       freqs.forEach((f, i) => playFreq(f, i * 0.14, 0.9));
     }
+
+    // iOS/Android browsers often require a user gesture before audio can start.
+    const unlockAudio = async () => {
+      try {
+        await ensureAudioReady();
+      } catch (_) {
+      }
+    };
+    document.addEventListener('touchstart', unlockAudio, { passive: true, once: true });
+    document.addEventListener('pointerdown', unlockAudio, { passive: true, once: true });
+    document.addEventListener('click', unlockAudio, { passive: true, once: true });
 
     function noteButtons(names, freqs) {
       return names.map((name, idx) => `<button data-f='${freqs[idx]}'>${name}</button>`).join('');
