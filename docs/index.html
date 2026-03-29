@@ -4,6 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Guitar Chords</title>
+  <script>
+    (function normalizeProjectPathCase() {
+      const canonicalSegment = 'GuitarChords';
+      const canonicalLower = canonicalSegment.toLowerCase();
+      const { host, pathname, search, hash } = window.location;
+
+      if (!host.endsWith('github.io')) return;
+
+      const parts = pathname.split('/');
+      if (parts.length > 1) {
+        const first = parts[1];
+        if (first && first.toLowerCase() === canonicalLower && first !== canonicalSegment) {
+          parts[1] = canonicalSegment;
+          const normalized = parts.join('/').replace(/\/+/g, '/');
+          window.location.replace(normalized + search + hash);
+          return;
+        }
+      }
+
+      if (pathname.endsWith('/index.html')) {
+        const normalized = pathname.slice(0, -'/index.html'.length) || '/';
+        window.location.replace(normalized + search + hash);
+      }
+    })();
+  </script>
   <style>
     :root {
       --bg: #f4f7f3;

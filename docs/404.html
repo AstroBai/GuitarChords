@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redirecting...</title>
+  <script>
+    (function redirectCaseMismatch() {
+      const canonicalSegment = 'GuitarChords';
+      const canonicalLower = canonicalSegment.toLowerCase();
+      const { pathname, search, hash } = window.location;
+      const parts = pathname.split('/');
+
+      let target = '/' + canonicalSegment + '/';
+      if (parts.length > 1) {
+        const first = parts[1] || '';
+        if (first.toLowerCase() === canonicalLower) {
+          const tail = parts.slice(2).join('/');
+          target = '/' + canonicalSegment + '/' + tail;
+        }
+      }
+
+      target = target.replace(/\/+/g, '/');
+      if (target.endsWith('/index.html')) {
+        target = target.slice(0, -'/index.html'.length) || '/';
+      }
+
+      window.location.replace(target + search + hash);
+    })();
+  </script>
+</head>
+<body>
+  Redirecting...
+</body>
+</html>
