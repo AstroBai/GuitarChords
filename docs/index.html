@@ -121,6 +121,7 @@
     let mobileWebAudioReady = false;
     let mobileWebAudioFailed = false;
     const FIXED_NOTE_DURATION = 0.48;
+    const ATTACK_TRIM_SEC = 0.028;
     const SCHEDULE_LEAD = 0.06;
     const MOBILE_AUDIO_POOL_SIZE = 10;
     let mobileAudioPool = [];
@@ -272,7 +273,7 @@
       const stopMs = Math.max(120, Math.round((when + FIXED_NOTE_DURATION) * 1000));
 
       const startVoice = () => {
-        audio.currentTime = 0;
+        audio.currentTime = ATTACK_TRIM_SEC;
         const p = audio.play();
         if (p && typeof p.catch === 'function') {
           p.catch((e) => setStatus(`Audio error: ${e.message || e}`, true));
@@ -307,7 +308,7 @@
         audio.defaultPlaybackRate = rate;
         audio.playbackRate = rate;
         audio.volume = Math.max(0.05, Math.min(1.0, velocity));
-        audio.currentTime = 0;
+        audio.currentTime = ATTACK_TRIM_SEC;
       }
 
       for (let i = 0; i < voices.length; i += 1) {
@@ -343,7 +344,7 @@
       gain.gain.setValueAtTime(velocity, releaseStart);
       gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
       src.connect(gain).connect(audioCtx.destination);
-      src.start(t0);
+      src.start(t0, ATTACK_TRIM_SEC);
       src.stop(t0 + duration + 0.01);
     }
 
