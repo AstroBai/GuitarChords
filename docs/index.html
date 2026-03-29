@@ -53,6 +53,19 @@
       font-weight: 600;
     }
     .meta { margin: 10px 0; font-size: 14px; }
+    .status {
+      margin: 6px 0 10px;
+      font-size: 13px;
+      border: 1px solid #d5ded3;
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: #f7fbf8;
+    }
+    .status.err {
+      border-color: #e5b5b5;
+      background: #fff6f6;
+      color: #8a2424;
+    }
     .jump { margin: 8px 0 12px; display: flex; flex-wrap: wrap; gap: 8px; }
     .jump a {
       color: #0f5e3f;
@@ -88,6 +101,7 @@
       <button id="search">Generate</button>
     </div>
     <div class="meta" id="meta">Loading Python engine...</div>
+    <div class="status" id="status">Status: idle</div>
     <div class="jump" id="jump"></div>
     <div id="groups"></div>
   </div>
@@ -103,11 +117,29 @@
     let sampleBaseFreq = 110.0;
     let audioUnlocked = false;
 
+    function setStatus(message, isError = false) {
+      const el = document.getElementById('status');
+      if (!el) return;
+      el.textContent = `Status: ${message}`;
+      el.classList.toggle('err', !!isError);
+    }
+
+    window.addEventListener('error', (e) => {
+      setStatus(`Script error: ${e.message || 'unknown'}`, true);
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+      const msg = e.reason && e.reason.message ? e.reason.message : String(e.reason || 'unknown');
+      setStatus(`Promise error: ${msg}`, true);
+    });
+
     async function ensureAudioReady() {
+      setStatus(`Audio state: ${audioCtx.state}`);
       if (audioCtx.state !== 'running') {
         try {
+          setStatus('Requesting audio unlock...');
           await audioCtx.resume();
           audioUnlocked = true;
+          setStatus('Audio unlocked');
         } catch (e) {
           throw new Error('Audio is locked. Tap a play button again.');
         }
@@ -117,10 +149,12 @@
     async function ensureSampleLoaded() {
       await ensureAudioReady();
       if (sampleBuffer) return sampleBuffer;
+      setStatus('Loading guitar.wav...');
       const res = await fetch('./guitar.wav');
       if (!res.ok) throw new Error('guitar.wav not found in docs/.');
       const arr = await res.arrayBuffer();
       sampleBuffer = await audioCtx.decodeAudioData(arr);
+      setStatus('Sample loaded');
       return sampleBuffer;
     }
 
@@ -144,6 +178,7 @@
       src.connect(gain).connect(audioCtx.destination);
       src.start(t0);
       src.stop(t0 + naturalDuration + 0.01);
+      if (when === 0) setStatus('Play command sent');
     }
 
     async function playChord(freqs) {
@@ -257,26 +292,32 @@
         if (!item) return;
         card.querySelector('.play-shape-arp').onclick = async () => {
           try {
+            setStatus('Trying arpeggio...');
             await autoUnlockAudio();
             await playArp(item.shape_note_freqs);
           } catch (e) {
+            setStatus(`Audio error: ${e.message}`, true);
             document.getElementById('meta').textContent = `Audio error: ${e.message}`;
           }
         };
         card.querySelector('.play-shape-chord').onclick = async () => {
           try {
+            setStatus('Trying chord...');
             await autoUnlockAudio();
             await playChord(item.shape_note_freqs);
           } catch (e) {
+            setStatus(`Audio error: ${e.message}`, true);
             document.getElementById('meta').textContent = `Audio error: ${e.message}`;
           }
         };
         card.querySelectorAll('button[data-f]').forEach(btn => {
           btn.onclick = async () => {
             try {
+              setStatus('Trying single note...');
               await autoUnlockAudio();
               await playFreq(parseFloat(btn.dataset.f), 0, 0.95);
             } catch (e) {
+              setStatus(`Audio error: ${e.message}`, true);
               document.getElementById('meta').textContent = `Audio error: ${e.message}`;
             }
           };
@@ -286,9 +327,12 @@
 
     async function load() {
       try {
+        setStatus('Loading chord engine...');
         const data = await fetchGroups();
         render(data);
+        setStatus('Ready');
       } catch (e) {
+        setStatus(`Error: ${e.message}`, true);
         document.getElementById('meta').textContent = `Error: ${e.message}`;
       }
     }
