@@ -150,8 +150,14 @@
       if (pyReady) return pyReady;
       pyReady = (async () => {
         pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.5/full/' });
-        const pySrc = await (await fetch('./GuitarChords.py')).text();
-        await pyodide.runPythonAsync(pySrc + '\nvisualizer_static = GuitarChords()\n');
+        const pySrc = await (await fetch('./GuitarChords.py?v=20260329b')).text();
+
+        // Static mode: execute only the chord engine section, skip Flask route registration.
+        const splitMarker = '\nvisualizer_web = GuitarChords()\n';
+        const markerIdx = pySrc.indexOf(splitMarker);
+        const engineOnly = markerIdx >= 0 ? pySrc.slice(0, markerIdx) : pySrc;
+
+        await pyodide.runPythonAsync(engineOnly + '\nvisualizer_static = GuitarChords()\n');
       })();
       return pyReady;
     }
