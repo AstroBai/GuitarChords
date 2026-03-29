@@ -123,6 +123,7 @@
     const FIXED_NOTE_DURATION = 0.48;
     const ATTACK_TRIM_SEC = 0.028;
     const SCHEDULE_LEAD = 0.06;
+    const MOBILE_CHORD_STRUM_SEC = 0.018;
     const MOBILE_AUDIO_POOL_SIZE = 10;
     let mobileAudioPool = [];
     let mobileAudioPoolReady = false;
@@ -368,8 +369,12 @@
 
     async function playChord(freqs) {
       if (isMobileAudio) {
-        await playChordHtml(freqs, 0.9);
-        setStatus('Play command sent (HTML chord mobile)');
+        // Mobile browsers are jittery when starting many media elements at exactly once.
+        // Use a deterministic tight strum for stable, repeatable timing.
+        freqs.forEach((f, i) => {
+          playFreqHtml(f, i * MOBILE_CHORD_STRUM_SEC, 0.9);
+        });
+        setStatus('Play command sent (mobile tight strum)');
         return;
       }
       await ensureAudioReady();
