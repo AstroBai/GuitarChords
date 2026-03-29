@@ -111,6 +111,7 @@
     let sampleBuffer = null;
     let sampleBaseFreq = 110.0;
     let audioEnabled = false;
+    let sampleFailed = false;
 
     function updateAudioStateUI() {
       const btn = document.getElementById('audio-toggle');
@@ -139,17 +140,41 @@
 
     async function ensureSampleLoaded() {
       await ensureAudioReady();
+      if (sampleFailed) return null;
       if (sampleBuffer) return sampleBuffer;
-      const res = await fetch('./guitar.wav');
-      if (!res.ok) throw new Error('guitar.wav not found in docs/.');
-      const arr = await res.arrayBuffer();
-      sampleBuffer = await audioCtx.decodeAudioData(arr);
-      return sampleBuffer;
+      try {
+        const res = await fetch('./guitar.wav');
+        if (!res.ok) throw new Error('guitar.wav not found in docs/.');
+        const arr = await res.arrayBuffer();
+        sampleBuffer = await audioCtx.decodeAudioData(arr);
+        return sampleBuffer;
+      } catch (e) {
+        sampleFailed = true;
+        return null;
+      }
+    }
+
+    function playOscFallback(freq, when = 0, velocity = 0.22, duration = 0.45) {
+      const t0 = audioCtx.currentTime + when;
+      const osc = audioCtx.createOscillator();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t0);
+      const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(velocity, t0 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(t0);
+      osc.stop(t0 + duration + 0.01);
     }
 
     async function playFreq(freq, when = 0, velocity = 0.95) {
       await ensureAudioReady();
       const buf = await ensureSampleLoaded();
+      if (!buf) {
+        playOscFallback(freq, when, 0.22, 0.5);
+        return;
+      }
       const src = audioCtx.createBufferSource();
       src.buffer = buf;
       const loweredFreq = freq * 0.5;
@@ -193,8 +218,13 @@
       try {
         audioEnabled = true;
         await ensureAudioReady();
+        // iOS warm-up: run a near-silent short tone right after resume.
+        playOscFallback(440, 0, 0.0002, 0.03);
         await ensureSampleLoaded();
         updateAudioStateUI();
+        if (sampleFailed) {
+          document.getElementById('meta').textContent = 'Audio enabled (fallback tone mode).';
+        }
       } catch (e) {
         audioEnabled = false;
         updateAudioStateUI();
@@ -295,10 +325,28 @@
       allCards.forEach((card, idx) => {
         const item = pageItems[idx];
         if (!item) return;
-        card.querySelector('.play-shape-arp').onclick = () => playArp(item.shape_note_freqs);
-        card.querySelector('.play-shape-chord').onclick = () => playChord(item.shape_note_freqs);
+        card.querySelector('.play-shape-arp').onclick = async () => {
+          try {
+            await playArp(item.shape_note_freqs);
+          } catch (e) {
+            document.getElementById('meta').textContent = `Audio error: ${e.message}`;
+          }
+        };
+        card.querySelector('.play-shape-chord').onclick = async () => {
+          try {
+            await playChord(item.shape_note_freqs);
+          } catch (e) {
+            document.getElementById('meta').textContent = `Audio error: ${e.message}`;
+          }
+        };
         card.querySelectorAll('button[data-f]').forEach(btn => {
-          btn.onclick = () => playFreq(parseFloat(btn.dataset.f), 0, 0.95);
+          btn.onclick = async () => {
+            try {
+              await playFreq(parseFloat(btn.dataset.f), 0, 0.95);
+            } catch (e) {
+              document.getElementById('meta').textContent = `Audio error: ${e.message}`;
+            }
+          };
         });
       });
     }
