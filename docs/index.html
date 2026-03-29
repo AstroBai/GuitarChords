@@ -112,10 +112,12 @@
     let pyodide = null;
     let pyReady = null;
 
+    const isMobileAudio = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let sampleBuffer = null;
     let sampleBaseFreq = 110.0;
     let audioUnlocked = false;
+    let htmlAudioUnlocked = false;
 
     function setStatus(message, isError = false) {
       const el = document.getElementById('status');
@@ -133,6 +135,9 @@
     });
 
     async function ensureAudioReady() {
+      if (isMobileAudio) {
+        return;
+      }
       setStatus(`Audio state: ${audioCtx.state}`);
       if (audioCtx.state !== 'running') {
         try {
@@ -147,6 +152,9 @@
     }
 
     async function ensureSampleLoaded() {
+      if (isMobileAudio) {
+        return null;
+      }
       await ensureAudioReady();
       if (sampleBuffer) return sampleBuffer;
       setStatus('Loading guitar.wav...');
@@ -158,7 +166,46 @@
       return sampleBuffer;
     }
 
+    async function ensureHtmlAudioReady() {
+      if (!isMobileAudio || htmlAudioUnlocked) return;
+      const probe = new Audio('./guitar.wav?v=20260329c');
+      probe.preload = 'auto';
+      probe.setAttribute('playsinline', '');
+      probe.playsInline = true;
+      probe.muted = true;
+      try {
+        await probe.play();
+        probe.pause();
+        probe.currentTime = 0;
+        htmlAudioUnlocked = true;
+        setStatus('HTML audio unlocked');
+      } catch (e) {
+        throw new Error('Tap play button again to unlock mobile audio.');
+      }
+    }
+
+    async function playFreqHtml(freq, when = 0, velocity = 0.95) {
+      await ensureHtmlAudioReady();
+      const audio = new Audio('./guitar.wav?v=20260329c');
+      audio.preload = 'auto';
+      audio.setAttribute('playsinline', '');
+      audio.playsInline = true;
+      const loweredFreq = freq * 0.5;
+      const rate = Math.max(0.25, Math.min(4.0, loweredFreq / sampleBaseFreq));
+      audio.playbackRate = rate;
+      audio.volume = Math.max(0.05, Math.min(1.0, velocity));
+      if (when > 0) {
+        await new Promise(resolve => setTimeout(resolve, Math.round(when * 1000)));
+      }
+      await audio.play();
+    }
+
     async function playFreq(freq, when = 0, velocity = 0.95) {
+      if (isMobileAudio) {
+        await playFreqHtml(freq, when, velocity);
+        if (when === 0) setStatus('Play command sent (HTML audio)');
+        return;
+      }
       await ensureAudioReady();
       const buf = await ensureSampleLoaded();
       const src = audioCtx.createBufferSource();
@@ -194,6 +241,10 @@
     }
 
     async function autoUnlockAudio() {
+      if (isMobileAudio) {
+        await ensureHtmlAudioReady();
+        return;
+      }
       if (audioUnlocked && audioCtx.state === 'running') return;
       await ensureAudioReady();
       await ensureSampleLoaded();
