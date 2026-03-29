@@ -489,7 +489,7 @@
       groups.innerHTML = activeGroup ? (() => {
         const cards = pageItems.map(item => `
           <div class='card' id='${item.anchor}'>
-            <div>Fingering: ${item.fingering}${item.is_inversion ? ` | Inversion: ${item.inversion}` : ''}</div>
+            <div>Fingering: ${item.fingering}${item.is_inversion ? ` | ${item.inversion}` : ''}</div>
             <div class='svg-wrap'>${item.svg}</div>
             <div class='notes'>
               <span>Shape Notes:</span>
