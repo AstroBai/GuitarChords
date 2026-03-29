@@ -240,17 +240,59 @@
       const startMs = Math.max(0, Math.round(when * 1000));
       const stopMs = Math.max(120, Math.round((when + FIXED_NOTE_DURATION) * 1000));
 
-      setTimeout(() => {
+      const startVoice = () => {
         audio.currentTime = 0;
         const p = audio.play();
         if (p && typeof p.catch === 'function') {
           p.catch((e) => setStatus(`Audio error: ${e.message || e}`, true));
         }
-      }, startMs);
+      };
+
+      if (startMs === 0) {
+        startVoice();
+      } else {
+        setTimeout(startVoice, startMs);
+      }
 
       setTimeout(() => {
         audio.pause();
         audio.currentTime = 0;
+      }, stopMs);
+    }
+
+    async function playChordHtml(freqs, velocity = 0.9) {
+      await ensureHtmlAudioReady();
+      const voices = freqs.map(() => getMobileAudioVoice());
+
+      // Configure all voices first, then start them in one tight loop for better sync.
+      for (let i = 0; i < voices.length; i += 1) {
+        const audio = voices[i];
+        const freq = freqs[i];
+        const loweredFreq = freq * 0.5;
+        const rate = Math.max(0.25, Math.min(4.0, loweredFreq / sampleBaseFreq));
+        audio.preservesPitch = false;
+        audio.webkitPreservesPitch = false;
+        audio.mozPreservesPitch = false;
+        audio.defaultPlaybackRate = rate;
+        audio.playbackRate = rate;
+        audio.volume = Math.max(0.05, Math.min(1.0, velocity));
+        audio.currentTime = 0;
+      }
+
+      for (let i = 0; i < voices.length; i += 1) {
+        const audio = voices[i];
+        const p = audio.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch((e) => setStatus(`Audio error: ${e.message || e}`, true));
+        }
+      }
+
+      const stopMs = Math.max(120, Math.round(FIXED_NOTE_DURATION * 1000));
+      setTimeout(() => {
+        for (let i = 0; i < voices.length; i += 1) {
+          voices[i].pause();
+          voices[i].currentTime = 0;
+        }
       }, stopMs);
     }
 
@@ -283,6 +325,11 @@
     }
 
     async function playChord(freqs) {
+      if (isMobileAudio) {
+        await playChordHtml(freqs, 0.9);
+        setStatus('Play command sent (HTML chord sync)');
+        return;
+      }
       await ensureAudioReady();
       await ensureSampleLoaded();
       freqs.forEach(f => playFreq(f, 0, 0.9));
