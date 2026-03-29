@@ -192,8 +192,14 @@
       audio.playsInline = true;
       const loweredFreq = freq * 0.5;
       const rate = Math.max(0.25, Math.min(4.0, loweredFreq / sampleBaseFreq));
+      // Ensure playback rate changes pitch on mobile browsers (disable time-stretch pitch correction).
+      audio.preservesPitch = false;
+      audio.webkitPreservesPitch = false;
+      audio.mozPreservesPitch = false;
+      audio.defaultPlaybackRate = rate;
       audio.playbackRate = rate;
       audio.volume = Math.max(0.05, Math.min(1.0, velocity));
+      audio.currentTime = 0;
       if (when > 0) {
         await new Promise(resolve => setTimeout(resolve, Math.round(when * 1000)));
       }
