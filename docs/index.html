@@ -119,6 +119,7 @@
     let audioUnlocked = false;
     let htmlAudioUnlocked = false;
     const FIXED_NOTE_DURATION = 0.48;
+    const SCHEDULE_LEAD = 0.06;
     const MOBILE_AUDIO_POOL_SIZE = 10;
     let mobileAudioPool = [];
     let mobileAudioPoolReady = false;
@@ -140,9 +141,6 @@
     });
 
     async function ensureAudioReady() {
-      if (isMobileAudio) {
-        return;
-      }
       setStatus(`Audio state: ${audioCtx.state}`);
       if (audioCtx.state !== 'running') {
         try {
@@ -157,9 +155,6 @@
     }
 
     async function ensureSampleLoaded() {
-      if (isMobileAudio) {
-        return null;
-      }
       await ensureAudioReady();
       if (sampleBuffer) return sampleBuffer;
       setStatus('Loading guitar.wav...');
@@ -296,14 +291,7 @@
       }, stopMs);
     }
 
-    async function playFreq(freq, when = 0, velocity = 0.95) {
-      if (isMobileAudio) {
-        await playFreqHtml(freq, when, velocity);
-        if (when === 0) setStatus('Play command sent (HTML audio)');
-        return;
-      }
-      await ensureAudioReady();
-      const buf = await ensureSampleLoaded();
+    function scheduleFreqWithBuffer(buf, freq, when = 0, velocity = 0.95) {
       const src = audioCtx.createBufferSource();
       src.buffer = buf;
       const loweredFreq = freq * 0.5;
@@ -321,31 +309,51 @@
       src.connect(gain).connect(audioCtx.destination);
       src.start(t0);
       src.stop(t0 + duration + 0.01);
-      if (when === 0) setStatus('Play command sent');
+    }
+
+    async function playFreq(freq, when = 0, velocity = 0.95) {
+      await ensureAudioReady();
+      const buf = await ensureSampleLoaded();
+      if (buf) {
+        scheduleFreqWithBuffer(buf, freq, when, velocity);
+        if (when === 0) setStatus('Play command sent');
+        return;
+      }
+      // Fallback only if sample buffer is unavailable.
+      await playFreqHtml(freq, when, velocity);
+      if (when === 0) setStatus('Play command sent (HTML audio fallback)');
     }
 
     async function playChord(freqs) {
-      if (isMobileAudio) {
-        await playChordHtml(freqs, 0.9);
-        setStatus('Play command sent (HTML chord sync)');
+      await ensureAudioReady();
+      const buf = await ensureSampleLoaded();
+      if (buf) {
+        const start = SCHEDULE_LEAD;
+        freqs.forEach(f => scheduleFreqWithBuffer(buf, f, start, 0.9));
+        setStatus('Play command sent (scheduled chord)');
         return;
       }
-      await ensureAudioReady();
-      await ensureSampleLoaded();
-      freqs.forEach(f => playFreq(f, 0, 0.9));
+
+      // Fallback for environments where WebAudio sample decode fails.
+      await playChordHtml(freqs, 0.9);
+      setStatus('Play command sent (HTML chord fallback)');
     }
 
     async function playArp(freqs) {
       await ensureAudioReady();
-      await ensureSampleLoaded();
-      freqs.forEach((f, i) => playFreq(f, i * 0.14, 0.9));
+      const buf = await ensureSampleLoaded();
+      if (buf) {
+        const base = SCHEDULE_LEAD;
+        freqs.forEach((f, i) => scheduleFreqWithBuffer(buf, f, base + i * 0.14, 0.9));
+        setStatus('Play command sent (scheduled arpeggio)');
+        return;
+      }
+
+      freqs.forEach((f, i) => playFreqHtml(f, i * 0.14, 0.9));
+      setStatus('Play command sent (HTML arpeggio fallback)');
     }
 
     async function autoUnlockAudio() {
-      if (isMobileAudio) {
-        await ensureHtmlAudioReady();
-        return;
-      }
       if (audioUnlocked && audioCtx.state === 'running') return;
       await ensureAudioReady();
       await ensureSampleLoaded();
