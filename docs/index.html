@@ -141,6 +141,9 @@
     });
 
     async function ensureAudioReady() {
+      if (isMobileAudio) {
+        return;
+      }
       setStatus(`Audio state: ${audioCtx.state}`);
       if (audioCtx.state !== 'running') {
         try {
@@ -155,13 +158,21 @@
     }
 
     async function ensureSampleLoaded() {
+      if (isMobileAudio) {
+        return null;
+      }
       await ensureAudioReady();
       if (sampleBuffer) return sampleBuffer;
       setStatus('Loading guitar.wav...');
       const res = await fetch('./guitar.wav');
       if (!res.ok) throw new Error('guitar.wav not found in docs/.');
       const arr = await res.arrayBuffer();
-      sampleBuffer = await audioCtx.decodeAudioData(arr);
+      try {
+        sampleBuffer = await audioCtx.decodeAudioData(arr);
+      } catch (e) {
+        setStatus('Sample decode failed, fallback to HTML audio', true);
+        return null;
+      }
       setStatus('Sample loaded');
       return sampleBuffer;
     }
@@ -312,6 +323,11 @@
     }
 
     async function playFreq(freq, when = 0, velocity = 0.95) {
+      if (isMobileAudio) {
+        await playFreqHtml(freq, when, velocity);
+        if (when === 0) setStatus('Play command sent (HTML audio mobile)');
+        return;
+      }
       await ensureAudioReady();
       const buf = await ensureSampleLoaded();
       if (buf) {
@@ -325,6 +341,11 @@
     }
 
     async function playChord(freqs) {
+      if (isMobileAudio) {
+        await playChordHtml(freqs, 0.9);
+        setStatus('Play command sent (HTML chord mobile)');
+        return;
+      }
       await ensureAudioReady();
       const buf = await ensureSampleLoaded();
       if (buf) {
@@ -340,6 +361,11 @@
     }
 
     async function playArp(freqs) {
+      if (isMobileAudio) {
+        freqs.forEach((f, i) => playFreqHtml(f, i * 0.14, 0.9));
+        setStatus('Play command sent (HTML arpeggio mobile)');
+        return;
+      }
       await ensureAudioReady();
       const buf = await ensureSampleLoaded();
       if (buf) {
@@ -354,6 +380,10 @@
     }
 
     async function autoUnlockAudio() {
+      if (isMobileAudio) {
+        await ensureHtmlAudioReady();
+        return;
+      }
       if (audioUnlocked && audioCtx.state === 'running') return;
       await ensureAudioReady();
       await ensureSampleLoaded();
