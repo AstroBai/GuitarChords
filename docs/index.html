@@ -53,19 +53,6 @@
       font-weight: 600;
     }
     .meta { margin: 10px 0; font-size: 14px; }
-    .status {
-      margin: 6px 0 10px;
-      font-size: 13px;
-      border: 1px solid #d5ded3;
-      border-radius: 8px;
-      padding: 8px 10px;
-      background: #f7fbf8;
-    }
-    .status.err {
-      border-color: #e5b5b5;
-      background: #fff6f6;
-      color: #8a2424;
-    }
     .jump { margin: 8px 0 12px; display: flex; flex-wrap: wrap; gap: 8px; }
     .jump a {
       color: #0f5e3f;
@@ -101,7 +88,6 @@
       <button id="search">Generate</button>
     </div>
     <div class="meta" id="meta">Loading Python engine...</div>
-    <div class="status" id="status">Status: idle</div>
     <div class="jump" id="jump"></div>
     <div id="groups"></div>
   </div>
@@ -117,45 +103,24 @@
     let sampleBuffer = null;
     let sampleBaseFreq = 110.0;
     let audioUnlocked = false;
-    let htmlAudioUnlocked = false;
-    let mobileWebAudioReady = false;
-    let mobileWebAudioFailed = false;
     const FIXED_NOTE_DURATION = 0.48;
     const ATTACK_TRIM_SEC = 0.028;
     const SCHEDULE_LEAD = 0.06;
-    const MOBILE_CHORD_STRUM_SEC = 0.018;
-    const MOBILE_AUDIO_POOL_SIZE = 8;
-    let mobileAudioPools = {};
-    let mobilePoolIndex = {};
 
-    function setStatus(message, isError = false) {
-      const el = document.getElementById('status');
-      if (!el) return;
-      el.textContent = `Status: ${message}`;
-      el.classList.toggle('err', !!isError);
+    function showMobileAudioUnsupported() {
+      document.getElementById('meta').textContent = 'Mobile playback is currently unsupported. Please use desktop browser for audio.';
     }
-
-    window.addEventListener('error', (e) => {
-      setStatus(`Script error: ${e.message || 'unknown'}`, true);
-    });
-    window.addEventListener('unhandledrejection', (e) => {
-      const msg = e.reason && e.reason.message ? e.reason.message : String(e.reason || 'unknown');
-      setStatus(`Promise error: ${msg}`, true);
-    });
 
     async function ensureAudioReady() {
       if (isMobileAudio) {
         return;
       }
-      setStatus(`Audio state: ${audioCtx.state}`);
       if (audioCtx.state !== 'running') {
         try {
-          setStatus('Requesting audio unlock...');
           await audioCtx.resume();
           audioUnlocked = true;
-          setStatus('Audio unlocked');
         } catch (e) {
-          throw new Error('Audio is locked. Tap a play button again.');
+          throw new Error('Audio is locked. Click play again.');
         }
       }
     }
@@ -166,203 +131,11 @@
       }
       await ensureAudioReady();
       if (sampleBuffer) return sampleBuffer;
-      setStatus('Loading guitar.wav...');
       const res = await fetch('./guitar.wav');
       if (!res.ok) throw new Error('guitar.wav not found in docs/.');
       const arr = await res.arrayBuffer();
-      try {
-        sampleBuffer = await audioCtx.decodeAudioData(arr);
-      } catch (e) {
-        setStatus('Sample decode failed, fallback to HTML audio', true);
-        return null;
-      }
-      setStatus('Sample loaded');
+      sampleBuffer = await audioCtx.decodeAudioData(arr);
       return sampleBuffer;
-    }
-
-    async function ensureMobileWebAudioReady() {
-      if (!isMobileAudio || mobileWebAudioReady || mobileWebAudioFailed) return;
-      try {
-        if (audioCtx.state !== 'running') {
-          await audioCtx.resume();
-        }
-        audioUnlocked = true;
-
-        if (!sampleBuffer) {
-          const res = await fetch('./guitar.wav?v=20260329d');
-          if (!res.ok) throw new Error('guitar.wav not found in docs/.');
-          const arr = await res.arrayBuffer();
-          sampleBuffer = await audioCtx.decodeAudioData(arr);
-        }
-
-        mobileWebAudioReady = true;
-        setStatus('Mobile WebAudio ready (sync mode)');
-      } catch (e) {
-        mobileWebAudioFailed = true;
-        setStatus('Mobile WebAudio unavailable, using HTML audio fallback');
-      }
-    }
-
-    async function ensureHtmlAudioReady() {
-      if (!isMobileAudio || htmlAudioUnlocked) return;
-      const probe = new Audio('./samples/C2.wav?v=20260329e');
-      probe.preload = 'auto';
-      probe.setAttribute('playsinline', '');
-      probe.playsInline = true;
-      probe.muted = true;
-      try {
-        await probe.play();
-        probe.pause();
-        probe.currentTime = 0;
-        htmlAudioUnlocked = true;
-        mobileAudioPools = {};
-        mobilePoolIndex = {};
-        setStatus('HTML audio unlocked');
-      } catch (e) {
-        throw new Error('Tap play button again to unlock mobile audio.');
-      }
-    }
-
-    function getSampleBank() {
-      return [
-        { key: 'C2', url: './samples/C2.wav?v=20260329e', baseFreq: sampleBaseFreq },
-        { key: 'C3', url: './samples/C3.wav?v=20260329e', baseFreq: sampleBaseFreq * 2.0 },
-        { key: 'C4', url: './samples/C4.wav?v=20260329e', baseFreq: sampleBaseFreq * 4.0 },
-      ];
-    }
-
-    function pickNearestSample(loweredFreq) {
-      const bank = getSampleBank();
-      let best = bank[0];
-      let bestErr = Infinity;
-      for (const item of bank) {
-        const err = Math.abs(Math.log2((loweredFreq || 1e-6) / item.baseFreq));
-        if (err < bestErr) {
-          bestErr = err;
-          best = item;
-        }
-      }
-      return best;
-    }
-
-    function ensurePoolForSample(sampleKey, sampleUrl) {
-      if (mobileAudioPools[sampleKey]) return;
-      mobileAudioPools[sampleKey] = Array.from({ length: MOBILE_AUDIO_POOL_SIZE }, () => {
-        const a = new Audio(sampleUrl);
-        a.preload = 'auto';
-        a.setAttribute('playsinline', '');
-        a.playsInline = true;
-        return a;
-      });
-      mobilePoolIndex[sampleKey] = 0;
-    }
-
-    function getMobileAudioVoice(sampleKey, sampleUrl) {
-      ensurePoolForSample(sampleKey, sampleUrl);
-      const pool = mobileAudioPools[sampleKey] || [];
-      if (pool.length === 0) {
-        const fallback = new Audio(sampleUrl);
-        fallback.preload = 'auto';
-        fallback.setAttribute('playsinline', '');
-        fallback.playsInline = true;
-        return fallback;
-      }
-
-      const size = pool.length;
-      const startIdx = mobilePoolIndex[sampleKey] || 0;
-      for (let i = 0; i < size; i += 1) {
-        const idx = (startIdx + i) % size;
-        const a = pool[idx];
-        if (a.paused || a.ended) {
-          mobilePoolIndex[sampleKey] = (idx + 1) % size;
-          return a;
-        }
-      }
-
-      const idx = mobilePoolIndex[sampleKey] || 0;
-      const a = pool[idx];
-      mobilePoolIndex[sampleKey] = (idx + 1) % size;
-      a.pause();
-      a.currentTime = 0;
-      return a;
-    }
-
-    async function playFreqHtml(freq, when = 0, velocity = 0.95) {
-      await ensureHtmlAudioReady();
-      const loweredFreq = freq * 0.5;
-      const sample = pickNearestSample(loweredFreq);
-      const audio = getMobileAudioVoice(sample.key, sample.url);
-      const rate = Math.max(0.6, Math.min(1.8, loweredFreq / sample.baseFreq));
-      // Ensure playback rate changes pitch on mobile browsers (disable time-stretch pitch correction).
-      audio.preservesPitch = false;
-      audio.webkitPreservesPitch = false;
-      audio.mozPreservesPitch = false;
-      audio.defaultPlaybackRate = rate;
-      audio.playbackRate = rate;
-      audio.volume = Math.max(0.05, Math.min(1.0, velocity));
-      const startMs = Math.max(0, Math.round(when * 1000));
-      const stopMs = Math.max(120, Math.round((when + FIXED_NOTE_DURATION) * 1000));
-
-      const startVoice = () => {
-        audio.currentTime = ATTACK_TRIM_SEC;
-        const p = audio.play();
-        if (p && typeof p.catch === 'function') {
-          p.catch((e) => setStatus(`Audio error: ${e.message || e}`, true));
-        }
-      };
-
-      if (startMs === 0) {
-        startVoice();
-      } else {
-        setTimeout(startVoice, startMs);
-      }
-
-      setTimeout(() => {
-        audio.pause();
-        audio.currentTime = 0;
-      }, stopMs);
-    }
-
-    async function playChordHtml(freqs, velocity = 0.9) {
-      await ensureHtmlAudioReady();
-      const voices = freqs.map((freq) => {
-        const loweredFreq = freq * 0.5;
-        const sample = pickNearestSample(loweredFreq);
-        return {
-          audio: getMobileAudioVoice(sample.key, sample.url),
-          loweredFreq,
-          sample,
-        };
-      });
-
-      // Configure all voices first, then start them in one tight loop for better sync.
-      for (let i = 0; i < voices.length; i += 1) {
-        const { audio, loweredFreq, sample } = voices[i];
-        const rate = Math.max(0.6, Math.min(1.8, loweredFreq / sample.baseFreq));
-        audio.preservesPitch = false;
-        audio.webkitPreservesPitch = false;
-        audio.mozPreservesPitch = false;
-        audio.defaultPlaybackRate = rate;
-        audio.playbackRate = rate;
-        audio.volume = Math.max(0.05, Math.min(1.0, velocity));
-        audio.currentTime = ATTACK_TRIM_SEC;
-      }
-
-      for (let i = 0; i < voices.length; i += 1) {
-        const { audio } = voices[i];
-        const p = audio.play();
-        if (p && typeof p.catch === 'function') {
-          p.catch((e) => setStatus(`Audio error: ${e.message || e}`, true));
-        }
-      }
-
-      const stopMs = Math.max(120, Math.round(FIXED_NOTE_DURATION * 1000));
-      setTimeout(() => {
-        for (let i = 0; i < voices.length; i += 1) {
-          voices[i].audio.pause();
-          voices[i].audio.currentTime = 0;
-        }
-      }, stopMs);
     }
 
     function scheduleFreqWithBuffer(buf, freq, when = 0, velocity = 0.95) {
@@ -387,30 +160,19 @@
 
     async function playFreq(freq, when = 0, velocity = 0.95) {
       if (isMobileAudio) {
-        await playFreqHtml(freq, when, velocity);
-        if (when === 0) setStatus('Play command sent (HTML audio mobile)');
+        showMobileAudioUnsupported();
         return;
       }
       await ensureAudioReady();
       const buf = await ensureSampleLoaded();
       if (buf) {
         scheduleFreqWithBuffer(buf, freq, when, velocity);
-        if (when === 0) setStatus('Play command sent');
-        return;
       }
-      // Fallback only if sample buffer is unavailable.
-      await playFreqHtml(freq, when, velocity);
-      if (when === 0) setStatus('Play command sent (HTML audio fallback)');
     }
 
     async function playChord(freqs) {
       if (isMobileAudio) {
-        // Mobile browsers are jittery when starting many media elements at exactly once.
-        // Use a deterministic tight strum for stable, repeatable timing.
-        freqs.forEach((f, i) => {
-          playFreqHtml(f, i * MOBILE_CHORD_STRUM_SEC, 0.9);
-        });
-        setStatus('Play command sent (mobile tight strum)');
+        showMobileAudioUnsupported();
         return;
       }
       await ensureAudioReady();
@@ -418,19 +180,12 @@
       if (buf) {
         const start = SCHEDULE_LEAD;
         freqs.forEach(f => scheduleFreqWithBuffer(buf, f, start, 0.9));
-        setStatus('Play command sent (scheduled chord)');
-        return;
       }
-
-      // Fallback for environments where WebAudio sample decode fails.
-      await playChordHtml(freqs, 0.9);
-      setStatus('Play command sent (HTML chord fallback)');
     }
 
     async function playArp(freqs) {
       if (isMobileAudio) {
-        freqs.forEach((f, i) => playFreqHtml(f, i * 0.14, 0.9));
-        setStatus('Play command sent (HTML arpeggio mobile)');
+        showMobileAudioUnsupported();
         return;
       }
       await ensureAudioReady();
@@ -438,17 +193,12 @@
       if (buf) {
         const base = SCHEDULE_LEAD;
         freqs.forEach((f, i) => scheduleFreqWithBuffer(buf, f, base + i * 0.14, 0.9));
-        setStatus('Play command sent (scheduled arpeggio)');
-        return;
       }
-
-      freqs.forEach((f, i) => playFreqHtml(f, i * 0.14, 0.9));
-      setStatus('Play command sent (HTML arpeggio fallback)');
     }
 
     async function autoUnlockAudio() {
       if (isMobileAudio) {
-        await ensureHtmlAudioReady();
+        showMobileAudioUnsupported();
         return;
       }
       if (audioUnlocked && audioCtx.state === 'running') return;
@@ -548,32 +298,26 @@
         if (!item) return;
         card.querySelector('.play-shape-arp').onclick = async () => {
           try {
-            setStatus('Trying arpeggio...');
             await autoUnlockAudio();
             await playArp(item.shape_note_freqs);
           } catch (e) {
-            setStatus(`Audio error: ${e.message}`, true);
             document.getElementById('meta').textContent = `Audio error: ${e.message}`;
           }
         };
         card.querySelector('.play-shape-chord').onclick = async () => {
           try {
-            setStatus('Trying chord...');
             await autoUnlockAudio();
             await playChord(item.shape_note_freqs);
           } catch (e) {
-            setStatus(`Audio error: ${e.message}`, true);
             document.getElementById('meta').textContent = `Audio error: ${e.message}`;
           }
         };
         card.querySelectorAll('button[data-f]').forEach(btn => {
           btn.onclick = async () => {
             try {
-              setStatus('Trying single note...');
               await autoUnlockAudio();
               await playFreq(parseFloat(btn.dataset.f), 0, 0.95);
             } catch (e) {
-              setStatus(`Audio error: ${e.message}`, true);
               document.getElementById('meta').textContent = `Audio error: ${e.message}`;
             }
           };
@@ -583,12 +327,9 @@
 
     async function load() {
       try {
-        setStatus('Loading chord engine...');
         const data = await fetchGroups();
         render(data);
-        setStatus('Ready');
       } catch (e) {
-        setStatus(`Error: ${e.message}`, true);
         document.getElementById('meta').textContent = `Error: ${e.message}`;
       }
     }
