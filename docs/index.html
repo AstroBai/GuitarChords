@@ -139,7 +139,7 @@
       <div id="groups"></div>
     </div>
     <div id="exam-view" class="hidden">
-      <div class="meta" id="exam-meta">Exam mode: 10 questions, fill what you know and leave others blank.</div>
+      <div class="meta" id="exam-meta">Exam mode: 10 questions. For each chord, provide as many fingerings as you know (up to 4 input boxes). Fill all boxes correctly to get full points for that question.</div>
       <div class="exam-actions">
         <button id="exam-start">Start Exam (10 Questions)</button>
         <button id="exam-exit">Back To Search</button>
@@ -169,14 +169,39 @@
       { display: 'Dm', query: 'Dm' },
       { display: 'Em', query: 'Em' },
       { display: 'F', query: 'F' },
+      { display: 'Bm', query: 'Bm' },
+      { display: 'B', query: 'B' },
+      { display: 'C#m', query: 'C#m' },
+      { display: 'Bb', query: 'Bb' },
+      { display: 'Ebmaj7', query: 'Ebmaj7' },
+      { display: 'Fmaj7', query: 'Fmaj7' },
       { display: 'C/E (1st inversion)', query: 'C', inversionFilter: '1st' },
       { display: 'G/B (1st inversion)', query: 'G', inversionFilter: '1st' },
       { display: 'D/F# (1st inversion)', query: 'D', inversionFilter: '1st' },
+      { display: 'A/C# (1st inversion)', query: 'A', inversionFilter: '1st' },
+      { display: 'C/G (2nd inversion)', query: 'C', inversionFilter: '2nd' },
+      { display: 'G/D (2nd inversion)', query: 'G', inversionFilter: '2nd' },
+      { display: 'Cmaj7', query: 'Cmaj7' },
+      { display: 'Cmin7', query: 'Cmin7' },
+      { display: 'G7', query: 'G7' },
+      { display: 'D7', query: 'D7' },
+      { display: 'A7', query: 'A7' },
+      { display: 'Dsus4', query: 'Dsus4' },
+      { display: 'Gsus4', query: 'Gsus4' },
+      { display: 'Asus4', query: 'Asus4' },
+      { display: 'Dm7', query: 'Dm7' },
+      { display: 'Am7', query: 'Am7' },
+      { display: 'Em7', query: 'Em7' },
+      { display: 'Dmaj7', query: 'Dmaj7' },
+      { display: 'Dmin7', query: 'Dmin7' },
+      { display: 'Dm7b5', query: 'Dm7b5' },
       { display: 'Eb9/Bb', query: 'Eb9/Bb' },
       { display: 'Fsus4/G', query: 'Fsus4/G' },
-      { display: 'Cmaj7', query: 'Cmaj7' },
-      { display: 'G7', query: 'G7' },
-      { display: 'Dsus4', query: 'Dsus4' },
+      { display: 'F#m7b5', query: 'F#m7b5' },
+      { display: 'Emin7b5', query: 'Emin7b5' },
+      { display: 'Bdim', query: 'Bdim' },
+      { display: 'Cadd9', query: 'Cadd9' },
+      { display: 'Gadd9', query: 'Gadd9' },
     ];
 
     const isMobileAudio = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
@@ -386,11 +411,16 @@
         return null;
       }
 
+      const totalFingerings = fingerings.length;
+      const displayCount = Math.min(4, totalFingerings);
+
       return {
         id: index,
         prompt: spec.display,
         expected: fingerings.map(f => f.text),
         expectedNorm: fingerings.map(f => f.norm),
+        totalFingerings: totalFingerings,
+        displayCount: displayCount,
       };
     }
 
@@ -422,13 +452,13 @@
       }
 
       wrap.innerHTML = examState.questions.map((q, idx) => {
-        const inputs = Array.from({ length: q.expected.length }, (_, i) => (
+        const inputs = Array.from({ length: q.displayCount }, (_, i) => (
           `<input class='exam-answer' data-q='${idx}' data-i='${i}' placeholder='x32010 or x 3 2 0 1 0' />`
         )).join('');
+        const hint = q.totalFingerings > 4 ? ` (${q.totalFingerings} variations, showing ${q.displayCount})` : '';
         return `
           <div class='exam-card'>
-            <div class='exam-title'>Q${idx + 1}. ${q.prompt}</div>
-            <div class='exam-help'>Provide all known fingerings. Blanks are allowed.</div>
+            <div class='exam-title'>Q${idx + 1}. ${q.prompt}${hint}</div>
             <div class='exam-inputs'>${inputs}</div>
           </div>
         `;
@@ -438,33 +468,43 @@
     }
 
     function scoreExam() {
-      let total = 0;
-      let correct = 0;
+      let totalPoints = 0;
+      let earnedPoints = 0;
       const feedback = [];
 
       examState.questions.forEach((q, qIdx) => {
-        total += q.expectedNorm.length;
+        const pointsForThisQ = q.totalFingerings > q.displayCount ? q.displayCount : q.totalFingerings;
+        totalPoints += pointsForThisQ;
+
         const unmatched = [...q.expectedNorm];
         const answers = Array.from(document.querySelectorAll(`input.exam-answer[data-q='${qIdx}']`))
           .map(el => normalizeFingeringInput(el.value))
           .filter(Boolean);
 
+        let correctCount = 0;
         answers.forEach(ans => {
           const pos = unmatched.indexOf(ans);
           if (pos >= 0) {
-            correct += 1;
+            correctCount += 1;
             unmatched.splice(pos, 1);
           }
         });
 
-        if (unmatched.length) {
-          feedback.push(`Q${qIdx + 1} ${q.prompt}: ${q.expected.join(', ')}`);
+        if (q.totalFingerings > q.displayCount) {
+          if (answers.length === q.displayCount && correctCount === answers.length) {
+            earnedPoints += q.displayCount;
+          }
+        } else {
+          earnedPoints += correctCount;
+          if (unmatched.length) {
+            feedback.push(`Q${qIdx + 1} ${q.prompt}: ${q.expected.join(', ')}`);
+          }
         }
       });
 
-      const percent = total ? Math.round((correct / total) * 100) : 0;
+      const percent = totalPoints ? Math.round((earnedPoints / totalPoints) * 100) : 0;
       const result = document.getElementById('exam-result');
-      result.innerHTML = `Score: ${percent}% (${correct}/${total})` +
+      result.innerHTML = `Score: ${percent}% (${earnedPoints}/${totalPoints})` +
         (feedback.length ? `<div class='exam-answer-key'>Missing answers:<br>${feedback.join('<br>')}</div>` : '');
     }
 
