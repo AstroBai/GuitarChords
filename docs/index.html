@@ -250,7 +250,7 @@
       if (pyReady) return pyReady;
       pyReady = (async () => {
         pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.5/full/' });
-        const pySrc = await (await fetch('./GuitarChords.py?v=20260330b')).text();
+        const pySrc = await (await fetch('./GuitarChords.py?v=20260330c', { cache: 'no-store' })).text();
 
         // Static mode: execute only the chord engine section, skip Flask route registration.
         const splitMarker = '\nvisualizer_web = GuitarChords()\n';
@@ -331,9 +331,9 @@
       groups.innerHTML = pageItems.length ? (() => {
         const cards = pageItems.map(item => `
           <div class='card' id='${item.anchor}'>
-            <div>Fingering: ${item.fingering}${item.is_inversion ? ` | ${item.inversion}` : ''}</div>
+            <div>Fingering: ${item.fingering}${(item.bass_is_chord_tone === true && item.is_inversion) ? ` | ${item.inversion}` : ''}</div>
             <div>${item.root_group || ''}</div>
-            ${item.is_non_chord_bass ? `<div>Bass: ${item.bass_note || '-'} (non-chord tone)</div>` : ''}
+            ${(item.is_non_chord_bass === true || (state.chord.includes('/') && item.bass_is_chord_tone !== true)) ? `<div>Bass: ${item.bass_note || '-'} (non-chord tone)</div>` : ''}
             <div class='svg-wrap'>${item.svg}</div>
             <div class='notes'>
               <span>Shape Notes:</span>

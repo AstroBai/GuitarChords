@@ -1366,6 +1366,7 @@ class GuitarChords:
                 "root_group": root_title,
                 "inversion": inversion_name,
                 "is_inversion": bass_is_chord_tone and inv_rank > 0,
+                "bass_is_chord_tone": bass_is_chord_tone,
                 "is_non_chord_bass": not bass_is_chord_tone,
                 "bass_note": bass_note_name,
                 "shape_note_names": shape_names,
@@ -1590,10 +1591,9 @@ HTML_TEMPLATE = """
             groups.innerHTML = pageItems.length ? (() => {
                 const cards = pageItems.map(item => `
                     <div class='card' id='${item.anchor}'>
-                        <div>Fingering: ${item.fingering}</div>
+                        <div>Fingering: ${item.fingering}${(item.bass_is_chord_tone === true && item.is_inversion) ? ` | ${item.inversion}` : ''}</div>
                         <div>${item.root_group || ''}</div>
-                        ${item.is_inversion ? `<div>Inversion: ${item.inversion}</div>` : ''}
-                        ${item.is_non_chord_bass ? `<div>Bass: ${item.bass_note || '-'} (non-chord tone)</div>` : ''}
+                        ${(item.is_non_chord_bass === true || (state.chord.includes('/') && item.bass_is_chord_tone !== true)) ? `<div>Bass: ${item.bass_note || '-'} (non-chord tone)</div>` : ''}
                         <div class='svg-wrap'>${item.svg}</div>
                         <div class='notes'>
                             <span>Shape Notes:</span>
