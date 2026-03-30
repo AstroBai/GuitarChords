@@ -189,10 +189,28 @@ class GuitarChords:
         info = self._parse_chord_info(chord_name)
         return info["chord_notes"]
 
+    def _normalize_note_name(self, note_token):
+        token = str(note_token or "").strip()
+        token = token.replace("♭", "b").replace("♯", "#")
+        match = re.match(r"^([A-Ga-g])([#b]?)(.*)$", token)
+        if not match:
+            return None
+
+        letter, accidental, tail = match.groups()
+        if tail.strip():
+            return None
+        return letter.upper() + accidental
+
     def _parse_chord_info(self, chord_name):
         # Support slash chords by parsing the harmony before '/'.
         chord_name = chord_name.strip()
-        parts = chord_name.split("/")
+        chord_name = chord_name.replace("♭", "b").replace("♯", "#")
+        parts = [part.strip() for part in chord_name.split("/") if part.strip()]
+        if not parts:
+            raise ValueError(f"Invalid chord name: {chord_name}")
+        if len(parts) > 2:
+            raise ValueError(f"Invalid slash chord format: {chord_name}")
+
         chord_core = parts[0]
         bass_name = parts[1] if len(parts) > 1 else None
         match = re.match(r"^([A-Ga-g])([#b]?)(.*)$", chord_core)
@@ -220,7 +238,9 @@ class GuitarChords:
 
         bass_pc = None
         if bass_name:
-            bass_name = bass_name[0].upper() + bass_name[1:]
+            bass_name = self._normalize_note_name(bass_name)
+            if bass_name is None:
+                raise ValueError(f"Invalid slash bass note: {parts[1]}")
             if bass_name not in self.NOTE_MAP:
                 raise ValueError(f"Unsupported slash bass note: {bass_name}")
             bass_pc = self.NOTE_MAP[bass_name]
@@ -304,7 +324,7 @@ class GuitarChords:
 
         return [(s, s + window_size - 1) for s in starts]
 
-    def _inject_bass(self, shape, target_bass_pc, chord_notes):
+    def _inject_bass(self, shape, target_bass_pc, chord_notes, allow_non_chord_bass=False):
         bass_idx = next((i for i, fret in enumerate(shape) if fret >= 0), None)
         if bass_idx is None:
             return None
@@ -317,13 +337,13 @@ class GuitarChords:
         for string in range(bass_idx - 1, -1, -1):
             candidates = []
             open_pc = self.tuning[string] % 12
-            if start_fret == 0 and open_pc == target_bass_pc and open_pc in chord_notes:
+            if start_fret == 0 and open_pc == target_bass_pc and (allow_non_chord_bass or open_pc in chord_notes):
                 candidates.append(0)
 
             low = max(1, start_fret)
             for fret in range(low, end_fret + 1):
                 note_pc = (self.tuning[string] + fret) % 12
-                if note_pc == target_bass_pc and note_pc in chord_notes:
+                if note_pc == target_bass_pc and (allow_non_chord_bass or note_pc in chord_notes):
                     candidates.append(fret)
 
             if candidates:
@@ -587,6 +607,7 @@ class GuitarChords:
 
         inversion_idx = self._normalize_inversion(inversion, formula)
         target_bass_pc = info["bass_pc"]
+        allow_non_chord_bass = info["bass_pc"] is not None and inversion_idx is None
         if inversion_idx is not None:
             target_bass_pc = (root_pc + formula[inversion_idx]) % 12
 
@@ -649,7 +670,12 @@ class GuitarChords:
             if target_bass_pc is not None:
                 bass_pc = self._bass_note_pc(fitted_shape)
                 if bass_pc != target_bass_pc:
-                    injected = self._inject_bass(fitted_shape, target_bass_pc, chord_notes)
+                    injected = self._inject_bass(
+                        fitted_shape,
+                        target_bass_pc,
+                        chord_notes,
+                        allow_non_chord_bass=allow_non_chord_bass,
+                    )
                     candidate_shapes = [injected] if injected else []
             else:
                 # Explore inversion-friendly bass notes for plain chords.
@@ -697,6 +723,34 @@ class GuitarChords:
             shapes,
             preserve_required_mutes=(target_bass_pc is None),
         )
+
+        # Fallback: for slash chords in extended qualities, strict bass constraints can
+        # eliminate all voicings. Reuse base chord voicings and inject requested bass.
+        if target_bass_pc is not None and not shapes and "/" in chord_name:
+            chord_core = chord_name.split("/")[0].strip()
+            base_shapes = self.generate_chord_shapes(chord_core, max_results=None, inversion=None)
+            recovered = []
+            recovered_seen = set()
+            for frame_name, base_shape in base_shapes:
+                candidate = base_shape
+                if self._bass_note_pc(candidate) != target_bass_pc:
+                    candidate = self._inject_bass(
+                        base_shape,
+                        target_bass_pc,
+                        chord_notes,
+                        allow_non_chord_bass=allow_non_chord_bass,
+                    )
+                if candidate is None or candidate in recovered_seen:
+                    continue
+                recovered_seen.add(candidate)
+                recovered.append((frame_name, candidate))
+
+            recovered.sort(key=shape_score)
+            shapes = self._prune_muted_subset_shapes(
+                recovered,
+                preserve_required_mutes=False,
+            )
+
         if max_results is None:
             return shapes
         return shapes[:max_results]
@@ -1498,7 +1552,6 @@ HTML_TEMPLATE = """
                 { value: '3', label: `String 3 (${rootCounts['3'] ?? 0})` },
                 { value: '2', label: `String 2 (${rootCounts['2'] ?? 0})` },
                 { value: '1', label: `String 1 (${rootCounts['1'] ?? 0})` },
-                { value: 'unknown', label: `Unknown (${rootCounts.unknown ?? 0})` },
             ];
             rootFilterSelect.innerHTML = rootOptions.map(opt => `<option value='${opt.value}'>${opt.label}</option>`).join('');
             rootFilterSelect.value = state.rootStringFilter;

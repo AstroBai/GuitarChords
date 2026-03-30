@@ -301,7 +301,6 @@
         { value: '3', label: `String 3 (${rootCounts['3'] ?? 0})` },
         { value: '2', label: `String 2 (${rootCounts['2'] ?? 0})` },
         { value: '1', label: `String 1 (${rootCounts['1'] ?? 0})` },
-        { value: 'unknown', label: `Unknown (${rootCounts.unknown ?? 0})` },
       ];
       rootFilterSelect.innerHTML = rootOptions.map(opt => `<option value='${opt.value}'>${opt.label}</option>`).join('');
       rootFilterSelect.value = state.rootStringFilter;
