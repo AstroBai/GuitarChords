@@ -378,8 +378,10 @@
         seen.add(norm);
         ordered.push({ text, norm, maxFret: parseFingeringMaxFret(text) });
       }
-      const openPosition = ordered.filter(x => x.maxFret <= 4);
-      return (openPosition.length ? openPosition : ordered);
+      return ordered.sort((a, b) => {
+        if (a.maxFret !== b.maxFret) return a.maxFret - b.maxFret;
+        return a.text.localeCompare(b.text);
+      });
     }
 
     function switchMode(examMode) {
