@@ -79,6 +79,8 @@
     }
     .meta { margin: 10px 0; font-size: 14px; line-height: 1.6; }
     .meta code { background: #efe8f6; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+    .meta div { margin: 4px 0; }
+    .meta strong { color: var(--accent); font-weight: 700; }
     .jump { margin: 8px 0 12px; display: flex; flex-wrap: wrap; gap: 8px; }
     .jump a {
       color: #0f5e3f;
@@ -103,7 +105,7 @@
     .exam-help { font-size: 13px; color: #47614f; margin: 4px 0 8px; }
     .exam-inputs { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 8px; }
     .exam-result { margin-top: 12px; font-size: 16px; font-weight: 700; }
-    .exam-answer-key { margin-top: 8px; font-size: 13px; color: #335343; }
+    .exam-answer-key { margin-top: 8px; font-size: 13px; color: #335343; max-height: 200px; overflow-y: auto; padding: 8px; background: #f9f7fc; border-radius: 6px; }
     @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -140,7 +142,12 @@
       <div id="groups"></div>
     </div>
     <div id="exam-view" class="hidden">
-      <div class="meta" id="exam-meta">Exam mode: 10 random questions (each one unique). <strong>Format:</strong> Enter fingerings as <code>x32010</code> (6 digits: strings 6→1) or space-separated <code>x 3 2 0 1 0</code>. Fill all input boxes to get full points. Examples: <code>x320033</code>, <code>x 3 2 0 0 3 3</code>, <code>032010</code>.</div>
+      <div class="meta" id="exam-meta">
+        <div><strong>Exam mode:</strong> 10 random questions (each one unique).</div>
+        <div><strong>Format:</strong> Enter fingerings as <code>x32010</code> (6 digits: strings 6→1) or space-separated <code>x 3 2 0 1 0</code>.</div>
+        <div><strong>Scoring:</strong> Fill all input boxes to get full points.</div>
+        <div><strong>Examples:</strong> <code>x320033</code>, <code>x 3 2 0 0 3 3</code>, <code>032010</code>.</div>
+      </div>
       <div class="exam-actions">
         <button id="exam-start">Start Exam (10 Questions)</button>
         <button id="exam-exit">Back To Search</button>
@@ -486,6 +493,8 @@
         if (q.totalFingerings > q.displayCount) {
           if (answers.length === q.displayCount && correctCount === answers.length) {
             earnedPoints += q.displayCount;
+          } else if (unmatched.length > 0) {
+            feedback.push(`Q${qIdx + 1} ${q.prompt}: ${q.expected.join(', ')}`);
           }
         } else {
           earnedPoints += correctCount;
@@ -498,7 +507,7 @@
       const percent = totalPoints ? Math.round((earnedPoints / totalPoints) * 100) : 0;
       const result = document.getElementById('exam-result');
       result.innerHTML = `Score: ${percent}% (${earnedPoints}/${totalPoints})` +
-        (feedback.length ? `<div class='exam-answer-key'>Missing answers:<br>${feedback.join('<br>')}</div>` : '');
+        (feedback.length ? `<div class='exam-answer-key'><strong>Missing answers:</strong><br>${feedback.join('<br>')}</div>` : '');
     }
 
     function render(data) {
