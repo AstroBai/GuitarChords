@@ -1503,6 +1503,14 @@ HTML_TEMPLATE = """
       return names.map((name, idx) => `<button data-f='${freqs[idx]}'>${name}</button>`).join('');
     }
 
+        function normalizeChordInput(raw) {
+            return (raw || '')
+                .replace(/♭/g, 'b')
+                .replace(/♯/g, '#')
+                .replace(/\s*\/\s*/g, '/')
+                .trim();
+        }
+
         async function fetchGroups() {
       const params = new URLSearchParams({
         chord: state.chord,
@@ -1612,7 +1620,7 @@ HTML_TEMPLATE = """
     }
 
                 function runSearch() {
-      state.chord = document.getElementById('chord').value.trim() || 'C';
+            state.chord = normalizeChordInput(document.getElementById('chord').value) || 'C';
             state.inversionFilter = document.getElementById('inversion-filter').value;
             state.rootStringFilter = document.getElementById('root-string-filter').value;
       load();

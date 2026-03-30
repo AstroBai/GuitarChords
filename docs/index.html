@@ -250,7 +250,7 @@
       if (pyReady) return pyReady;
       pyReady = (async () => {
         pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.5/full/' });
-        const pySrc = await (await fetch('./GuitarChords.py?v=20260330a')).text();
+        const pySrc = await (await fetch('./GuitarChords.py?v=20260330b')).text();
 
         // Static mode: execute only the chord engine section, skip Flask route registration.
         const splitMarker = '\nvisualizer_web = GuitarChords()\n';
@@ -267,8 +267,16 @@
       pyodide.globals.set('arg_chord', state.chord);
       pyodide.globals.set('arg_filter', state.inversionFilter);
       pyodide.globals.set('arg_root_filter', state.rootStringFilter);
-      const payloadJson = await pyodide.runPythonAsync(`import json\njson.dumps(visualizer_static.get_shapes_grouped(chord_name=arg_chord, max_shapes=None, inversion_filter=arg_filter, root_string_filter=arg_root_filter), ensure_ascii=False)`);
+      const payloadJson = await pyodide.runPythonAsync(`import json\ntry:\n    _payload = visualizer_static.get_shapes_grouped(chord_name=arg_chord, max_shapes=None, inversion_filter=arg_filter, root_string_filter=arg_root_filter)\nexcept TypeError:\n    _payload = visualizer_static.get_shapes_grouped(chord_name=arg_chord, max_shapes=None, inversion_filter=arg_filter)\njson.dumps(_payload, ensure_ascii=False)`);
       return JSON.parse(payloadJson);
+    }
+
+    function normalizeChordInput(raw) {
+      return (raw || '')
+        .replace(/♭/g, 'b')
+        .replace(/♯/g, '#')
+        .replace(/\s*\/\s*/g, '/')
+        .trim();
     }
 
     function render(data) {
@@ -380,7 +388,7 @@
     }
 
     function runSearch() {
-      state.chord = document.getElementById('chord').value.trim() || 'C';
+      state.chord = normalizeChordInput(document.getElementById('chord').value) || 'C';
       state.inversionFilter = document.getElementById('inversion-filter').value;
       state.rootStringFilter = document.getElementById('root-string-filter').value;
       load();
