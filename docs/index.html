@@ -333,6 +333,7 @@
           <div class='card' id='${item.anchor}'>
             <div>Fingering: ${item.fingering}${item.is_inversion ? ` | ${item.inversion}` : ''}</div>
             <div>${item.root_group || ''}</div>
+            ${item.is_non_chord_bass ? `<div>Bass: ${item.bass_note || '-'} (non-chord tone)</div>` : ''}
             <div class='svg-wrap'>${item.svg}</div>
             <div class='notes'>
               <span>Shape Notes:</span>

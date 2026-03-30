@@ -1342,6 +1342,7 @@ class GuitarChords:
             visible_shapes = [item for item in visible_shapes if self._root_string_key(item[1]) == root_key]
 
         grouped = {"6": [], "5": [], "4": [], "3": [], "2": [], "1": [], "unknown": []}
+        chord_tone_set = set(info["chord_notes"])
         for inv_rank, root_string_idx, shape, label in visible_shapes:
             root_key = self._root_string_key(root_string_idx)
             root_title = self._root_string_title(root_string_idx)
@@ -1350,6 +1351,10 @@ class GuitarChords:
             shape_unique = sorted(set(shape_midi))
             shape_names = [self._midi_to_note_name(note) for note in shape_unique]
             shape_freqs = [self._midi_to_freq(note) for note in shape_unique]
+            bass_pc = self._bass_note_pc(shape)
+            bass_note_name = self._pc_display_name(bass_pc) if bass_pc is not None else None
+            bass_is_chord_tone = bass_pc in chord_tone_set if bass_pc is not None else False
+            inversion_name = self._inversion_name(inv_rank) if bass_is_chord_tone else "Non-chord bass"
             group_idx = len(grouped.get(root_key, [])) + 1
             item = {
                 "label": label,
@@ -1359,8 +1364,10 @@ class GuitarChords:
                 "fingering": " ".join("x" if f < 0 else str(f) for f in shape),
                 "root_string": None if root_string_idx is None else (6 - root_string_idx),
                 "root_group": root_title,
-                "inversion": self._inversion_name(inv_rank),
-                "is_inversion": inv_rank > 0,
+                "inversion": inversion_name,
+                "is_inversion": bass_is_chord_tone and inv_rank > 0,
+                "is_non_chord_bass": not bass_is_chord_tone,
+                "bass_note": bass_note_name,
                 "shape_note_names": shape_names,
                 "shape_note_freqs": shape_freqs,
                 "svg": self._shape_to_svg(shape, panel_title),
@@ -1507,7 +1514,7 @@ HTML_TEMPLATE = """
             return (raw || '')
                 .replace(/♭/g, 'b')
                 .replace(/♯/g, '#')
-                .replace(/\s*\/\s*/g, '/')
+                .replace(/\\s*\\/\\s*/g, '/')
                 .trim();
         }
 
@@ -1586,6 +1593,7 @@ HTML_TEMPLATE = """
                         <div>Fingering: ${item.fingering}</div>
                         <div>${item.root_group || ''}</div>
                         ${item.is_inversion ? `<div>Inversion: ${item.inversion}</div>` : ''}
+                        ${item.is_non_chord_bass ? `<div>Bass: ${item.bass_note || '-'} (non-chord tone)</div>` : ''}
                         <div class='svg-wrap'>${item.svg}</div>
                         <div class='notes'>
                             <span>Shape Notes:</span>
