@@ -94,6 +94,15 @@
     .svg-wrap { border: 1px solid #e8efe8; border-radius: 8px; padding: 6px; overflow: auto; }
     .notes { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
     .notes button { background: #fff; color: var(--ink); border-color: #b8c7ba; }
+    .hidden { display: none; }
+    .exam-actions { margin: 10px 0; display: flex; gap: 10px; flex-wrap: wrap; }
+    .exam-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .exam-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .exam-title { font-weight: 700; margin-bottom: 8px; }
+    .exam-help { font-size: 13px; color: #47614f; margin: 4px 0 8px; }
+    .exam-inputs { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 8px; }
+    .exam-result { margin-top: 12px; font-size: 16px; font-weight: 700; }
+    .exam-answer-key { margin-top: 8px; font-size: 13px; color: #335343; }
     @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -122,17 +131,53 @@
         </select>
       </label>
       <button id="search">Generate</button>
+      <button id="exam-mode">Exam Mode</button>
     </div>
-    <div class="meta" id="meta">Loading Python engine...</div>
-    <div class="jump" id="jump"></div>
-    <div id="groups"></div>
+    <div id="browse-view">
+      <div class="meta" id="meta">Loading Python engine...</div>
+      <div class="jump" id="jump"></div>
+      <div id="groups"></div>
+    </div>
+    <div id="exam-view" class="hidden">
+      <div class="meta" id="exam-meta">Exam mode: 10 questions, fill what you know and leave others blank.</div>
+      <div class="exam-actions">
+        <button id="exam-start">Start Exam (10 Questions)</button>
+        <button id="exam-exit">Back To Search</button>
+      </div>
+      <div id="exam-questions" class="exam-grid"></div>
+      <div class="exam-actions hidden" id="exam-submit-wrap">
+        <button id="exam-submit">Submit Answers</button>
+      </div>
+      <div id="exam-result" class="exam-result"></div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
   <script>
     let state = { chord: 'Cmaj', inversionFilter: 'all', rootStringFilter: 'all' };
+    let examState = { active: false, questions: [] };
     let pyodide = null;
     let pyReady = null;
+    const EXAM_QUESTION_COUNT = 10;
+    const EXAM_POOL = [
+      { display: 'C', query: 'C' },
+      { display: 'G', query: 'G' },
+      { display: 'D', query: 'D' },
+      { display: 'A', query: 'A' },
+      { display: 'E', query: 'E' },
+      { display: 'Am', query: 'Am' },
+      { display: 'Dm', query: 'Dm' },
+      { display: 'Em', query: 'Em' },
+      { display: 'F', query: 'F' },
+      { display: 'C/E (1st inversion)', query: 'C', inversionFilter: '1st' },
+      { display: 'G/B (1st inversion)', query: 'G', inversionFilter: '1st' },
+      { display: 'D/F# (1st inversion)', query: 'D', inversionFilter: '1st' },
+      { display: 'Eb9/Bb', query: 'Eb9/Bb' },
+      { display: 'Fsus4/G', query: 'Fsus4/G' },
+      { display: 'Cmaj7', query: 'Cmaj7' },
+      { display: 'G7', query: 'G7' },
+      { display: 'Dsus4', query: 'Dsus4' },
+    ];
 
     const isMobileAudio = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -271,12 +316,156 @@
       return JSON.parse(payloadJson);
     }
 
+    async function fetchGroupsFor(chordName, inversionFilter = 'all', rootStringFilter = 'all') {
+      await ensurePyReady();
+      pyodide.globals.set('arg_chord', chordName);
+      pyodide.globals.set('arg_filter', inversionFilter);
+      pyodide.globals.set('arg_root_filter', rootStringFilter);
+      const payloadJson = await pyodide.runPythonAsync(`import json\ntry:\n    _payload = visualizer_static.get_shapes_grouped(chord_name=arg_chord, max_shapes=None, inversion_filter=arg_filter, root_string_filter=arg_root_filter)\nexcept TypeError:\n    _payload = visualizer_static.get_shapes_grouped(chord_name=arg_chord, max_shapes=None, inversion_filter=arg_filter)\njson.dumps(_payload, ensure_ascii=False)`);
+      return JSON.parse(payloadJson);
+    }
+
     function normalizeChordInput(raw) {
       return (raw || '')
         .replace(/♭/g, 'b')
         .replace(/♯/g, '#')
         .replace(/\s*\/\s*/g, '/')
         .trim();
+    }
+
+    function normalizeFingeringInput(raw) {
+      return (raw || '').replace(/\s+/g, '').toLowerCase().trim();
+    }
+
+    function parseFingeringMaxFret(fingering) {
+      const tokens = String(fingering || '').trim().split(/\s+/);
+      const frets = tokens
+        .map(t => t.toLowerCase() === 'x' ? -1 : parseInt(t, 10))
+        .filter(n => Number.isFinite(n) && n > 0);
+      if (!frets.length) return 0;
+      return Math.max(...frets);
+    }
+
+    function collectItemsFromPayload(data) {
+      const groupsData = data.groups || {};
+      const order = data.group_order || Object.keys(groupsData);
+      return order.flatMap(key => groupsData[key] || []);
+    }
+
+    function uniqueFingerings(items) {
+      const seen = new Set();
+      const ordered = [];
+      for (const item of items) {
+        const text = String(item.fingering || '').trim();
+        const norm = normalizeFingeringInput(text);
+        if (!norm || seen.has(norm)) continue;
+        seen.add(norm);
+        ordered.push({ text, norm, maxFret: parseFingeringMaxFret(text) });
+      }
+      const openPosition = ordered.filter(x => x.maxFret <= 4);
+      return (openPosition.length ? openPosition : ordered);
+    }
+
+    function switchMode(examMode) {
+      examState.active = examMode;
+      document.getElementById('browse-view').classList.toggle('hidden', examMode);
+      document.getElementById('exam-view').classList.toggle('hidden', !examMode);
+      document.getElementById('exam-mode').textContent = examMode ? 'Search Mode' : 'Exam Mode';
+    }
+
+    async function buildQuestion(spec, index) {
+      const payload = await fetchGroupsFor(spec.query, spec.inversionFilter || 'all', 'all');
+      let items = collectItemsFromPayload(payload);
+
+      if (!spec.query.includes('/') && (spec.inversionFilter || 'all') === 'all') {
+        items = items.filter(item => !String(item.label || '').includes('/'));
+      }
+
+      const fingerings = uniqueFingerings(items);
+      if (!fingerings.length) {
+        return null;
+      }
+
+      return {
+        id: index,
+        prompt: spec.display,
+        expected: fingerings.map(f => f.text),
+        expectedNorm: fingerings.map(f => f.norm),
+      };
+    }
+
+    async function generateExamQuestions() {
+      const questions = [];
+      let attempts = 0;
+
+      while (questions.length < EXAM_QUESTION_COUNT && attempts < 300) {
+        attempts += 1;
+        const spec = EXAM_POOL[Math.floor(Math.random() * EXAM_POOL.length)];
+        const question = await buildQuestion(spec, questions.length + 1);
+        if (!question) continue;
+        questions.push(question);
+      }
+
+      return questions;
+    }
+
+    function renderExamQuestions() {
+      const wrap = document.getElementById('exam-questions');
+      const submitWrap = document.getElementById('exam-submit-wrap');
+      const result = document.getElementById('exam-result');
+      result.textContent = '';
+
+      if (!examState.questions.length) {
+        wrap.innerHTML = '';
+        submitWrap.classList.add('hidden');
+        return;
+      }
+
+      wrap.innerHTML = examState.questions.map((q, idx) => {
+        const inputs = Array.from({ length: q.expected.length }, (_, i) => (
+          `<input class='exam-answer' data-q='${idx}' data-i='${i}' placeholder='x32010 or x 3 2 0 1 0' />`
+        )).join('');
+        return `
+          <div class='exam-card'>
+            <div class='exam-title'>Q${idx + 1}. ${q.prompt}</div>
+            <div class='exam-help'>Provide all known fingerings. Blanks are allowed.</div>
+            <div class='exam-inputs'>${inputs}</div>
+          </div>
+        `;
+      }).join('');
+
+      submitWrap.classList.remove('hidden');
+    }
+
+    function scoreExam() {
+      let total = 0;
+      let correct = 0;
+      const feedback = [];
+
+      examState.questions.forEach((q, qIdx) => {
+        total += q.expectedNorm.length;
+        const unmatched = [...q.expectedNorm];
+        const answers = Array.from(document.querySelectorAll(`input.exam-answer[data-q='${qIdx}']`))
+          .map(el => normalizeFingeringInput(el.value))
+          .filter(Boolean);
+
+        answers.forEach(ans => {
+          const pos = unmatched.indexOf(ans);
+          if (pos >= 0) {
+            correct += 1;
+            unmatched.splice(pos, 1);
+          }
+        });
+
+        if (unmatched.length) {
+          feedback.push(`Q${qIdx + 1} ${q.prompt}: ${q.expected.join(', ')}`);
+        }
+      });
+
+      const percent = total ? Math.round((correct / total) * 100) : 0;
+      const result = document.getElementById('exam-result');
+      result.innerHTML = `Score: ${percent}% (${correct}/${total})` +
+        (feedback.length ? `<div class='exam-answer-key'>Missing answers:<br>${feedback.join('<br>')}</div>` : '');
     }
 
     function render(data) {
@@ -405,6 +594,32 @@
     });
     document.getElementById('inversion-filter').addEventListener('change', () => runSearch());
     document.getElementById('root-string-filter').addEventListener('change', () => runSearch());
+
+    document.getElementById('exam-mode').addEventListener('click', () => {
+      switchMode(!examState.active);
+    });
+
+    document.getElementById('exam-exit').addEventListener('click', () => {
+      switchMode(false);
+    });
+
+    document.getElementById('exam-start').addEventListener('click', async () => {
+      const meta = document.getElementById('exam-meta');
+      meta.textContent = 'Building 10 questions...';
+      const questions = await generateExamQuestions();
+      examState.questions = questions;
+      if (!questions.length) {
+        meta.textContent = 'Unable to build exam questions right now. Try again.';
+        renderExamQuestions();
+        return;
+      }
+      meta.textContent = `Exam ready: ${questions.length} questions.`;
+      renderExamQuestions();
+    });
+
+    document.getElementById('exam-submit').addEventListener('click', () => {
+      scoreExam();
+    });
 
     load();
   </script>
