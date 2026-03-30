@@ -77,7 +77,8 @@
       cursor: pointer;
       font-weight: 600;
     }
-    .meta { margin: 10px 0; font-size: 14px; }
+    .meta { margin: 10px 0; font-size: 14px; line-height: 1.6; }
+    .meta code { background: #efe8f6; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
     .jump { margin: 8px 0 12px; display: flex; flex-wrap: wrap; gap: 8px; }
     .jump a {
       color: #0f5e3f;
@@ -139,7 +140,7 @@
       <div id="groups"></div>
     </div>
     <div id="exam-view" class="hidden">
-      <div class="meta" id="exam-meta">Exam mode: 10 questions. For each chord, provide as many fingerings as you know (up to 4 input boxes). Fill all boxes correctly to get full points for that question.</div>
+      <div class="meta" id="exam-meta">Exam mode: 10 random questions (each one unique). <strong>Format:</strong> Enter fingerings as <code>x32010</code> (6 digits: strings 6→1) or space-separated <code>x 3 2 0 1 0</code>. Fill all input boxes to get full points. Examples: <code>x320033</code>, <code>x 3 2 0 0 3 3</code>, <code>032010</code>.</div>
       <div class="exam-actions">
         <button id="exam-start">Start Exam (10 Questions)</button>
         <button id="exam-exit">Back To Search</button>
@@ -159,50 +160,33 @@
     let pyodide = null;
     let pyReady = null;
     const EXAM_QUESTION_COUNT = 10;
-    const EXAM_POOL = [
-      { display: 'C', query: 'C' },
-      { display: 'G', query: 'G' },
-      { display: 'D', query: 'D' },
-      { display: 'A', query: 'A' },
-      { display: 'E', query: 'E' },
-      { display: 'Am', query: 'Am' },
-      { display: 'Dm', query: 'Dm' },
-      { display: 'Em', query: 'Em' },
-      { display: 'F', query: 'F' },
-      { display: 'Bm', query: 'Bm' },
-      { display: 'B', query: 'B' },
-      { display: 'C#m', query: 'C#m' },
-      { display: 'Bb', query: 'Bb' },
-      { display: 'Ebmaj7', query: 'Ebmaj7' },
-      { display: 'Fmaj7', query: 'Fmaj7' },
-      { display: 'C/E (1st inversion)', query: 'C', inversionFilter: '1st' },
-      { display: 'G/B (1st inversion)', query: 'G', inversionFilter: '1st' },
-      { display: 'D/F# (1st inversion)', query: 'D', inversionFilter: '1st' },
-      { display: 'A/C# (1st inversion)', query: 'A', inversionFilter: '1st' },
-      { display: 'C/G (2nd inversion)', query: 'C', inversionFilter: '2nd' },
-      { display: 'G/D (2nd inversion)', query: 'G', inversionFilter: '2nd' },
-      { display: 'Cmaj7', query: 'Cmaj7' },
-      { display: 'Cmin7', query: 'Cmin7' },
-      { display: 'G7', query: 'G7' },
-      { display: 'D7', query: 'D7' },
-      { display: 'A7', query: 'A7' },
-      { display: 'Dsus4', query: 'Dsus4' },
-      { display: 'Gsus4', query: 'Gsus4' },
-      { display: 'Asus4', query: 'Asus4' },
-      { display: 'Dm7', query: 'Dm7' },
-      { display: 'Am7', query: 'Am7' },
-      { display: 'Em7', query: 'Em7' },
-      { display: 'Dmaj7', query: 'Dmaj7' },
-      { display: 'Dmin7', query: 'Dmin7' },
-      { display: 'Dm7b5', query: 'Dm7b5' },
-      { display: 'Eb9/Bb', query: 'Eb9/Bb' },
-      { display: 'Fsus4/G', query: 'Fsus4/G' },
-      { display: 'F#m7b5', query: 'F#m7b5' },
-      { display: 'Emin7b5', query: 'Emin7b5' },
-      { display: 'Bdim', query: 'Bdim' },
-      { display: 'Cadd9', query: 'Cadd9' },
-      { display: 'Gadd9', query: 'Gadd9' },
-    ];
+    
+    const EXAM_ROOTS = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C#', 'D#', 'Eb', 'F#', 'Bb'];
+    const EXAM_QUALITIES = ['', 'm', '7', 'maj7', 'm7', 'sus4', 'add9', 'dim', 'm7b5'];
+    const EXAM_INVERSIONS = ['all', '1st', '2nd'];
+    const EXAM_SLASH_OPTIONS = [false, true];
+    
+    function generateExamQuestionParams(usedParams = new Set()) {
+      let paramStr = '';
+      let attempts = 0;
+      
+      while (attempts < 50) {
+        attempts += 1;
+        const root = EXAM_ROOTS[Math.floor(Math.random() * EXAM_ROOTS.length)];
+        const quality = EXAM_QUALITIES[Math.floor(Math.random() * EXAM_QUALITIES.length)];
+        const inversion = EXAM_INVERSIONS[Math.floor(Math.random() * EXAM_INVERSIONS.length)];
+        const hasSlash = EXAM_SLASH_OPTIONS[Math.floor(Math.random() * EXAM_SLASH_OPTIONS.length)];
+        
+        const query = root + quality;
+        paramStr = `${query}|${inversion || 'all'}|${hasSlash}`;
+        
+        if (!usedParams.has(paramStr)) {
+          return { query, inversion: inversion || 'all', hasSlash, paramStr };
+        }
+      }
+      
+      return null;
+    }
 
     const isMobileAudio = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -398,11 +382,11 @@
       document.getElementById('exam-mode').textContent = examMode ? 'Search Mode' : 'Exam Mode';
     }
 
-    async function buildQuestion(spec, index) {
-      const payload = await fetchGroupsFor(spec.query, spec.inversionFilter || 'all', 'all');
+    async function buildQuestion(params, index) {
+      const payload = await fetchGroupsFor(params.query, params.inversion, 'all');
       let items = collectItemsFromPayload(payload);
 
-      if (!spec.query.includes('/') && (spec.inversionFilter || 'all') === 'all') {
+      if (!params.hasSlash && params.inversion === 'all') {
         items = items.filter(item => !String(item.label || '').includes('/'));
       }
 
@@ -413,10 +397,15 @@
 
       const totalFingerings = fingerings.length;
       const displayCount = Math.min(4, totalFingerings);
+      
+      let displayPrompt = params.query;
+      if (params.inversion !== 'all') {
+        displayPrompt += ` (${params.inversion} inversion)`;
+      }
 
       return {
         id: index,
-        prompt: spec.display,
+        prompt: displayPrompt,
         expected: fingerings.map(f => f.text),
         expectedNorm: fingerings.map(f => f.norm),
         totalFingerings: totalFingerings,
@@ -426,12 +415,16 @@
 
     async function generateExamQuestions() {
       const questions = [];
+      const usedParams = new Set();
       let attempts = 0;
 
-      while (questions.length < EXAM_QUESTION_COUNT && attempts < 300) {
+      while (questions.length < EXAM_QUESTION_COUNT && attempts < 200) {
         attempts += 1;
-        const spec = EXAM_POOL[Math.floor(Math.random() * EXAM_POOL.length)];
-        const question = await buildQuestion(spec, questions.length + 1);
+        const params = generateExamQuestionParams(usedParams);
+        if (!params) break;
+        
+        usedParams.add(params.paramStr);
+        const question = await buildQuestion(params, questions.length + 1);
         if (!question) continue;
         questions.push(question);
       }
@@ -453,7 +446,7 @@
 
       wrap.innerHTML = examState.questions.map((q, idx) => {
         const inputs = Array.from({ length: q.displayCount }, (_, i) => (
-          `<input class='exam-answer' data-q='${idx}' data-i='${i}' placeholder='x32010 or x 3 2 0 1 0' />`
+          `<input class='exam-answer' data-q='${idx}' data-i='${i}' />`
         )).join('');
         const hint = q.totalFingerings > 4 ? ` (${q.totalFingerings} variations, showing ${q.displayCount})` : '';
         return `
