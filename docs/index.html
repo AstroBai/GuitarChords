@@ -331,7 +331,8 @@
       groups.innerHTML = pageItems.length ? (() => {
         const cards = pageItems.map(item => `
           <div class='card' id='${item.anchor}'>
-            <div>Fingering: ${item.fingering}${(item.bass_is_chord_tone === true && item.is_inversion) ? ` | ${item.inversion}` : ''}</div>
+            <div>Fingering: ${item.fingering}</div>
+            ${(item.bass_is_chord_tone === true && item.is_inversion) ? `<div>Inversion: ${item.inversion}</div>` : ''}
             <div>${item.root_group || ''}</div>
             ${(item.is_non_chord_bass === true || (state.chord.includes('/') && item.bass_is_chord_tone !== true)) ? `<div>Bass: ${item.bass_note || '-'} (non-chord tone)</div>` : ''}
             <div class='svg-wrap'>${item.svg}</div>
