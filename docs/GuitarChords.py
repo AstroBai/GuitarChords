@@ -1397,7 +1397,7 @@ HTML_TEMPLATE = """
   </div>
 
   <script>
-                let state = { chord: 'Cmaj', inversionFilter: 'all', rootStringFilter: 'all', page: 1, pageSize: 8, pageCount: 1 };
+                let state = { chord: 'Cmaj', inversionFilter: 'all', rootStringFilter: 'all' };
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let sampleBuffer = null;
         let sampleBaseFreq = 110.0;
@@ -1515,27 +1515,11 @@ HTML_TEMPLATE = """
                 : { C: 'C-shape', A: 'A-shape', G: 'G-shape', E: 'E-shape', D: 'D-shape' };
 
             const availableGroups = order.filter(key => (groupsData[key] || []).length > 0);
-            const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${labels[key] || key} (${(groupsData[key] || []).length})</a>`);
+            const pageItems = availableGroups.flatMap(key => (groupsData[key] || []));
 
-            state.pageCount = Math.max(1, availableGroups.length);
-            state.page = Math.max(1, Math.min(state.page, state.pageCount));
-            const activeGroup = availableGroups[state.page - 1] || null;
-            const pageItems = activeGroup ? (groupsData[activeGroup] || []) : [];
+            jump.innerHTML = '';
 
-            jump.innerHTML = groupLinks.join(' ');
-            jump.querySelectorAll('a[data-group]').forEach(link => {
-                link.onclick = (e) => {
-                    e.preventDefault();
-                    const target = link.getAttribute('data-group');
-                    const idx = availableGroups.indexOf(target);
-                    if (idx >= 0) {
-                        state.page = idx + 1;
-                        render(data);
-                    }
-                };
-            });
-
-            groups.innerHTML = activeGroup ? (() => {
+            groups.innerHTML = pageItems.length ? (() => {
                 const cards = pageItems.map(item => `
                     <div class='card' id='${item.anchor}'>
                         <div>Fingering: ${item.fingering}</div>
@@ -1550,7 +1534,7 @@ HTML_TEMPLATE = """
                         </div>
                     </div>
                 `).join('');
-                return `<div class='group-title' id='grp-${activeGroup}'>${labels[activeGroup] || activeGroup} (${pageItems.length})</div><div class='grid'>${cards}</div>`;
+                return `<div class='group-title'>Matched Shapes (${pageItems.length})</div><div class='grid'>${cards}</div>`;
             })() : '';
 
             const allCards = groups.querySelectorAll('.card');
@@ -1574,33 +1558,30 @@ HTML_TEMPLATE = """
       }
     }
 
-        function runSearch(resetPage = true) {
+                function runSearch() {
       state.chord = document.getElementById('chord').value.trim() || 'C';
             state.inversionFilter = document.getElementById('inversion-filter').value;
             state.rootStringFilter = document.getElementById('root-string-filter').value;
-            if (resetPage) {
-            state.page = 1;
-            }
       load();
         }
 
         document.getElementById('search').onclick = () => {
-            runSearch(true);
+                        runSearch();
     };
 
         document.getElementById('chord').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                runSearch(true);
+                runSearch();
             }
         });
 
         document.getElementById('inversion-filter').addEventListener('change', () => {
-            runSearch(true);
+            runSearch();
         });
 
         document.getElementById('root-string-filter').addEventListener('change', () => {
-            runSearch(true);
+            runSearch();
         });
 
     load();
