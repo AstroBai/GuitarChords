@@ -144,6 +144,7 @@
     <div id="exam-view" class="hidden">
       <div class="meta" id="exam-meta">
         <div><strong>Exam mode:</strong> 10 random questions (each one unique).</div>
+        <div><strong>Scope:</strong> Questions may include inversion. For normal chord questions, inversion/slash shapes are excluded from answer count.</div>
         <div><strong>Format:</strong> Enter fingerings as <code>x32010</code> (6 digits: strings 6→1) or space-separated <code>x 3 2 0 1 0</code>.</div>
         <div><strong>Scoring:</strong> Fill all input boxes to get full points.</div>
         <div><strong>Examples:</strong> <code>x320033</code>, <code>x 3 2 0 0 3 3</code>, <code>032010</code>.</div>
@@ -171,7 +172,7 @@
     const EXAM_ROOTS = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C#', 'D#', 'Eb', 'F#', 'Bb'];
     const EXAM_QUALITIES = ['', 'm', '7', 'maj7', 'm7', 'sus4', 'add9', 'dim', 'm7b5'];
     const EXAM_INVERSIONS = ['all', '1st', '2nd'];
-    const EXAM_SLASH_OPTIONS = [false, true];
+    const EXAM_SLASH_OPTIONS = [false];
     
     function generateExamQuestionParams(usedParams = new Set()) {
       let paramStr = '';
@@ -395,8 +396,13 @@
       const payload = await fetchGroupsFor(params.query, params.inversion, 'all');
       let items = collectItemsFromPayload(payload);
 
-      if (!params.hasSlash && params.inversion === 'all') {
-        items = items.filter(item => !String(item.label || '').includes('/'));
+      // For normal questions, exclude inversion/slash shapes from answer counting.
+      // For explicit inversion questions, keep inversion shapes returned by backend.
+      if (params.inversion === 'all') {
+        items = items.filter(item => {
+          const label = String(item.label || '');
+          return !item.is_inversion && !label.includes('/');
+        });
       }
 
       const fingerings = uniqueFingerings(items);
