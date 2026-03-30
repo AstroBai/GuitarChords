@@ -152,14 +152,13 @@
         <div><strong>Status:</strong> <span id="exam-status">Ready.</span></div>
       </div>
       <div class="exam-actions">
+        <button id="exam-start">Start Exam (10 Questions)</button>
         <label>Difficulty
           <select id="exam-difficulty">
             <option value="easy" selected>Easy</option>
             <option value="hard">Hard</option>
           </select>
         </label>
-        <button id="exam-start">Start Exam (10 Questions)</button>
-        <button id="exam-exit">Back To Search</button>
       </div>
       <div id="exam-questions" class="exam-grid"></div>
       <div class="exam-actions hidden" id="exam-submit-wrap">
@@ -676,10 +675,6 @@
 
     document.getElementById('exam-mode').addEventListener('click', () => {
       switchMode(!examState.active);
-    });
-
-    document.getElementById('exam-exit').addEventListener('click', () => {
-      switchMode(false);
     });
 
     document.getElementById('exam-difficulty').addEventListener('change', (e) => {
