@@ -1232,7 +1232,7 @@ class GuitarChords:
         parts.append("</svg>")
         return "".join(parts)
 
-    def get_shapes_grouped(self, chord_name, max_shapes=None, inversion=None, inversion_filter="all"):
+    def get_shapes_grouped(self, chord_name, max_shapes=None, inversion=None, inversion_filter="all", root_string_filter="all"):
         info, dedup, visible_shapes = self._collect_visible_shapes(
             chord_name,
             max_shapes=max_shapes,
@@ -1266,6 +1266,26 @@ class GuitarChords:
         selected_rank = filter_map.get(key, None)
         if selected_rank is not None:
             visible_shapes = [item for item in visible_shapes if item[0] == selected_rank]
+
+        root_string_counts = {
+            "all": len(visible_shapes),
+            "6": 0,
+            "5": 0,
+            "4": 0,
+            "3": 0,
+            "2": 0,
+            "1": 0,
+            "unknown": 0,
+        }
+        for _, root_string_idx, _, _ in visible_shapes:
+            root_key = self._root_string_key(root_string_idx)
+            root_string_counts[root_key] = root_string_counts.get(root_key, 0) + 1
+
+        root_key = str(root_string_filter or "all").strip().lower()
+        if root_key not in root_string_counts:
+            root_key = "all"
+        if root_key != "all":
+            visible_shapes = [item for item in visible_shapes if self._root_string_key(item[1]) == root_key]
 
         grouped = {"6": [], "5": [], "4": [], "3": [], "2": [], "1": [], "unknown": []}
         for inv_rank, root_string_idx, shape, label in visible_shapes:
@@ -1309,7 +1329,9 @@ class GuitarChords:
             "total_found": len(dedup),
             "total_visible": len(visible_shapes),
             "inversion_filter": key,
+            "root_string_filter": root_key,
             "inversion_counts": inversion_counts,
+            "root_string_counts": root_string_counts,
             "groups": grouped,
             "group_order": group_order,
             "group_labels": group_labels,
@@ -1356,6 +1378,17 @@ HTML_TEMPLATE = """
                                         <option value="3rd">3rd inversion</option>
                                     </select>
                                 </label>
+                                <label>Root String
+                                    <select id="root-string-filter">
+                                        <option value="all" selected>All</option>
+                                        <option value="6">String 6</option>
+                                        <option value="5">String 5</option>
+                                        <option value="4">String 4</option>
+                                        <option value="3">String 3</option>
+                                        <option value="2">String 2</option>
+                                        <option value="1">String 1</option>
+                                    </select>
+                                </label>
             <button id="search">Generate</button>
     </div>
     <div class=\"meta\" id=\"meta\"></div>
@@ -1364,7 +1397,7 @@ HTML_TEMPLATE = """
   </div>
 
   <script>
-                let state = { chord: 'Cmaj', inversionFilter: 'all', page: 1, pageSize: 8, pageCount: 1 };
+                let state = { chord: 'Cmaj', inversionFilter: 'all', rootStringFilter: 'all', page: 1, pageSize: 8, pageCount: 1 };
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let sampleBuffer = null;
         let sampleBaseFreq = 110.0;
@@ -1420,6 +1453,7 @@ HTML_TEMPLATE = """
       const params = new URLSearchParams({
         chord: state.chord,
                 inversion_filter: state.inversionFilter,
+                                root_string_filter: state.rootStringFilter,
       });
             const res = await fetch(`/api/shapes-grouped?${params}`);
       if (!res.ok) {
@@ -1439,7 +1473,9 @@ HTML_TEMPLATE = """
                 '3rd': '3rd',
             };
             const activeFilter = filterLabelMap[data.inversion_filter] || 'All';
-            document.getElementById('meta').textContent = `Chord ${data.chord} | Filter ${activeFilter} | Matched ${data.total_visible} shapes`;
+            const activeRootString = data.root_string_filter || 'all';
+            const activeRootStringLabel = activeRootString === 'all' ? 'All strings' : `String ${activeRootString}`;
+            document.getElementById('meta').textContent = `Chord ${data.chord} | Inversion ${activeFilter} | Root ${activeRootStringLabel} | Matched ${data.total_visible} shapes`;
             const filterSelect = document.getElementById('inversion-filter');
             const counts = data.inversion_counts || {};
             const options = [
@@ -1452,18 +1488,39 @@ HTML_TEMPLATE = """
             filterSelect.innerHTML = options.map(opt => `<option value='${opt.value}'>${opt.label}</option>`).join('');
             filterSelect.value = state.inversionFilter;
 
+            const rootFilterSelect = document.getElementById('root-string-filter');
+            const rootCounts = data.root_string_counts || {};
+            const rootOptions = [
+                { value: 'all', label: `All (${rootCounts.all ?? 0})` },
+                { value: '6', label: `String 6 (${rootCounts['6'] ?? 0})` },
+                { value: '5', label: `String 5 (${rootCounts['5'] ?? 0})` },
+                { value: '4', label: `String 4 (${rootCounts['4'] ?? 0})` },
+                { value: '3', label: `String 3 (${rootCounts['3'] ?? 0})` },
+                { value: '2', label: `String 2 (${rootCounts['2'] ?? 0})` },
+                { value: '1', label: `String 1 (${rootCounts['1'] ?? 0})` },
+                { value: 'unknown', label: `Unknown (${rootCounts.unknown ?? 0})` },
+            ];
+            rootFilterSelect.innerHTML = rootOptions.map(opt => `<option value='${opt.value}'>${opt.label}</option>`).join('');
+            rootFilterSelect.value = state.rootStringFilter;
+
             const groups = document.getElementById('groups');
             const jump = document.getElementById('jump');
-            const order = data.group_order || ['6', '5', '4', '3', '2', '1', 'unknown'];
-            const labels = data.group_labels || {};
+            const groupsData = data.groups || {};
+            const hasRootStringKeys = ['6', '5', '4', '3', '2', '1'].some(key => Array.isArray(groupsData[key]));
+            const order = hasRootStringKeys
+                ? (data.group_order || ['6', '5', '4', '3', '2', '1', 'unknown'])
+                : ['C', 'A', 'G', 'E', 'D'];
+            const labels = hasRootStringKeys
+                ? (data.group_labels || {})
+                : { C: 'C-shape', A: 'A-shape', G: 'G-shape', E: 'E-shape', D: 'D-shape' };
 
-            const availableGroups = order.filter(key => (data.groups[key] || []).length > 0);
-            const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${labels[key] || key} (${(data.groups[key] || []).length})</a>`);
+            const availableGroups = order.filter(key => (groupsData[key] || []).length > 0);
+            const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${labels[key] || key} (${(groupsData[key] || []).length})</a>`);
 
             state.pageCount = Math.max(1, availableGroups.length);
             state.page = Math.max(1, Math.min(state.page, state.pageCount));
             const activeGroup = availableGroups[state.page - 1] || null;
-            const pageItems = activeGroup ? (data.groups[activeGroup] || []) : [];
+            const pageItems = activeGroup ? (groupsData[activeGroup] || []) : [];
 
             jump.innerHTML = groupLinks.join(' ');
             jump.querySelectorAll('a[data-group]').forEach(link => {
@@ -1520,6 +1577,7 @@ HTML_TEMPLATE = """
         function runSearch(resetPage = true) {
       state.chord = document.getElementById('chord').value.trim() || 'C';
             state.inversionFilter = document.getElementById('inversion-filter').value;
+            state.rootStringFilter = document.getElementById('root-string-filter').value;
             if (resetPage) {
             state.page = 1;
             }
@@ -1538,6 +1596,10 @@ HTML_TEMPLATE = """
         });
 
         document.getElementById('inversion-filter').addEventListener('change', () => {
+            runSearch(true);
+        });
+
+        document.getElementById('root-string-filter').addEventListener('change', () => {
             runSearch(true);
         });
 
@@ -1576,11 +1638,13 @@ if app is not None:
         chord = request.args.get("chord", "Cmaj").strip()
         inversion = request.args.get("inversion", "").strip() or None
         inversion_filter = request.args.get("inversion_filter", "all").strip().lower() or "all"
+        root_string_filter = request.args.get("root_string_filter", "all").strip().lower() or "all"
         payload = visualizer_web.get_shapes_grouped(
             chord_name=chord,
             max_shapes=None,
             inversion=inversion,
             inversion_filter=inversion_filter,
+            root_string_filter=root_string_filter,
         )
         return jsonify(payload)
 

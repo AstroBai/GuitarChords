@@ -110,6 +110,17 @@
           <option value="3rd">3rd inversion</option>
         </select>
       </label>
+      <label>Root String
+        <select id="root-string-filter">
+          <option value="all" selected>All</option>
+          <option value="6">String 6</option>
+          <option value="5">String 5</option>
+          <option value="4">String 4</option>
+          <option value="3">String 3</option>
+          <option value="2">String 2</option>
+          <option value="1">String 1</option>
+        </select>
+      </label>
       <button id="search">Generate</button>
     </div>
     <div class="meta" id="meta">Loading Python engine...</div>
@@ -119,7 +130,7 @@
 
   <script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
   <script>
-    let state = { chord: 'Cmaj', inversionFilter: 'all', page: 1, pageCount: 1 };
+    let state = { chord: 'Cmaj', inversionFilter: 'all', rootStringFilter: 'all', page: 1, pageCount: 1 };
     let pyodide = null;
     let pyReady = null;
 
@@ -239,7 +250,7 @@
       if (pyReady) return pyReady;
       pyReady = (async () => {
         pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.5/full/' });
-        const pySrc = await (await fetch('./GuitarChords.py?v=20260329b')).text();
+        const pySrc = await (await fetch('./GuitarChords.py?v=20260330a')).text();
 
         // Static mode: execute only the chord engine section, skip Flask route registration.
         const splitMarker = '\nvisualizer_web = GuitarChords()\n';
@@ -255,7 +266,8 @@
       await ensurePyReady();
       pyodide.globals.set('arg_chord', state.chord);
       pyodide.globals.set('arg_filter', state.inversionFilter);
-      const payloadJson = await pyodide.runPythonAsync(`import json\njson.dumps(visualizer_static.get_shapes_grouped(chord_name=arg_chord, max_shapes=None, inversion_filter=arg_filter), ensure_ascii=False)`);
+      pyodide.globals.set('arg_root_filter', state.rootStringFilter);
+      const payloadJson = await pyodide.runPythonAsync(`import json\njson.dumps(visualizer_static.get_shapes_grouped(chord_name=arg_chord, max_shapes=None, inversion_filter=arg_filter, root_string_filter=arg_root_filter), ensure_ascii=False)`);
       return JSON.parse(payloadJson);
     }
 
@@ -263,7 +275,9 @@
       sampleBaseFreq = data.sample_base_freq || 110.0;
       const filterLabelMap = { all: 'All', root: 'Root', '1st': '1st', '2nd': '2nd', '3rd': '3rd' };
       const activeFilter = filterLabelMap[data.inversion_filter] || 'All';
-      document.getElementById('meta').textContent = `Chord ${data.chord} | Filter ${activeFilter} | Matched ${data.total_visible} shapes`;
+      const activeRootString = data.root_string_filter || 'all';
+      const activeRootStringLabel = activeRootString === 'all' ? 'All strings' : `String ${activeRootString}`;
+      document.getElementById('meta').textContent = `Chord ${data.chord} | Inversion ${activeFilter} | Root ${activeRootStringLabel} | Matched ${data.total_visible} shapes`;
 
       const filterSelect = document.getElementById('inversion-filter');
       const counts = data.inversion_counts || {};
@@ -277,17 +291,38 @@
       filterSelect.innerHTML = options.map(opt => `<option value='${opt.value}'>${opt.label}</option>`).join('');
       filterSelect.value = state.inversionFilter;
 
+      const rootFilterSelect = document.getElementById('root-string-filter');
+      const rootCounts = data.root_string_counts || {};
+      const rootOptions = [
+        { value: 'all', label: `All (${rootCounts.all ?? 0})` },
+        { value: '6', label: `String 6 (${rootCounts['6'] ?? 0})` },
+        { value: '5', label: `String 5 (${rootCounts['5'] ?? 0})` },
+        { value: '4', label: `String 4 (${rootCounts['4'] ?? 0})` },
+        { value: '3', label: `String 3 (${rootCounts['3'] ?? 0})` },
+        { value: '2', label: `String 2 (${rootCounts['2'] ?? 0})` },
+        { value: '1', label: `String 1 (${rootCounts['1'] ?? 0})` },
+        { value: 'unknown', label: `Unknown (${rootCounts.unknown ?? 0})` },
+      ];
+      rootFilterSelect.innerHTML = rootOptions.map(opt => `<option value='${opt.value}'>${opt.label}</option>`).join('');
+      rootFilterSelect.value = state.rootStringFilter;
+
       const groups = document.getElementById('groups');
       const jump = document.getElementById('jump');
-      const order = data.group_order || ['6', '5', '4', '3', '2', '1', 'unknown'];
-      const labels = data.group_labels || {};
-      const availableGroups = order.filter(key => (data.groups[key] || []).length > 0);
-      const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${labels[key] || key} (${(data.groups[key] || []).length})</a>`);
+      const groupsData = data.groups || {};
+      const hasRootStringKeys = ['6', '5', '4', '3', '2', '1'].some(key => Array.isArray(groupsData[key]));
+      const order = hasRootStringKeys
+        ? (data.group_order || ['6', '5', '4', '3', '2', '1', 'unknown'])
+        : ['C', 'A', 'G', 'E', 'D'];
+      const labels = hasRootStringKeys
+        ? (data.group_labels || {})
+        : { C: 'C-shape', A: 'A-shape', G: 'G-shape', E: 'E-shape', D: 'D-shape' };
+      const availableGroups = order.filter(key => (groupsData[key] || []).length > 0);
+      const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${labels[key] || key} (${(groupsData[key] || []).length})</a>`);
 
       state.pageCount = Math.max(1, availableGroups.length);
       state.page = Math.max(1, Math.min(state.page, state.pageCount));
       const activeGroup = availableGroups[state.page - 1] || null;
-      const pageItems = activeGroup ? (data.groups[activeGroup] || []) : [];
+      const pageItems = activeGroup ? (groupsData[activeGroup] || []) : [];
 
       jump.innerHTML = groupLinks.join(' ');
       jump.querySelectorAll('a[data-group]').forEach(link => {
@@ -364,6 +399,7 @@
     function runSearch(resetPage = true) {
       state.chord = document.getElementById('chord').value.trim() || 'C';
       state.inversionFilter = document.getElementById('inversion-filter').value;
+      state.rootStringFilter = document.getElementById('root-string-filter').value;
       if (resetPage) state.page = 1;
       load();
     }
@@ -376,6 +412,7 @@
       }
     });
     document.getElementById('inversion-filter').addEventListener('change', () => runSearch(true));
+    document.getElementById('root-string-filter').addEventListener('change', () => runSearch(true));
 
     load();
   </script>
