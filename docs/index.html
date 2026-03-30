@@ -144,12 +144,20 @@
     <div id="exam-view" class="hidden">
       <div class="meta" id="exam-meta">
         <div><strong>Exam mode:</strong> 10 random questions (each one unique).</div>
-        <div><strong>Scope:</strong> Questions may include inversion. For normal chord questions, inversion/slash shapes are excluded from answer count.</div>
+        <div><strong>Difficulty:</strong> <span id="exam-difficulty-label">Easy</span></div>
+        <div><strong>Scope:</strong> <span id="exam-scope">No inversion, no add/sus and no advanced qualities.</span></div>
         <div><strong>Format:</strong> Enter fingerings as <code>x32010</code> (6 digits: strings 6→1) or space-separated <code>x 3 2 0 1 0</code>.</div>
         <div><strong>Scoring:</strong> Fill all input boxes to get full points.</div>
         <div><strong>Examples:</strong> <code>x320033</code>, <code>x 3 2 0 0 3 3</code>, <code>032010</code>.</div>
+        <div><strong>Status:</strong> <span id="exam-status">Ready.</span></div>
       </div>
       <div class="exam-actions">
+        <label>Difficulty
+          <select id="exam-difficulty">
+            <option value="easy" selected>Easy</option>
+            <option value="hard">Hard</option>
+          </select>
+        </label>
         <button id="exam-start">Start Exam (10 Questions)</button>
         <button id="exam-exit">Back To Search</button>
       </div>
@@ -164,25 +172,46 @@
   <script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
   <script>
     let state = { chord: 'Cmaj', inversionFilter: 'all', rootStringFilter: 'all' };
-    let examState = { active: false, questions: [] };
+    let examState = { active: false, questions: [], difficulty: 'easy' };
     let pyodide = null;
     let pyReady = null;
     const EXAM_QUESTION_COUNT = 10;
     
     const EXAM_ROOTS = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C#', 'D#', 'Eb', 'F#', 'Bb'];
-    const EXAM_QUALITIES = ['', 'm', '7', 'maj7', 'm7', 'sus4', 'add9', 'dim', 'm7b5'];
-    const EXAM_INVERSIONS = ['all', '1st', '2nd'];
+    const EXAM_DIFFICULTY_CONFIG = {
+      easy: {
+        qualities: ['', 'm', '7', 'maj7', 'm7'],
+        inversions: ['all'],
+      },
+      hard: {
+        qualities: ['', 'm', '7', 'maj7', 'm7', 'sus4', 'add9', 'dim', 'm7b5'],
+        inversions: ['all', '1st', '2nd'],
+      },
+    };
     const EXAM_SLASH_OPTIONS = [false];
+
+    function updateExamDifficultyMeta() {
+      const difficultyLabel = document.getElementById('exam-difficulty-label');
+      const scope = document.getElementById('exam-scope');
+      if (examState.difficulty === 'hard') {
+        difficultyLabel.textContent = 'Hard';
+        scope.textContent = 'Fully random; may include inversions, add/sus and advanced qualities.';
+      } else {
+        difficultyLabel.textContent = 'Easy';
+        scope.textContent = 'No inversion, no add/sus and no advanced qualities.';
+      }
+    }
     
-    function generateExamQuestionParams(usedParams = new Set()) {
+    function generateExamQuestionParams(usedParams = new Set(), difficulty = 'easy') {
+      const cfg = EXAM_DIFFICULTY_CONFIG[difficulty] || EXAM_DIFFICULTY_CONFIG.easy;
       let paramStr = '';
       let attempts = 0;
       
       while (attempts < 50) {
         attempts += 1;
         const root = EXAM_ROOTS[Math.floor(Math.random() * EXAM_ROOTS.length)];
-        const quality = EXAM_QUALITIES[Math.floor(Math.random() * EXAM_QUALITIES.length)];
-        const inversion = EXAM_INVERSIONS[Math.floor(Math.random() * EXAM_INVERSIONS.length)];
+        const quality = cfg.qualities[Math.floor(Math.random() * cfg.qualities.length)];
+        const inversion = cfg.inversions[Math.floor(Math.random() * cfg.inversions.length)];
         const hasSlash = EXAM_SLASH_OPTIONS[Math.floor(Math.random() * EXAM_SLASH_OPTIONS.length)];
         
         const query = root + quality;
@@ -428,14 +457,14 @@
       };
     }
 
-    async function generateExamQuestions() {
+    async function generateExamQuestions(difficulty = 'easy') {
       const questions = [];
       const usedParams = new Set();
       let attempts = 0;
 
       while (questions.length < EXAM_QUESTION_COUNT && attempts < 200) {
         attempts += 1;
-        const params = generateExamQuestionParams(usedParams);
+        const params = generateExamQuestionParams(usedParams, difficulty);
         if (!params) break;
         
         usedParams.add(params.paramStr);
@@ -653,17 +682,24 @@
       switchMode(false);
     });
 
+    document.getElementById('exam-difficulty').addEventListener('change', (e) => {
+      examState.difficulty = e.target.value;
+      updateExamDifficultyMeta();
+      document.getElementById('exam-status').textContent = 'Ready.';
+    });
+
     document.getElementById('exam-start').addEventListener('click', async () => {
-      const meta = document.getElementById('exam-meta');
-      meta.textContent = 'Building 10 questions...';
-      const questions = await generateExamQuestions();
+      examState.difficulty = document.getElementById('exam-difficulty').value;
+      updateExamDifficultyMeta();
+      document.getElementById('exam-status').textContent = 'Building 10 questions...';
+      const questions = await generateExamQuestions(examState.difficulty);
       examState.questions = questions;
       if (!questions.length) {
-        meta.textContent = 'Unable to build exam questions right now. Try again.';
+        document.getElementById('exam-status').textContent = 'Unable to build exam questions right now. Try again.';
         renderExamQuestions();
         return;
       }
-      meta.textContent = `Exam ready: ${questions.length} questions.`;
+      document.getElementById('exam-status').textContent = `Exam ready: ${questions.length} questions.`;
       renderExamQuestions();
     });
 
@@ -671,6 +707,7 @@
       scoreExam();
     });
 
+    updateExamDifficultyMeta();
     load();
   </script>
 </body>
