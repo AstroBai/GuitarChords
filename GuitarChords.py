@@ -172,8 +172,8 @@ class GuitarChords:
         "alt": "alt",
     }
 
-    # Universal CAGED skeletons (major-shape frames) used as positional windows.
-    CAGED_SKELETONS = [
+    # Universal major-shape frames used as positional windows.
+    FRAME_SKELETONS = [
         ("C", (-1, 3, 2, 0, 1, 0), "C"),
         ("A", (-1, 0, 2, 2, 2, 0), "A"),
         ("G", (3, 2, 0, 0, 0, 3), "G"),
@@ -597,7 +597,7 @@ class GuitarChords:
         must_include = self._characteristic_pcs(root_pc, formula)
         shapes = []
         seen_shapes = set()
-        for caged_name, template_shape, template_root in self.CAGED_SKELETONS:
+        for frame_name, template_shape, template_root in self.FRAME_SKELETONS:
             template_root_pc = self.NOTE_MAP[template_root]
             shift = (root_pc - template_root_pc) % 12
             shifted_shape = self._transpose_shape(template_shape, shift)
@@ -617,7 +617,7 @@ class GuitarChords:
                     if variant in seen_shapes:
                         continue
                     seen_shapes.add(variant)
-                    shapes.append((caged_name, variant))
+                    shapes.append((frame_name, variant))
                 continue
 
             fitted_shape = self._fit_shape_to_chord(shifted_shape, chord_notes)
@@ -683,7 +683,7 @@ class GuitarChords:
                 if candidate in seen_shapes:
                     continue
                 seen_shapes.add(candidate)
-                shapes.append((caged_name, candidate))
+                shapes.append((frame_name, candidate))
 
         def shape_score(item):
             _, shape = item
@@ -716,6 +716,24 @@ class GuitarChords:
 
         chord_core = chord_name.split("/")[0]
         return f"{chord_core}/{self._pc_display_name(bass_pc)}"
+
+    def _root_string_index(self, shape, root_pc):
+        for string, fret in enumerate(shape):
+            if fret < 0:
+                continue
+            if (self.tuning[string] + fret) % 12 == root_pc:
+                return string
+        return None
+
+    def _root_string_key(self, root_string_idx):
+        if root_string_idx is None:
+            return "unknown"
+        return str(6 - root_string_idx)
+
+    def _root_string_title(self, root_string_idx):
+        if root_string_idx is None:
+            return "Root string unknown"
+        return f"Root on string {6 - root_string_idx}"
 
     def _pc_display_name(self, pc):
         return self.DISPLAY_NOTE_NAMES[pc % 12]
@@ -756,20 +774,20 @@ class GuitarChords:
         return muted_from_fuller
 
     def _prune_muted_subset_shapes(self, shapes, preserve_required_mutes=True):
-        required_mute_by_caged = {
-            caged_name: {idx for idx, fret in enumerate(template_shape) if fret < 0}
-            for caged_name, template_shape, _ in self.CAGED_SKELETONS
+        required_mute_by_frame = {
+            frame_name: {idx for idx, fret in enumerate(template_shape) if fret < 0}
+            for frame_name, template_shape, _ in self.FRAME_SKELETONS
         }
 
         pruned = []
         for idx, item in enumerate(shapes):
-            candidate_caged, candidate_shape = item
+            candidate_frame, candidate_shape = item
             dominated = False
             for jdx, other in enumerate(shapes):
                 if idx == jdx:
                     continue
-                other_caged, other_shape = other
-                if candidate_caged != other_caged:
+                other_frame, other_shape = other
+                if candidate_frame != other_frame:
                     continue
                 if self._is_muted_subset_shape(other_shape, candidate_shape):
                     # Keep shapes that change the bass note/inversion (e.g. G vs G/B).
@@ -778,15 +796,14 @@ class GuitarChords:
                     if candidate_bass != other_bass:
                         continue
 
-                    # Keep mute strings that are structurally required by the CAGED template
-                    # (for example C-shape keeps low E muted: x32010).
+                    # Keep mute strings that are structurally required by the base frame.
                     muted_from_fuller = {
                         i
                         for i, (full_fret, cand_fret) in enumerate(zip(other_shape, candidate_shape))
                         if cand_fret < 0 and full_fret >= 0
                     }
                     if preserve_required_mutes:
-                        required_mutes = required_mute_by_caged.get(candidate_caged, set())
+                        required_mutes = required_mute_by_frame.get(candidate_frame, set())
                         if muted_from_fuller & required_mutes:
                             continue
 
@@ -999,12 +1016,13 @@ class GuitarChords:
         header.pack(anchor="w", padx=10, pady=(10, 6))
 
         for idx, item in enumerate(visible_shapes, start=1):
-            _, caged_name, shape, label = item
+            _, root_string_idx, shape, label = item
             shape_midi = self._shape_midi_notes(shape)
             shape_unique_midi = sorted(set(shape_midi))
             fingering_text = " ".join("x" if fret < 0 else str(fret) for fret in shape)
+            root_title = self._root_string_title(root_string_idx)
 
-            card = ttk.LabelFrame(container, text=f"{idx}. {label} ({caged_name})")
+            card = ttk.LabelFrame(container, text=f"{idx}. {label} ({root_title})")
             card.pack(fill="x", padx=10, pady=8)
 
             ttk.Label(card, text=f"Fingering: {fingering_text}").pack(anchor="w", padx=8, pady=(6, 2))
@@ -1049,22 +1067,23 @@ class GuitarChords:
         shapes = self.generate_chord_shapes(chord_name, max_results=None, inversion=inversion)
 
         ordered = []
-        for caged_name, shape in shapes:
+        for _, shape in shapes:
             bass_pc = self._bass_note_pc(shape)
             inv_rank = self._inversion_rank(bass_pc, root_pc, formula)
             label = self._shape_label(chord_name, shape, root_pc)
-            ordered.append((inv_rank, caged_name, shape, label))
+            root_string_idx = self._root_string_index(shape, root_pc)
+            ordered.append((inv_rank, root_string_idx, shape, label))
 
-        ordered.sort(key=lambda item: (item[0], item[1]))
+        ordered.sort(key=lambda item: (item[0], item[1] if item[1] is not None else 99))
 
         dedup = []
         seen = set()
-        for inv_rank, caged_name, shape, label in ordered:
+        for inv_rank, root_string_idx, shape, label in ordered:
             key = (shape, label)
             if key in seen:
                 continue
             seen.add(key)
-            dedup.append((inv_rank, caged_name, shape, label))
+            dedup.append((inv_rank, root_string_idx, shape, label))
 
         visible_shapes = dedup
         return info, dedup, visible_shapes
@@ -1099,8 +1118,9 @@ class GuitarChords:
             axes_list = [ax for row_axes in axes for ax in row_axes]
 
         for idx, item in enumerate(visible_shapes):
-            _, caged_name, shape, label = item
-            panel_title = label if len(visible_shapes) == 1 else f"{label} ({caged_name})"
+            _, root_string_idx, shape, label = item
+            root_title = self._root_string_title(root_string_idx)
+            panel_title = label if len(visible_shapes) == 1 else f"{label} ({root_title})"
             self._draw_chord_box(axes_list[idx], shape, panel_title)
 
         for ax in axes_list[len(visible_shapes):]:
@@ -1112,13 +1132,15 @@ class GuitarChords:
     def plot_shape(self, shape, chord_name, title_suffix="", pdf_path=None, show=True, dpi=220, export_dpi=360):
         dpi = max(80, min(int(dpi), self.MAX_UI_DPI))
         export_dpi = max(100, min(int(export_dpi), self.MAX_EXPORT_DPI))
-        if isinstance(shape, tuple) and len(shape) == 2 and isinstance(shape[0], str):
-            caged_name, fingering = shape
+        if isinstance(shape, tuple) and len(shape) == 2:
+            group_tag, fingering = shape
         else:
-            caged_name, fingering = "", shape
+            group_tag, fingering = "", shape
         title = f"{chord_name} {title_suffix}".strip()
-        if caged_name:
-            title = f"{title} ({caged_name})".strip()
+        if isinstance(group_tag, int):
+            title = f"{title} ({self._root_string_title(group_tag)})".strip()
+        elif isinstance(group_tag, str) and group_tag:
+            title = f"{title} ({group_tag})".strip()
         fig, ax = plt.subplots(figsize=(2.8, 4.0), dpi=dpi, facecolor="none")
         fig.patch.set_alpha(0)
         self._draw_chord_box(ax, fingering, title)
@@ -1245,28 +1267,42 @@ class GuitarChords:
         if selected_rank is not None:
             visible_shapes = [item for item in visible_shapes if item[0] == selected_rank]
 
-        grouped = {"C": [], "A": [], "G": [], "E": [], "D": []}
-        for inv_rank, caged_name, shape, label in visible_shapes:
-            panel_title = f"{label} ({caged_name})"
+        grouped = {"6": [], "5": [], "4": [], "3": [], "2": [], "1": [], "unknown": []}
+        for inv_rank, root_string_idx, shape, label in visible_shapes:
+            root_key = self._root_string_key(root_string_idx)
+            root_title = self._root_string_title(root_string_idx)
+            panel_title = f"{label} ({root_title})"
             shape_midi = self._shape_midi_notes(shape)
             shape_unique = sorted(set(shape_midi))
             shape_names = [self._midi_to_note_name(note) for note in shape_unique]
             shape_freqs = [self._midi_to_freq(note) for note in shape_unique]
-            group_idx = len(grouped.get(caged_name, [])) + 1
+            group_idx = len(grouped.get(root_key, [])) + 1
             item = {
-                "caged": caged_name,
                 "label": label,
                 "title": panel_title,
-                "anchor": f"shape-{caged_name}-{group_idx}",
+                "anchor": f"shape-s{root_key}-{group_idx}",
                 "shape": list(shape),
                 "fingering": " ".join("x" if f < 0 else str(f) for f in shape),
+                "root_string": None if root_string_idx is None else (6 - root_string_idx),
+                "root_group": root_title,
                 "inversion": self._inversion_name(inv_rank),
                 "is_inversion": inv_rank > 0,
                 "shape_note_names": shape_names,
                 "shape_note_freqs": shape_freqs,
                 "svg": self._shape_to_svg(shape, panel_title),
             }
-            grouped.setdefault(caged_name, []).append(item)
+            grouped.setdefault(root_key, []).append(item)
+
+        group_order = ["6", "5", "4", "3", "2", "1", "unknown"]
+        group_labels = {
+            "6": "Root on string 6",
+            "5": "Root on string 5",
+            "4": "Root on string 4",
+            "3": "Root on string 3",
+            "2": "Root on string 2",
+            "1": "Root on string 1",
+            "unknown": "Root string unknown",
+        }
 
         return {
             "chord": chord_name,
@@ -1275,6 +1311,8 @@ class GuitarChords:
             "inversion_filter": key,
             "inversion_counts": inversion_counts,
             "groups": grouped,
+            "group_order": group_order,
+            "group_labels": group_labels,
             "sample_base_freq": self._midi_to_freq(self.GUITAR_SAMPLE_MIDI),
         }
 
@@ -1416,10 +1454,11 @@ HTML_TEMPLATE = """
 
             const groups = document.getElementById('groups');
             const jump = document.getElementById('jump');
-            const order = ['C', 'A', 'G', 'E', 'D'];
+            const order = data.group_order || ['6', '5', '4', '3', '2', '1', 'unknown'];
+            const labels = data.group_labels || {};
 
             const availableGroups = order.filter(key => (data.groups[key] || []).length > 0);
-            const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${key}-shape (${(data.groups[key] || []).length})</a>`);
+            const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${labels[key] || key} (${(data.groups[key] || []).length})</a>`);
 
             state.pageCount = Math.max(1, availableGroups.length);
             state.page = Math.max(1, Math.min(state.page, state.pageCount));
@@ -1443,6 +1482,7 @@ HTML_TEMPLATE = """
                 const cards = pageItems.map(item => `
                     <div class='card' id='${item.anchor}'>
                         <div>Fingering: ${item.fingering}</div>
+                        <div>${item.root_group || ''}</div>
                         ${item.is_inversion ? `<div>Inversion: ${item.inversion}</div>` : ''}
                         <div class='svg-wrap'>${item.svg}</div>
                         <div class='notes'>
@@ -1453,7 +1493,7 @@ HTML_TEMPLATE = """
                         </div>
                     </div>
                 `).join('');
-                return `<div class='group-title' id='grp-${activeGroup}'>${activeGroup}-shape (${pageItems.length})</div><div class='grid'>${cards}</div>`;
+                return `<div class='group-title' id='grp-${activeGroup}'>${labels[activeGroup] || activeGroup} (${pageItems.length})</div><div class='grid'>${cards}</div>`;
             })() : '';
 
             const allCards = groups.querySelectorAll('.card');

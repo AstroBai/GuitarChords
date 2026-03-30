@@ -279,9 +279,10 @@
 
       const groups = document.getElementById('groups');
       const jump = document.getElementById('jump');
-      const order = ['C', 'A', 'G', 'E', 'D'];
+      const order = data.group_order || ['6', '5', '4', '3', '2', '1', 'unknown'];
+      const labels = data.group_labels || {};
       const availableGroups = order.filter(key => (data.groups[key] || []).length > 0);
-      const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${key}-shape (${(data.groups[key] || []).length})</a>`);
+      const groupLinks = availableGroups.map(key => `<a href='#' data-group='${key}'>${labels[key] || key} (${(data.groups[key] || []).length})</a>`);
 
       state.pageCount = Math.max(1, availableGroups.length);
       state.page = Math.max(1, Math.min(state.page, state.pageCount));
@@ -305,6 +306,7 @@
         const cards = pageItems.map(item => `
           <div class='card' id='${item.anchor}'>
             <div>Fingering: ${item.fingering}${item.is_inversion ? ` | ${item.inversion}` : ''}</div>
+            <div>${item.root_group || ''}</div>
             <div class='svg-wrap'>${item.svg}</div>
             <div class='notes'>
               <span>Shape Notes:</span>
@@ -314,7 +316,7 @@
             </div>
           </div>
         `).join('');
-        return `<div class='group-title'>${activeGroup}-shape (${pageItems.length})</div><div class='grid'>${cards}</div>`;
+        return `<div class='group-title'>${labels[activeGroup] || activeGroup} (${pageItems.length})</div><div class='grid'>${cards}</div>`;
       })() : '';
 
       const allCards = groups.querySelectorAll('.card');
