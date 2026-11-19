@@ -64,8 +64,10 @@
       "name": "50s progression",
       "styles": [
         "pop",
+        "rnb",
+        "soul",
         "doo-wop",
-        "soul"
+        "motown"
       ],
       "roman": "I–vi–IV–V",
       "description": "Doo-wop changes also known as the Stand by Me progression.",
@@ -323,7 +325,8 @@
       "name": "I–vi–ii–V turnaround",
       "styles": [
         "jazz",
-        "pop"
+        "pop",
+        "rnb"
       ],
       "roman": "I–vi–ii–V",
       "description": "Circle-of-fifths turnaround used to close a section and lead back to the top.",
@@ -539,6 +542,186 @@
       ],
       "source": "Wikipedia: List of chord progressions",
       "sourceUrl": "https://en.wikipedia.org/wiki/List_of_chord_progressions"
+    },
+    {
+      "id": "quick-change-blues",
+      "type": "common",
+      "name": "Quick-change 12-bar blues",
+      "styles": [
+        "blues",
+        "rnb"
+      ],
+      "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+      "description": "A 12-bar blues with the IV chord arriving in bar 2; common in Chicago and jump blues.",
+      "referenceKey": "C major",
+      "tonicPc": 0,
+      "mode": "major",
+      "chords": [
+        "C7",
+        "F7",
+        "C7",
+        "C7",
+        "F7",
+        "F7",
+        "C7",
+        "C7",
+        "G7",
+        "F7",
+        "C7",
+        "G7"
+      ],
+      "examples": [
+        "Pride and Joy",
+        "Crossroads",
+        "Hoochie Coochie Man"
+      ],
+      "source": "Wikipedia: Twelve-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Twelve-bar_blues"
+    },
+    {
+      "id": "minor-blues",
+      "type": "common",
+      "name": "Minor 12-bar blues",
+      "styles": [
+        "blues",
+        "rnb"
+      ],
+      "roman": "i7–iv7–i7–i7–iv7–iv7–i7–i7–V7–iv7–i7–V7",
+      "description": "Minor blues with a major V7; the sound of slow blues and minor-key R&B.",
+      "referenceKey": "A minor",
+      "tonicPc": 9,
+      "mode": "minor",
+      "chords": [
+        "Am7",
+        "Dm7",
+        "Am7",
+        "Am7",
+        "Dm7",
+        "Dm7",
+        "Am7",
+        "Am7",
+        "E7",
+        "Dm7",
+        "Am7",
+        "E7"
+      ],
+      "examples": [
+        "The Thrill Is Gone",
+        "I'd Rather Go Blind",
+        "Minor blues jams"
+      ],
+      "source": "Wikipedia: Twelve-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Twelve-bar_blues"
+    },
+    {
+      "id": "slow-blues-iv-iv-i",
+      "type": "common",
+      "name": "Slow blues IV–iv–I",
+      "styles": [
+        "blues",
+        "soul"
+      ],
+      "roman": "I–IV–iv–I",
+      "description": "Slow blues/soul move from IV to the borrowed minor iv before resolving to I.",
+      "referenceKey": "C major",
+      "tonicPc": 0,
+      "mode": "major",
+      "chords": [
+        "C",
+        "F",
+        "Fm",
+        "C"
+      ],
+      "examples": [
+        "Slow blues ballads",
+        "Soul ballads"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": ""
+    },
+    {
+      "id": "blues-turnaround",
+      "type": "common",
+      "name": "Blues turnaround I–VI–ii–V",
+      "styles": [
+        "blues",
+        "rnb",
+        "jazz"
+      ],
+      "roman": "I–VI7–ii7–V7",
+      "description": "Turnaround that leads back to the top of a blues or R&B section.",
+      "referenceKey": "C major",
+      "tonicPc": 0,
+      "mode": "major",
+      "chords": [
+        "C",
+        "A7",
+        "Dm7",
+        "G7"
+      ],
+      "examples": [
+        "Blues turnarounds",
+        "R&B outros"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": ""
+    },
+    {
+      "id": "gospel-changes",
+      "type": "common",
+      "name": "Gospel/soul changes",
+      "styles": [
+        "rnb",
+        "soul",
+        "gospel"
+      ],
+      "roman": "I–I7–IV–iv–I–V–I",
+      "description": "Gospel-flavoured progression using a secondary dominant and a borrowed iv.",
+      "referenceKey": "C major",
+      "tonicPc": 0,
+      "mode": "major",
+      "chords": [
+        "C",
+        "C7",
+        "F",
+        "Fm",
+        "C",
+        "G",
+        "C"
+      ],
+      "examples": [
+        "Soul and gospel ballads",
+        "A Change Is Gonna Come"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": ""
+    },
+    {
+      "id": "rnb-turnaround",
+      "type": "common",
+      "name": "R&B turnaround ii7–V7–Imaj7–vi7",
+      "styles": [
+        "rnb",
+        "soul",
+        "jazz"
+      ],
+      "roman": "ii7–V7–Imaj7–vi7",
+      "description": "Smooth R&B/neo-soul turnaround using seventh chords.",
+      "referenceKey": "C major",
+      "tonicPc": 0,
+      "mode": "major",
+      "chords": [
+        "Dm7",
+        "G7",
+        "Cmaj7",
+        "Am7"
+      ],
+      "examples": [
+        "R&B ballads",
+        "Neo-soul vamps"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": ""
     }
   ],
   "songs": [
@@ -572,7 +755,61 @@
           "originalKey": "F# minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–iii7–vi7–I64–vi64",
+          "chords": [
+            "B",
+            "D#m7",
+            "G#m7",
+            "B/F#",
+            "G#m/D#"
+          ],
+          "shapeChords": [
+            "B",
+            "D#m7",
+            "G#m7",
+            "B/F#",
+            "G#m/D#"
+          ],
+          "keyLabel": "B major",
+          "tonicPc": 11,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "B major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/toto/africa",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "vi–IVsus2–I–V",
+          "chords": [
+            "F#m",
+            "Dsus2",
+            "A",
+            "E"
+          ],
+          "shapeChords": [
+            "F#m",
+            "Dsus2",
+            "A",
+            "E"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/toto/africa",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "all-of-me-john-legend",
@@ -582,6 +819,7 @@
       "year": 2013,
       "styles": [
         "pop",
+        "rnb",
         "soul"
       ],
       "lists": [],
@@ -603,7 +841,57 @@
           "isReference": false,
           "originalKey": "Ab major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Intro and Verse",
+          "roman": "vi(no3)–IV(no5)–I–V(no3)",
+          "chords": [
+            "Fm",
+            "Db",
+            "Ab",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Db",
+            "Ab",
+            "Eb"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/john-legend/all-of-me",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus and Chorus",
+          "roman": "ii–I–V",
+          "chords": [
+            "Bbm",
+            "Ab",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Bbm",
+            "Ab",
+            "Eb"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/john-legend/all-of-me",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "anti-hero-taylor-swift",
@@ -633,7 +921,83 @@
           "isReference": false,
           "originalKey": "E major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "IV7–I–V–vi7",
+          "chords": [
+            "Amaj7",
+            "E",
+            "B",
+            "C#m7"
+          ],
+          "shapeChords": [
+            "Amaj7",
+            "E",
+            "B",
+            "C#m7"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/taylor-swift/anti-hero",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "IV7–I–V–vi7",
+          "chords": [
+            "Amaj7",
+            "E",
+            "B",
+            "C#m7"
+          ],
+          "shapeChords": [
+            "Amaj7",
+            "E",
+            "B",
+            "C#m7"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/taylor-swift/anti-hero",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "IV(add9)–I–V–vi7",
+          "chords": [
+            "Aadd9",
+            "E",
+            "B",
+            "C#m7"
+          ],
+          "shapeChords": [
+            "Aadd9",
+            "E",
+            "B",
+            "C#m7"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/taylor-swift/anti-hero",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "bad-blood-taylor-swift",
@@ -663,7 +1027,35 @@
           "isReference": false,
           "originalKey": "G major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "IV–I–V–vi",
+          "chords": [
+            "C",
+            "G",
+            "D",
+            "Em"
+          ],
+          "shapeChords": [
+            "C",
+            "G",
+            "D",
+            "Em"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "simplified"
     },
     {
       "id": "beast-of-burden-the-rolling-stones",
@@ -696,7 +1088,57 @@
           "isReference": false,
           "originalKey": "E major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V6–vi–IV–V",
+          "chords": [
+            "E",
+            "B/D#",
+            "C#m",
+            "A",
+            "B"
+          ],
+          "shapeChords": [
+            "E",
+            "B/D#",
+            "C#m",
+            "A",
+            "B"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-rolling-stones/beast-of-burden",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "IV–I",
+          "chords": [
+            "A",
+            "E"
+          ],
+          "shapeChords": [
+            "A",
+            "E"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-rolling-stones/beast-of-burden",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "cheap-thrills-sia",
@@ -728,7 +1170,59 @@
           "originalKey": "E minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "III–VII6–i–VI",
+          "chords": [
+            "A",
+            "E/G#",
+            "F#m",
+            "D"
+          ],
+          "shapeChords": [
+            "A",
+            "E/G#",
+            "F#m",
+            "D"
+          ],
+          "keyLabel": "F# minor",
+          "tonicPc": 6,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/sia/cheap-thrills",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i–VI–III–VII6",
+          "chords": [
+            "F#m",
+            "D",
+            "A",
+            "E/G#"
+          ],
+          "shapeChords": [
+            "F#m",
+            "D",
+            "A",
+            "E/G#"
+          ],
+          "keyLabel": "F# minor",
+          "tonicPc": 6,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/sia/cheap-thrills",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "complicated-avril-lavigne",
@@ -760,7 +1254,81 @@
           "originalKey": "D minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–vi–IV(add9)–V",
+          "chords": [
+            "F",
+            "Dm",
+            "Bbadd9",
+            "C"
+          ],
+          "shapeChords": [
+            "F",
+            "Dm",
+            "Bbadd9",
+            "C"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/avril-lavigne/complicated",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "IV7–V–vi",
+          "chords": [
+            "Bbmaj7",
+            "C",
+            "Dm"
+          ],
+          "shapeChords": [
+            "Bbmaj7",
+            "C",
+            "Dm"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/avril-lavigne/complicated",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "vi–IV–I–V",
+          "chords": [
+            "Dm",
+            "Bb",
+            "F",
+            "C"
+          ],
+          "shapeChords": [
+            "Dm",
+            "Bb",
+            "F",
+            "C"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/avril-lavigne/complicated",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "demons-imagine-dragons",
@@ -791,7 +1359,59 @@
           "isReference": false,
           "originalKey": "Eb major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Intro and Verse",
+          "roman": "I–Vsus4–vi–IV",
+          "chords": [
+            "Eb",
+            "Bbsus4",
+            "Cm",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Eb",
+            "Bbsus4",
+            "Cm",
+            "Ab"
+          ],
+          "keyLabel": "Eb major",
+          "tonicPc": 3,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Eb major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/imagine-dragons/demons",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus and Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "Eb",
+            "Bb",
+            "Cm",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Eb",
+            "Bb",
+            "Cm",
+            "Ab"
+          ],
+          "keyLabel": "Eb major",
+          "tonicPc": 3,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Eb major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/imagine-dragons/demons",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "despacito-luis-fonsi",
@@ -823,7 +1443,35 @@
           "originalKey": "B minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Chorus",
+          "roman": "i–VI–III–VII",
+          "chords": [
+            "Bm",
+            "G",
+            "D",
+            "A"
+          ],
+          "shapeChords": [
+            "Bm",
+            "G",
+            "D",
+            "A"
+          ],
+          "keyLabel": "B minor",
+          "tonicPc": 11,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "B minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/luis-fonsi/despacito",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "dosed-red-hot-chili-peppers",
@@ -853,7 +1501,79 @@
           "isReference": false,
           "originalKey": "G major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "IV–V–vi",
+          "chords": [
+            "C",
+            "D",
+            "Em"
+          ],
+          "shapeChords": [
+            "C",
+            "D",
+            "Em"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/red-hot-chili-peppers/dosed",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "IV–V–vi",
+          "chords": [
+            "C",
+            "D",
+            "Em"
+          ],
+          "shapeChords": [
+            "C",
+            "D",
+            "Em"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/red-hot-chili-peppers/dosed",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "G",
+            "D",
+            "Em",
+            "C"
+          ],
+          "shapeChords": [
+            "G",
+            "D",
+            "Em",
+            "C"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/red-hot-chili-peppers/dosed",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "forever-young-alphaville",
@@ -884,7 +1604,63 @@
           "isReference": false,
           "originalKey": "C major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–vi–IV–V",
+          "chords": [
+            "C",
+            "G",
+            "Am",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "G",
+            "Am",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/alphaville/forever-young",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV–V",
+          "chords": [
+            "C",
+            "G",
+            "Am",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "G",
+            "Am",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/alphaville/forever-young",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "glycerine-bush",
@@ -915,7 +1691,59 @@
           "isReference": false,
           "originalKey": "F major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Intro and Verse",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "F",
+            "C",
+            "Dm",
+            "Bb"
+          ],
+          "shapeChords": [
+            "F",
+            "C",
+            "Dm",
+            "Bb"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bush/glycerine",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "F",
+            "C",
+            "Dm",
+            "Bb"
+          ],
+          "shapeChords": [
+            "F",
+            "C",
+            "Dm",
+            "Bb"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bush/glycerine",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "hello-adele",
@@ -925,6 +1753,7 @@
       "year": 2015,
       "styles": [
         "pop",
+        "rnb",
         "soul"
       ],
       "lists": [],
@@ -947,7 +1776,111 @@
           "originalKey": "F minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Intro and Verse",
+          "roman": "i–III–VII–VI(add9)",
+          "chords": [
+            "Fm",
+            "Ab",
+            "Eb",
+            "Dbadd9"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Ab",
+            "Eb",
+            "Dbadd9"
+          ],
+          "keyLabel": "F minor",
+          "tonicPc": 5,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/adele/hello",
+          "note": ""
+        },
+        {
+          "name": "Verse and Pre-Chorus",
+          "roman": "i–VII–v–VI–i",
+          "chords": [
+            "Fm",
+            "Eb",
+            "Cm",
+            "Db",
+            "Fm"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Eb",
+            "Cm",
+            "Db",
+            "Fm"
+          ],
+          "keyLabel": "F minor",
+          "tonicPc": 5,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/adele/hello",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i–VI(add9)–III–VII",
+          "chords": [
+            "Fm",
+            "Dbadd9",
+            "Ab",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Dbadd9",
+            "Ab",
+            "Eb"
+          ],
+          "keyLabel": "F minor",
+          "tonicPc": 5,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/adele/hello",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "III–VII–i–VI–VII",
+          "chords": [
+            "Ab",
+            "Eb",
+            "Fm",
+            "Db",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Ab",
+            "Eb",
+            "Fm",
+            "Db",
+            "Eb"
+          ],
+          "keyLabel": "F minor",
+          "tonicPc": 5,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/adele/hello",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "home-phillip-phillips",
@@ -978,7 +1911,89 @@
           "isReference": false,
           "originalKey": "C major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Pre-Chorus",
+          "roman": "Isus4–vi–IV–I–V6",
+          "chords": [
+            "Csus4",
+            "Am",
+            "F",
+            "C",
+            "G/B"
+          ],
+          "shapeChords": [
+            "Csus4",
+            "Am",
+            "F",
+            "C",
+            "G/B"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/phillip-phillips/home",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–vi7–IV–I–V",
+          "chords": [
+            "C",
+            "Am7",
+            "F",
+            "C",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "Am7",
+            "F",
+            "C",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/phillip-phillips/home",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "IV–I–vi–V(add11)–IV",
+          "chords": [
+            "F",
+            "C",
+            "Am",
+            "Gadd11",
+            "F"
+          ],
+          "shapeChords": [
+            "F",
+            "C",
+            "Am",
+            "Gadd11",
+            "F"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/phillip-phillips/home",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "im-yours-jason-mraz",
@@ -1009,7 +2024,85 @@
           "isReference": false,
           "originalKey": "B major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "B",
+            "F#",
+            "G#m",
+            "E"
+          ],
+          "shapeChords": [
+            "B",
+            "F#",
+            "G#m",
+            "E"
+          ],
+          "keyLabel": "B major",
+          "tonicPc": 11,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "B major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/jason-mraz/im-yours",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "B",
+            "F#",
+            "G#m",
+            "E"
+          ],
+          "shapeChords": [
+            "B",
+            "F#",
+            "G#m",
+            "E"
+          ],
+          "keyLabel": "B major",
+          "tonicPc": 11,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "B major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/jason-mraz/im-yours",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "I–V6–vi–V–IV",
+          "chords": [
+            "B",
+            "F#/A#",
+            "G#m",
+            "F#",
+            "E"
+          ],
+          "shapeChords": [
+            "B",
+            "F#/A#",
+            "G#m",
+            "F#",
+            "E"
+          ],
+          "keyLabel": "B major",
+          "tonicPc": 11,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "B major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/jason-mraz/im-yours",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "i-want-you-to-want-me-cheap-trick",
@@ -1040,7 +2133,85 @@
           "isReference": false,
           "originalKey": "A major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–vi–V–IV",
+          "chords": [
+            "A",
+            "F#m",
+            "E",
+            "D"
+          ],
+          "shapeChords": [
+            "A",
+            "F#m",
+            "E",
+            "D"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/cheap-trick/i-want-you-to-want-me",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "vi–II–bVII–I–vi",
+          "chords": [
+            "F#m",
+            "B",
+            "G",
+            "A",
+            "F#m"
+          ],
+          "shapeChords": [
+            "F#m",
+            "B",
+            "G",
+            "A",
+            "F#m"
+          ],
+          "keyLabel": "A lydian",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A lydian",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/cheap-trick/i-want-you-to-want-me",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "A",
+            "E",
+            "F#m",
+            "D"
+          ],
+          "shapeChords": [
+            "A",
+            "E",
+            "F#m",
+            "D"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/cheap-trick/i-want-you-to-want-me",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "little-talks-of-monsters-and-men",
@@ -1072,7 +2243,57 @@
           "originalKey": "Bb minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "vi–IV–I",
+          "chords": [
+            "Bbm",
+            "Gb",
+            "Db"
+          ],
+          "shapeChords": [
+            "Bbm",
+            "Gb",
+            "Db"
+          ],
+          "keyLabel": "Db major",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Db major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/of-monsters-and-men/little-talks",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "vi–IV–I–V",
+          "chords": [
+            "Bbm",
+            "Gb",
+            "Db",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Bbm",
+            "Gb",
+            "Db",
+            "Ab"
+          ],
+          "keyLabel": "Db major",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Db major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/of-monsters-and-men/little-talks",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "love-the-way-you-lie-eminem",
@@ -1104,7 +2325,35 @@
           "originalKey": "G minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "i–VI–III–VII",
+          "chords": [
+            "Gm",
+            "Eb",
+            "Bb",
+            "F"
+          ],
+          "shapeChords": [
+            "Gm",
+            "Eb",
+            "Bb",
+            "F"
+          ],
+          "keyLabel": "G minor",
+          "tonicPc": 7,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "G minor",
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "simplified"
     },
     {
       "id": "machinehead-bush",
@@ -1135,7 +2384,55 @@
           "isReference": false,
           "originalKey": "E major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i–VI",
+          "chords": [
+            "C#m",
+            "A"
+          ],
+          "shapeChords": [
+            "C#m",
+            "A"
+          ],
+          "keyLabel": "C# minor",
+          "tonicPc": 1,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "C# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bush/machinehead",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "E",
+            "B",
+            "C#m",
+            "A"
+          ],
+          "shapeChords": [
+            "E",
+            "B",
+            "C#m",
+            "A"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bush/machinehead",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "my-happy-ending-avril-lavigne",
@@ -1167,7 +2464,97 @@
           "originalKey": "B minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "vi–IV7–Isus2–Vsus4",
+          "chords": [
+            "Bm",
+            "Gmaj7",
+            "Dsus2",
+            "Asus4"
+          ],
+          "shapeChords": [
+            "Bm",
+            "Gmaj7",
+            "Dsus2",
+            "Asus4"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/avril-lavigne/my-happy-ending",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "IV–V",
+          "chords": [
+            "G",
+            "A"
+          ],
+          "shapeChords": [
+            "G",
+            "A"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/avril-lavigne/my-happy-ending",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "IV–I–V",
+          "chords": [
+            "G",
+            "D",
+            "A"
+          ],
+          "shapeChords": [
+            "G",
+            "D",
+            "A"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/avril-lavigne/my-happy-ending",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "V–IV",
+          "chords": [
+            "A",
+            "G"
+          ],
+          "shapeChords": [
+            "A",
+            "G"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/avril-lavigne/my-happy-ending",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "no-woman-no-cry-bob-marley",
@@ -1199,7 +2586,61 @@
           "isReference": false,
           "originalKey": "C# major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V6–vi–IV",
+          "chords": [
+            "Db",
+            "Ab/C",
+            "Bbm",
+            "Gb"
+          ],
+          "shapeChords": [
+            "Db",
+            "Ab/C",
+            "Bbm",
+            "Gb"
+          ],
+          "keyLabel": "Db major",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Db major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bob-marley/no-woman-no-cry",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V6–vi–IV–I",
+          "chords": [
+            "Db",
+            "Ab/C",
+            "Bbm",
+            "Gb",
+            "Db"
+          ],
+          "shapeChords": [
+            "Db",
+            "Ab/C",
+            "Bbm",
+            "Gb",
+            "Db"
+          ],
+          "keyLabel": "Db major",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Db major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bob-marley/no-woman-no-cry",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "numb-linkin-park",
@@ -1231,7 +2672,83 @@
           "originalKey": "F# minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i–VI7–III–VII",
+          "chords": [
+            "F#m",
+            "Dmaj7",
+            "A",
+            "E"
+          ],
+          "shapeChords": [
+            "F#m",
+            "Dmaj7",
+            "A",
+            "E"
+          ],
+          "keyLabel": "F# minor",
+          "tonicPc": 6,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/linkin-park/numb",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "VI7–VII(add6)–i–III",
+          "chords": [
+            "Dmaj7",
+            "E6",
+            "F#m",
+            "A"
+          ],
+          "shapeChords": [
+            "Dmaj7",
+            "E6",
+            "F#m",
+            "A"
+          ],
+          "keyLabel": "F# minor",
+          "tonicPc": 6,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/linkin-park/numb",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i–VI7–III–VII(add6)",
+          "chords": [
+            "F#m",
+            "Dmaj7",
+            "A",
+            "E6"
+          ],
+          "shapeChords": [
+            "F#m",
+            "Dmaj7",
+            "A",
+            "E6"
+          ],
+          "keyLabel": "F# minor",
+          "tonicPc": 6,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/linkin-park/numb",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "one-of-us-joan-osborne",
@@ -1263,7 +2780,55 @@
           "originalKey": "F# minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "vi–IV–I–V",
+          "chords": [
+            "F#m",
+            "D",
+            "A",
+            "E"
+          ],
+          "shapeChords": [
+            "F#m",
+            "D",
+            "A",
+            "E"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/joan-osborne/one-of-us",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus and Chorus",
+          "roman": "IV–Vsus4",
+          "chords": [
+            "D",
+            "Esus4"
+          ],
+          "shapeChords": [
+            "D",
+            "Esus4"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/joan-osborne/one-of-us",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "otherside-red-hot-chili-peppers",
@@ -1295,7 +2860,77 @@
           "originalKey": "A minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i–v",
+          "chords": [
+            "Am",
+            "Em"
+          ],
+          "shapeChords": [
+            "Am",
+            "Em"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/red-hot-chili-peppers/otherside",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i–VI–III–VII",
+          "chords": [
+            "Am",
+            "F",
+            "C",
+            "G"
+          ],
+          "shapeChords": [
+            "Am",
+            "F",
+            "C",
+            "G"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/red-hot-chili-peppers/otherside",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "i–VI–III",
+          "chords": [
+            "Em",
+            "C",
+            "G"
+          ],
+          "shapeChords": [
+            "Em",
+            "C",
+            "G"
+          ],
+          "keyLabel": "E minor",
+          "tonicPc": 4,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "E minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/red-hot-chili-peppers/otherside",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "paparazzi-lady-gaga",
@@ -1326,7 +2961,55 @@
           "isReference": false,
           "originalKey": "G major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i(add6)–VI",
+          "chords": [
+            "Cm6",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Cm6",
+            "Ab"
+          ],
+          "keyLabel": "C minor",
+          "tonicPc": 0,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "C minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/lady-gaga/paparazzi",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "Ab",
+            "Eb",
+            "Fm",
+            "Db"
+          ],
+          "shapeChords": [
+            "Ab",
+            "Eb",
+            "Fm",
+            "Db"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/lady-gaga/paparazzi",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "perfect-ed-sheeran",
@@ -1356,7 +3039,61 @@
           "isReference": false,
           "originalKey": "Ab major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Pre-Chorus",
+          "roman": "I–vi–IV–I–V",
+          "chords": [
+            "Ab",
+            "Fm",
+            "Db",
+            "Ab",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Ab",
+            "Fm",
+            "Db",
+            "Ab",
+            "Eb"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/ed-sheeran/perfect",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "vi–IV–I–V",
+          "chords": [
+            "Fm",
+            "Db",
+            "Ab",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Db",
+            "Ab",
+            "Eb"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/ed-sheeran/perfect",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "poker-face-lady-gaga",
@@ -1388,7 +3125,57 @@
           "originalKey": "G# minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse and Pre-Chorus",
+          "roman": "i–VI6–VII",
+          "chords": [
+            "G#m",
+            "E/G#",
+            "F#"
+          ],
+          "shapeChords": [
+            "G#m",
+            "E/G#",
+            "F#"
+          ],
+          "keyLabel": "G# minor",
+          "tonicPc": 8,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "G# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/lady-gaga/poker-face",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "vi–IV–I–V",
+          "chords": [
+            "G#m",
+            "E",
+            "B",
+            "F#"
+          ],
+          "shapeChords": [
+            "G#m",
+            "E",
+            "B",
+            "F#"
+          ],
+          "keyLabel": "B major",
+          "tonicPc": 11,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "B major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/lady-gaga/poker-face",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "save-tonight-eagle-eye-cherry",
@@ -1419,7 +3206,59 @@
           "isReference": false,
           "originalKey": "C major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse and Pre-Chorus",
+          "roman": "III–VII–i–VI",
+          "chords": [
+            "C",
+            "G",
+            "Am",
+            "F"
+          ],
+          "shapeChords": [
+            "C",
+            "G",
+            "Am",
+            "F"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/eagle-eye-cherry/save-tonight",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "III–VII–i–VI",
+          "chords": [
+            "C",
+            "G",
+            "Am",
+            "F"
+          ],
+          "shapeChords": [
+            "C",
+            "G",
+            "Am",
+            "F"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/eagle-eye-cherry/save-tonight",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "self-esteem-the-offspring",
@@ -1451,7 +3290,83 @@
           "originalKey": "A minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i–VI–III–VII",
+          "chords": [
+            "Am",
+            "F",
+            "C",
+            "G"
+          ],
+          "shapeChords": [
+            "Am",
+            "F",
+            "C",
+            "G"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-offspring/self-esteem",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i–VI–III–VII",
+          "chords": [
+            "Am",
+            "F",
+            "C",
+            "G"
+          ],
+          "shapeChords": [
+            "Am",
+            "F",
+            "C",
+            "G"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-offspring/self-esteem",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "i–VI–III–VII",
+          "chords": [
+            "Dm",
+            "Bb",
+            "F",
+            "C"
+          ],
+          "shapeChords": [
+            "Dm",
+            "Bb",
+            "F",
+            "C"
+          ],
+          "keyLabel": "D minor",
+          "tonicPc": 2,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "D minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-offspring/self-esteem",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "someone-like-you-adele",
@@ -1461,6 +3376,7 @@
       "year": 2011,
       "styles": [
         "pop",
+        "rnb",
         "soul"
       ],
       "lists": [],
@@ -1482,7 +3398,81 @@
           "isReference": false,
           "originalKey": "A major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "IV–I–iii64–vi(no3)",
+          "chords": [
+            "D",
+            "A",
+            "C#m/G#",
+            "F#m"
+          ],
+          "shapeChords": [
+            "D",
+            "A",
+            "C#m/G#",
+            "F#m"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/adele/someone-like-you",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "V(add9)–vi7–IV",
+          "chords": [
+            "Eadd9",
+            "F#m7",
+            "D"
+          ],
+          "shapeChords": [
+            "Eadd9",
+            "F#m7",
+            "D"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/adele/someone-like-you",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV(no3)",
+          "chords": [
+            "A",
+            "E",
+            "F#m",
+            "D"
+          ],
+          "shapeChords": [
+            "A",
+            "E",
+            "F#m",
+            "D"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/adele/someone-like-you",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "someone-you-loved-lewis-capaldi",
@@ -1512,7 +3502,83 @@
           "isReference": false,
           "originalKey": "Db major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "Db",
+            "Ab",
+            "Bbm",
+            "Gb"
+          ],
+          "shapeChords": [
+            "Db",
+            "Ab",
+            "Bbm",
+            "Gb"
+          ],
+          "keyLabel": "Db major",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Db major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/lewis-capaldi/someone-you-loved",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "Db",
+            "Ab",
+            "Bbm",
+            "Gb"
+          ],
+          "shapeChords": [
+            "Db",
+            "Ab",
+            "Bbm",
+            "Gb"
+          ],
+          "keyLabel": "Db major",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Db major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/lewis-capaldi/someone-you-loved",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "ii–vi–V–vi",
+          "chords": [
+            "Ebm",
+            "Bbm",
+            "Ab",
+            "Bbm"
+          ],
+          "shapeChords": [
+            "Ebm",
+            "Bbm",
+            "Ab",
+            "Bbm"
+          ],
+          "keyLabel": "Db major",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Db major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/lewis-capaldi/someone-you-loved",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "soul-to-squeeze-red-hot-chili-peppers",
@@ -1543,7 +3609,63 @@
           "isReference": false,
           "originalKey": "F major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–vi–IV–vi",
+          "chords": [
+            "F",
+            "C",
+            "Dm",
+            "Bb",
+            "Dm"
+          ],
+          "shapeChords": [
+            "F",
+            "C",
+            "Dm",
+            "Bb",
+            "Dm"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/red-hot-chili-peppers/soul-to-squeeze",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV–I",
+          "chords": [
+            "F",
+            "C",
+            "Dm",
+            "Bb",
+            "F"
+          ],
+          "shapeChords": [
+            "F",
+            "C",
+            "Dm",
+            "Bb",
+            "F"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/red-hot-chili-peppers/soul-to-squeeze",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "stronger-what-doesnt-kill-you-kelly-clarkson",
@@ -1575,7 +3697,35 @@
           "originalKey": "A minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "i–VI–III–VII",
+          "chords": [
+            "Am",
+            "F",
+            "C",
+            "G"
+          ],
+          "shapeChords": [
+            "Am",
+            "F",
+            "C",
+            "G"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "simplified"
     },
     {
       "id": "the-kids-arent-alright-the-offspring",
@@ -1607,7 +3757,59 @@
           "originalKey": "Bb minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i(no3)–VI(no3)–III(no3)–VII(no3)",
+          "chords": [
+            "Bbm",
+            "Gb",
+            "Db",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Bbm",
+            "Gb",
+            "Db",
+            "Ab"
+          ],
+          "keyLabel": "Bb minor",
+          "tonicPc": 10,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "Bb minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-offspring/the-kids-arent-alright",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i(no3)–VI(no3)–III(no3)–VII(no3)",
+          "chords": [
+            "Bbm",
+            "Gb",
+            "Db",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Bbm",
+            "Gb",
+            "Db",
+            "Ab"
+          ],
+          "keyLabel": "Bb minor",
+          "tonicPc": 10,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "Bb minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-offspring/the-kids-arent-alright",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "to-know-him-is-to-love-him-the-teddy-bears",
@@ -1638,7 +3840,35 @@
           "isReference": false,
           "originalKey": "D major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V7–vi–IV",
+          "chords": [
+            "D",
+            "A7",
+            "Bm",
+            "G"
+          ],
+          "shapeChords": [
+            "D",
+            "A7",
+            "Bm",
+            "G"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-teddy-bears/to-know-him-is-to-love-him",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "tuesdays-gone-lynyrd-skynyrd",
@@ -1669,7 +3899,37 @@
           "isReference": false,
           "originalKey": "A major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Chorus",
+          "roman": "I–IV/IV–I–V–IV",
+          "chords": [
+            "A",
+            "G",
+            "A",
+            "E",
+            "D"
+          ],
+          "shapeChords": [
+            "A",
+            "G",
+            "A",
+            "E",
+            "D"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/lynyrd-skynyrd/tuesdays-gone",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "wagon-wheel-old-crow-medicine-show",
@@ -1700,7 +3960,37 @@
           "isReference": false,
           "originalKey": "A major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–vi–IV–I",
+          "chords": [
+            "A",
+            "E",
+            "F#m",
+            "D",
+            "A"
+          ],
+          "shapeChords": [
+            "A",
+            "E",
+            "F#m",
+            "D",
+            "A"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/old-crow-medicine-show/wagon-wheel",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "we-didnt-start-the-fire-billy-joel",
@@ -1731,7 +4021,37 @@
           "isReference": false,
           "originalKey": "G major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Chorus",
+          "roman": "I64–vi43–V11–I64–vi43",
+          "chords": [
+            "G/D",
+            "Em7/B",
+            "D11",
+            "G/D",
+            "Em7/B"
+          ],
+          "shapeChords": [
+            "G/D",
+            "Em7/B",
+            "D11",
+            "G/D",
+            "Em7/B"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/billy-joel/we-didnt-start-the-fire",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "with-or-without-you-u2",
@@ -1764,7 +4084,59 @@
           "isReference": false,
           "originalKey": "D major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "D",
+            "A",
+            "Bm",
+            "G"
+          ],
+          "shapeChords": [
+            "D",
+            "A",
+            "Bm",
+            "G"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/u2/with-or-without-you",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV",
+          "chords": [
+            "D",
+            "A",
+            "Bm",
+            "G"
+          ],
+          "shapeChords": [
+            "D",
+            "A",
+            "Bm",
+            "G"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/u2/with-or-without-you",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "zombie-the-cranberries",
@@ -1796,7 +4168,59 @@
           "originalKey": "E minor",
           "note": "Roman numerals are relative to the minor tonic."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse and Pre-Chorus",
+          "roman": "i–VI7–i65–VII6(add9)",
+          "chords": [
+            "Em",
+            "Cmaj7",
+            "Em7/G",
+            "Dadd9/F#"
+          ],
+          "shapeChords": [
+            "Em",
+            "Cmaj7",
+            "Em7/G",
+            "Dadd9/F#"
+          ],
+          "keyLabel": "E minor",
+          "tonicPc": 4,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "E minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-cranberries/zombie",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i–VI7–i65–v43(add11)",
+          "chords": [
+            "Em",
+            "Cmaj7",
+            "Em7/G",
+            "Bm7add11/F#"
+          ],
+          "shapeChords": [
+            "Em",
+            "Cmaj7",
+            "Em7/G",
+            "Bm7add11/F#"
+          ],
+          "keyLabel": "E minor",
+          "tonicPc": 4,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "E minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-cranberries/zombie",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "stand-by-me-ben-e-king",
@@ -1805,6 +4229,7 @@
       "artist": "Ben E. King",
       "year": 1961,
       "styles": [
+        "rnb",
         "soul",
         "doo-wop"
       ],
@@ -1847,7 +4272,59 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "A",
+            "F#m",
+            "D",
+            "E"
+          ],
+          "shapeChords": [
+            "A",
+            "F#m",
+            "D",
+            "E"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/ben-e-king/stand-by-me",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "A",
+            "F#m",
+            "D",
+            "E"
+          ],
+          "shapeChords": [
+            "A",
+            "F#m",
+            "D",
+            "E"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/ben-e-king/stand-by-me",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "every-breath-you-take-the-police",
@@ -1898,7 +4375,83 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I(add9)–vi(add9)–IVsus2–Vsus2–vi(add9)",
+          "chords": [
+            "Abadd9",
+            "Fmadd9",
+            "Dbsus2",
+            "Ebsus2",
+            "Fmadd9"
+          ],
+          "shapeChords": [
+            "Abadd9",
+            "Fmadd9",
+            "Dbsus2",
+            "Ebsus2",
+            "Fmadd9"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-police/every-breath-you-take",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "IV(add9)–viø43(add13)–I(add9)–V9/V–I(add9)",
+          "chords": [
+            "Dbadd9",
+            "Fm13/C",
+            "Abadd9",
+            "Bb9",
+            "Abadd9"
+          ],
+          "shapeChords": [
+            "Dbadd9",
+            "Fm13/C",
+            "Abadd9",
+            "Bb9",
+            "Abadd9"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-police/every-breath-you-take",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "VI(add11)–VII(add11)",
+          "chords": [
+            "Eadd11",
+            "F#add11"
+          ],
+          "shapeChords": [
+            "Eadd11",
+            "F#add11"
+          ],
+          "keyLabel": "G# minor",
+          "tonicPc": 8,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "G# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-police/every-breath-you-take",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "earth-angel-the-penguins",
@@ -1907,6 +4460,7 @@
       "artist": "The Penguins",
       "year": 1954,
       "styles": [
+        "rnb",
         "doo-wop",
         "soul"
       ],
@@ -1947,7 +4501,35 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Pre-Chorus and Chorus",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "Ab",
+            "Fm",
+            "Db",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Ab",
+            "Fm",
+            "Db",
+            "Eb"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-penguins/earth-angel",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "i-will-always-love-you-dolly-parton-whitney-houston",
@@ -1957,6 +4539,7 @@
       "year": 1974,
       "styles": [
         "pop",
+        "rnb",
         "soul"
       ],
       "lists": [
@@ -1998,7 +4581,35 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Chorus",
+          "roman": "I–vi–IV–V7",
+          "chords": [
+            "A",
+            "F#m",
+            "D",
+            "E7"
+          ],
+          "shapeChords": [
+            "A",
+            "F#m",
+            "D",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/dolly-parton/i-will-always-love-you",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "total-eclipse-of-the-heart-bonnie-tyler",
@@ -2047,7 +4658,97 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i–VII",
+          "chords": [
+            "Bbm",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Bbm",
+            "Ab"
+          ],
+          "keyLabel": "Bb minor",
+          "tonicPc": 10,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "Bb minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bonnie-tyler/total-eclipse-of-the-heart",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "I–IV",
+          "chords": [
+            "E",
+            "A"
+          ],
+          "shapeChords": [
+            "E",
+            "A"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bonnie-tyler/total-eclipse-of-the-heart",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "IV6–V6–vi–V/V–I",
+          "chords": [
+            "Db/F",
+            "Eb/G",
+            "Fm",
+            "Bb",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Db/F",
+            "Eb/G",
+            "Fm",
+            "Bb",
+            "Ab"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bonnie-tyler/total-eclipse-of-the-heart",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "i–VII",
+          "chords": [
+            "Bbm",
+            "Ab"
+          ],
+          "shapeChords": [
+            "Bbm",
+            "Ab"
+          ],
+          "keyLabel": "Bb minor",
+          "tonicPc": 10,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "Bb minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bonnie-tyler/total-eclipse-of-the-heart",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "unchained-melody-the-righteous-brothers",
@@ -2056,6 +4757,7 @@
       "artist": "The Righteous Brothers",
       "year": 1955,
       "styles": [
+        "rnb",
         "soul",
         "pop"
       ],
@@ -2098,7 +4800,37 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–vi–IV–V–I",
+          "chords": [
+            "Db",
+            "Bbm",
+            "Gb",
+            "Ab",
+            "Db"
+          ],
+          "shapeChords": [
+            "Db",
+            "Bbm",
+            "Gb",
+            "Ab",
+            "Db"
+          ],
+          "keyLabel": "Db major",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Db major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/righteous-brothers/unchained-melody",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "blue-moon-the-marcels",
@@ -2107,7 +4839,9 @@
       "artist": "The Marcels",
       "year": 1961,
       "styles": [
+        "rnb",
         "doo-wop",
+        "soul",
         "pop"
       ],
       "lists": [],
@@ -2147,7 +4881,59 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": true,
+          "originalKey": null,
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": true,
+          "originalKey": null,
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "simplified"
     },
     {
       "id": "this-magic-moment-the-drifters",
@@ -2156,6 +4942,7 @@
       "artist": "The Drifters",
       "year": 1960,
       "styles": [
+        "rnb",
         "doo-wop",
         "soul"
       ],
@@ -2196,7 +4983,61 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I(add9)–vi–IV–V(add9)",
+          "chords": [
+            "Cadd9",
+            "Am",
+            "F",
+            "Gadd9"
+          ],
+          "shapeChords": [
+            "Cadd9",
+            "Am",
+            "F",
+            "Gadd9"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-drifters/this-magic-moment",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "vi–IV–V–I(add9)–V7",
+          "chords": [
+            "Am",
+            "F",
+            "G",
+            "Cadd9",
+            "G7"
+          ],
+          "shapeChords": [
+            "Am",
+            "F",
+            "G",
+            "Cadd9",
+            "G7"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-drifters/this-magic-moment",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "please-mr-postman-the-marvelettes",
@@ -2205,8 +5046,10 @@
       "artist": "The Marvelettes",
       "year": 1961,
       "styles": [
+        "rnb",
         "soul",
-        "pop"
+        "pop",
+        "motown"
       ],
       "lists": [
         "rolling-stone-500"
@@ -2247,7 +5090,59 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": true,
+          "originalKey": null,
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": true,
+          "originalKey": null,
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "simplified"
     },
     {
       "id": "oh-pretty-woman-roy-orbison",
@@ -2298,7 +5193,57 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Chorus",
+          "roman": "I–vi",
+          "chords": [
+            "A",
+            "F#m"
+          ],
+          "shapeChords": [
+            "A",
+            "F#m"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/roy-orbison/oh-pretty-woman",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "ii–V–I–vi–ii",
+          "chords": [
+            "Dm",
+            "G",
+            "C",
+            "Am",
+            "Dm"
+          ],
+          "shapeChords": [
+            "Dm",
+            "G",
+            "C",
+            "Am",
+            "Dm"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/roy-orbison/oh-pretty-woman",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "hit-the-road-jack-ray-charles",
@@ -2307,6 +5252,7 @@
       "artist": "Ray Charles",
       "year": 1961,
       "styles": [
+        "rnb",
         "soul",
         "blues"
       ],
@@ -2349,7 +5295,35 @@
           "originalKey": "A minor",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Intro and Verse",
+          "roman": "i–VII–VI–V/i",
+          "chords": [
+            "G#m",
+            "F#",
+            "E",
+            "D#"
+          ],
+          "shapeChords": [
+            "G#m",
+            "F#",
+            "E",
+            "D#"
+          ],
+          "keyLabel": "G# minor",
+          "tonicPc": 8,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "G# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/ray-charles/hit-the-road-jack",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "sultans-of-swing-dire-straits",
@@ -2400,7 +5374,61 @@
           "originalKey": "D minor",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i–VII–VI–V",
+          "chords": [
+            "Dm",
+            "C",
+            "Bb",
+            "A"
+          ],
+          "shapeChords": [
+            "Dm",
+            "C",
+            "Bb",
+            "A"
+          ],
+          "keyLabel": "D minor",
+          "tonicPc": 2,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "D minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/dire-straits/sultans-of-swing",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "III–VII–VI–i–VI",
+          "chords": [
+            "F",
+            "C",
+            "Bb",
+            "Dm",
+            "Bb"
+          ],
+          "shapeChords": [
+            "F",
+            "C",
+            "Bb",
+            "Dm",
+            "Bb"
+          ],
+          "keyLabel": "D minor",
+          "tonicPc": 2,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "D minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/dire-straits/sultans-of-swing",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "war-pigs-black-sabbath",
@@ -2451,7 +5479,57 @@
           "originalKey": null,
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "VII–I",
+          "chords": [
+            "D",
+            "E"
+          ],
+          "shapeChords": [
+            "D",
+            "E"
+          ],
+          "keyLabel": "E mixolydian",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E mixolydian",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/black-sabbath/war-pigs",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "VII–I–bIII–II–bII",
+          "chords": [
+            "D",
+            "E",
+            "G",
+            "F#",
+            "F"
+          ],
+          "shapeChords": [
+            "D",
+            "E",
+            "G",
+            "F#",
+            "F"
+          ],
+          "keyLabel": "E mixolydian",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E mixolydian",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/black-sabbath/war-pigs",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "house-of-the-rising-sun-the-animals",
@@ -2509,7 +5587,37 @@
           "originalKey": "A minor",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i–III–IVb7–VI7–i",
+          "chords": [
+            "Am",
+            "C",
+            "D7",
+            "Fmaj7",
+            "Am"
+          ],
+          "shapeChords": [
+            "Am",
+            "C",
+            "D7",
+            "Fmaj7",
+            "Am"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-animals/house-of-the-rising-sun",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "wonderwall",
@@ -2558,7 +5666,81 @@
           "isReference": false,
           "originalKey": "F# minor"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i7–III–VIIsus4–iv7sus4",
+          "chords": [
+            "F#m7",
+            "A",
+            "Esus4",
+            "B7sus4"
+          ],
+          "shapeChords": [
+            "F#m7",
+            "A",
+            "Esus4",
+            "B7sus4"
+          ],
+          "keyLabel": "F# minor",
+          "tonicPc": 6,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/oasis/wonderwall",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus and Chorus",
+          "roman": "VI–VII–i7",
+          "chords": [
+            "D",
+            "E",
+            "F#m7"
+          ],
+          "shapeChords": [
+            "D",
+            "E",
+            "F#m7"
+          ],
+          "keyLabel": "F# minor",
+          "tonicPc": 6,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/oasis/wonderwall",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "VI(add9)–i7–III–i7",
+          "chords": [
+            "Dadd9",
+            "F#m7",
+            "A",
+            "F#m7"
+          ],
+          "shapeChords": [
+            "Dadd9",
+            "F#m7",
+            "A",
+            "F#m7"
+          ],
+          "keyLabel": "F# minor",
+          "tonicPc": 6,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/oasis/wonderwall",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "hotel-california",
@@ -2614,7 +5796,63 @@
           "isReference": false,
           "originalKey": "B minor"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i–V7–VII(add9)–IV9–VI",
+          "chords": [
+            "Bm",
+            "F#7",
+            "Aadd9",
+            "E9",
+            "G"
+          ],
+          "shapeChords": [
+            "Bm",
+            "F#7",
+            "Aadd9",
+            "E9",
+            "G"
+          ],
+          "keyLabel": "B minor",
+          "tonicPc": 11,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "B minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/eagles/hotel-california",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "IV–I–V7/vi–vi–viiø11",
+          "chords": [
+            "G",
+            "D",
+            "F#7",
+            "Bm",
+            "C#m11b5"
+          ],
+          "shapeChords": [
+            "G",
+            "D",
+            "F#7",
+            "Bm",
+            "C#m11b5"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/eagles/hotel-california",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "smells-like-teen-spirit",
@@ -2665,7 +5903,83 @@
           "originalKey": "F minor",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i(no3)–iv(no3)–III(no3)–VI(no3)",
+          "chords": [
+            "Fm",
+            "Bbm",
+            "Ab",
+            "Db"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Bbm",
+            "Ab",
+            "Db"
+          ],
+          "keyLabel": "F minor",
+          "tonicPc": 5,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/nirvana/smells-like-teen-spirit",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "i(no3)–iv(no3)–III(no3)–VI(no3)",
+          "chords": [
+            "Fm",
+            "Bbm",
+            "Ab",
+            "Db"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Bbm",
+            "Ab",
+            "Db"
+          ],
+          "keyLabel": "F minor",
+          "tonicPc": 5,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/nirvana/smells-like-teen-spirit",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i(no3)–iv(no3)–III(no3)–VI(no3)",
+          "chords": [
+            "Fm",
+            "Bbm",
+            "Ab",
+            "Db"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Bbm",
+            "Ab",
+            "Db"
+          ],
+          "keyLabel": "F minor",
+          "tonicPc": 5,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/nirvana/smells-like-teen-spirit",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "creep",
@@ -2714,7 +6028,87 @@
           "isReference": false,
           "originalKey": "G major"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V/vi–IV–iv",
+          "chords": [
+            "G",
+            "B",
+            "C",
+            "Cm"
+          ],
+          "shapeChords": [
+            "G",
+            "B",
+            "C",
+            "Cm"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/radiohead/creep",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V/vi–iiisus4–V/vi–IV",
+          "chords": [
+            "G",
+            "B",
+            "Bsus4",
+            "B",
+            "C"
+          ],
+          "shapeChords": [
+            "G",
+            "B",
+            "Bsus4",
+            "B",
+            "C"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/radiohead/creep",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "I–IV–iv(add11)–I–V/vi",
+          "chords": [
+            "G",
+            "C",
+            "Cmadd11",
+            "G",
+            "B"
+          ],
+          "shapeChords": [
+            "G",
+            "C",
+            "Cmadd11",
+            "G",
+            "B"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/radiohead/creep",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "dont-stop-believin",
@@ -2763,7 +6157,83 @@
           "originalKey": "E major",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–vi–IV–I",
+          "chords": [
+            "E",
+            "B",
+            "C#m",
+            "A",
+            "E"
+          ],
+          "shapeChords": [
+            "E",
+            "B",
+            "C#m",
+            "A",
+            "E"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/journey/dont-stop-believin",
+          "note": ""
+        },
+        {
+          "name": "Pre-Chorus",
+          "roman": "V42–IV",
+          "chords": [
+            "B7/A",
+            "A"
+          ],
+          "shapeChords": [
+            "B7/A",
+            "A"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/journey/dont-stop-believin",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V–vi–IV–I",
+          "chords": [
+            "E",
+            "B",
+            "C#m",
+            "A",
+            "E"
+          ],
+          "shapeChords": [
+            "E",
+            "B",
+            "C#m",
+            "A",
+            "E"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/journey/dont-stop-believin",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "sweet-child-o-mine",
@@ -2812,7 +6282,81 @@
           "originalKey": "D major",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–VII–IV(no3)",
+          "chords": [
+            "C#",
+            "B",
+            "F#"
+          ],
+          "shapeChords": [
+            "C#",
+            "B",
+            "F#"
+          ],
+          "keyLabel": "C# mixolydian",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C# mixolydian",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/guns-n-roses/sweet-child-o-mine",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "V–VII–I",
+          "chords": [
+            "G#",
+            "B",
+            "C#"
+          ],
+          "shapeChords": [
+            "G#",
+            "B",
+            "C#"
+          ],
+          "keyLabel": "C# mixolydian",
+          "tonicPc": 1,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C# mixolydian",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/guns-n-roses/sweet-child-o-mine",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "i(no3)–III(no3no5)–iv(no3)–VI(no3)–VII(no3)",
+          "chords": [
+            "D#m",
+            "F#",
+            "G#m",
+            "B",
+            "C#"
+          ],
+          "shapeChords": [
+            "D#m",
+            "F#",
+            "G#m",
+            "B",
+            "C#"
+          ],
+          "keyLabel": "D# minor",
+          "tonicPc": 3,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "D# minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/guns-n-roses/sweet-child-o-mine",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "knockin-on-heavens-door",
@@ -2859,7 +6403,37 @@
           "originalKey": "G major",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–ii–I–V",
+          "chords": [
+            "G",
+            "D",
+            "Am",
+            "G",
+            "D"
+          ],
+          "shapeChords": [
+            "G",
+            "D",
+            "Am",
+            "G",
+            "D"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bob-dylan/knockin-on-heavens-door",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "la-bamba",
@@ -2909,7 +6483,55 @@
           "originalKey": "C major",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–IV–V",
+          "chords": [
+            "C",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–IV–V",
+          "chords": [
+            "C",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Simplified chord symbols (no extended-chord source found)",
+          "sourceUrl": "",
+          "note": "No extended-chord source found; simplified chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "simplified"
     },
     {
       "id": "three-little-birds",
@@ -2955,7 +6577,37 @@
           "originalKey": "A major",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V–I–IV–I",
+          "chords": [
+            "A",
+            "E",
+            "A",
+            "D",
+            "A"
+          ],
+          "shapeChords": [
+            "A",
+            "E",
+            "A",
+            "D",
+            "A"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bob-marley/three-little-birds",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "oye-como-va",
@@ -2985,7 +6637,31 @@
           "isReference": false,
           "originalKey": "A minor"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i7–IV",
+          "chords": [
+            "Am7",
+            "D"
+          ],
+          "shapeChords": [
+            "Am7",
+            "D"
+          ],
+          "keyLabel": "A dorian",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A dorian",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/santana/oye-como-va",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "fly-me-to-the-moon",
@@ -3020,7 +6696,37 @@
           "isReference": false,
           "originalKey": "A minor"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i7–iv7–VII7–III–VI",
+          "chords": [
+            "Am7",
+            "Dm7",
+            "G7",
+            "C",
+            "F"
+          ],
+          "shapeChords": [
+            "Am7",
+            "Dm7",
+            "G7",
+            "C",
+            "F"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/frank-sinatra/fly-me-to-the-moon",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "autumn-leaves",
@@ -3074,7 +6780,75 @@
           "isReference": false,
           "originalKey": "G minor"
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "A section",
+          "roman": "i7–IV7–IIImaj7–VImaj7–iim7b5–V7–i7–i7",
+          "chords": [
+            "Cm7",
+            "F7",
+            "Bbmaj7",
+            "Ebmaj7",
+            "Am7b5",
+            "D7",
+            "Gm7",
+            "Gm7"
+          ],
+          "shapeChords": [
+            "Cm7",
+            "F7",
+            "Bbmaj7",
+            "Ebmaj7",
+            "Am7b5",
+            "D7",
+            "Gm7",
+            "Gm7"
+          ],
+          "keyLabel": "G minor",
+          "tonicPc": 7,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "G minor",
+          "source": "Standard jazz chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard jazz chord symbols are shown."
+        },
+        {
+          "name": "B section",
+          "roman": "iim7b5–V7–i7–i7–i7–IV7–IIImaj7–VImaj7",
+          "chords": [
+            "Am7b5",
+            "D7",
+            "Gm7",
+            "Gm7",
+            "Cm7",
+            "F7",
+            "Bbmaj7",
+            "Ebmaj7"
+          ],
+          "shapeChords": [
+            "Am7b5",
+            "D7",
+            "Gm7",
+            "Gm7",
+            "Cm7",
+            "F7",
+            "Bbmaj7",
+            "Ebmaj7"
+          ],
+          "keyLabel": "G minor",
+          "tonicPc": 7,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "G minor",
+          "source": "Standard jazz chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard jazz chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-jazz"
     },
     {
       "id": "johnny-b-goode",
@@ -3141,7 +6915,59 @@
           "originalKey": "Bb major",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–IV–I–V",
+          "chords": [
+            "Bb",
+            "Eb",
+            "Bb",
+            "F"
+          ],
+          "shapeChords": [
+            "Bb",
+            "Eb",
+            "Bb",
+            "F"
+          ],
+          "keyLabel": "Bb major",
+          "tonicPc": 10,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Bb major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/chuck-berry/johnny-b-goode",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–IV–I–V",
+          "chords": [
+            "Bb",
+            "Eb",
+            "Bb",
+            "F"
+          ],
+          "shapeChords": [
+            "Bb",
+            "Eb",
+            "Bb",
+            "F"
+          ],
+          "keyLabel": "Bb major",
+          "tonicPc": 10,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Bb major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/chuck-berry/johnny-b-goode",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "sweet-home-chicago",
@@ -3205,7 +7031,31 @@
           "originalKey": "E major",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–IV6",
+          "chords": [
+            "F",
+            "Bb/D"
+          ],
+          "shapeChords": [
+            "F",
+            "Bb/D"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/robert-johnson/sweet-home-chicago",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
     },
     {
       "id": "the-thrill-is-gone",
@@ -3271,7 +7121,1820 @@
           "originalKey": "B minor",
           "note": "Simplified: verse and chorus share the same progression."
         }
-      ]
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "i7–iv7–i7–i7–iv7–iv7–i7–i7–V7–iv7–i7–V7",
+          "chords": [
+            "Bm7",
+            "Em7",
+            "Bm7",
+            "Bm7",
+            "Em7",
+            "Em7",
+            "Bm7",
+            "Bm7",
+            "F#7",
+            "Em7",
+            "Bm7",
+            "F#7"
+          ],
+          "shapeChords": [
+            "Bm7",
+            "Em7",
+            "Bm7",
+            "Bm7",
+            "Em7",
+            "Em7",
+            "Bm7",
+            "Bm7",
+            "F#7",
+            "Em7",
+            "Bm7",
+            "F#7"
+          ],
+          "keyLabel": "B minor",
+          "tonicPc": 11,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "B minor",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        },
+        {
+          "name": "Chorus",
+          "roman": "i7–iv7–i7–i7–iv7–iv7–i7–i7–V7–iv7–i7–V7",
+          "chords": [
+            "Bm7",
+            "Em7",
+            "Bm7",
+            "Bm7",
+            "Em7",
+            "Em7",
+            "Bm7",
+            "Bm7",
+            "F#7",
+            "Em7",
+            "Bm7",
+            "F#7"
+          ],
+          "shapeChords": [
+            "Bm7",
+            "Em7",
+            "Bm7",
+            "Bm7",
+            "Em7",
+            "Em7",
+            "Bm7",
+            "Bm7",
+            "F#7",
+            "Em7",
+            "Bm7",
+            "F#7"
+          ],
+          "keyLabel": "B minor",
+          "tonicPc": 11,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "B minor",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "my-girl-the-temptations",
+      "type": "song",
+      "title": "My Girl",
+      "artist": "The Temptations",
+      "year": 1964,
+      "styles": [
+        "rnb",
+        "soul",
+        "motown"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified Motown classic; verse and chorus are shown.",
+      "sections": [
+        {
+          "name": "Verse",
+          "roman": "I–IV–I–IV",
+          "chords": [
+            "C",
+            "F",
+            "C",
+            "F"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major"
+        },
+        {
+          "name": "Chorus",
+          "roman": "IV–I–ii–V",
+          "chords": [
+            "F",
+            "C",
+            "Dm",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–IV",
+          "chords": [
+            "C",
+            "F"
+          ],
+          "shapeChords": [
+            "C",
+            "F"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-temptations/my-girl",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–ii7–IV–V",
+          "chords": [
+            "C",
+            "Dm7",
+            "F",
+            "G"
+          ],
+          "shapeChords": [
+            "C",
+            "Dm7",
+            "F",
+            "G"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/the-temptations/my-girl",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "aint-no-sunshine-bill-withers",
+      "type": "song",
+      "title": "Ain't No Sunshine",
+      "artist": "Bill Withers",
+      "year": 1971,
+      "styles": [
+        "rnb",
+        "soul"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified i–v–VII–i loop; the bridge is omitted.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "i–v–VII–i",
+          "chords": [
+            "Am",
+            "Em",
+            "G",
+            "Am"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Chorus",
+          "roman": "i–v–VII–i–VII",
+          "chords": [
+            "Am",
+            "Em",
+            "G",
+            "Am",
+            "G"
+          ],
+          "shapeChords": [
+            "Am",
+            "Em",
+            "G",
+            "Am",
+            "G"
+          ],
+          "keyLabel": "A minor",
+          "tonicPc": 9,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "A minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/bill-withers/aint-no-sunshine",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "sittin-on-the-dock-of-the-bay-otis-redding",
+      "type": "song",
+      "title": "(Sittin' On) The Dock of the Bay",
+      "artist": "Otis Redding",
+      "year": 1968,
+      "styles": [
+        "rnb",
+        "soul"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Eight-chord verse/chorus pattern; simplified.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I–III7–IV–II–I–VI–IV–V",
+          "chords": [
+            "G",
+            "B7",
+            "C",
+            "A",
+            "G",
+            "E",
+            "C",
+            "D"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–V/vi–IV–II",
+          "chords": [
+            "G",
+            "B",
+            "C",
+            "A"
+          ],
+          "shapeChords": [
+            "G",
+            "B",
+            "C",
+            "A"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/otis-redding/sittin-on-the-dock-of-the-bay",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V(add9)/ii",
+          "chords": [
+            "G",
+            "Eadd9"
+          ],
+          "shapeChords": [
+            "G",
+            "Eadd9"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/otis-redding/sittin-on-the-dock-of-the-bay",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "I–V–IV",
+          "chords": [
+            "G",
+            "D",
+            "C"
+          ],
+          "shapeChords": [
+            "G",
+            "D",
+            "C"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/otis-redding/sittin-on-the-dock-of-the-bay",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "purple-rain-prince",
+      "type": "song",
+      "title": "Purple Rain",
+      "artist": "Prince",
+      "year": 1984,
+      "styles": [
+        "rnb",
+        "pop",
+        "rock"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified I–vi–V–IV loop; the bridge and solo sections are omitted.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I–vi–V–IV",
+          "chords": [
+            "Bb",
+            "Gm",
+            "F",
+            "Eb"
+          ],
+          "keyLabel": "Bb major",
+          "tonicPc": 10,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Bb major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I(add9)–vi7sus4–V–IV(add9)",
+          "chords": [
+            "Bbadd9",
+            "G7sus4",
+            "F",
+            "Ebadd9"
+          ],
+          "shapeChords": [
+            "Bbadd9",
+            "G7sus4",
+            "F",
+            "Ebadd9"
+          ],
+          "keyLabel": "Bb major",
+          "tonicPc": 10,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Bb major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/prince/purple-rain",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "i-want-you-back-the-jackson-5",
+      "type": "song",
+      "title": "I Want You Back",
+      "artist": "The Jackson 5",
+      "year": 1969,
+      "styles": [
+        "rnb",
+        "soul",
+        "motown"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified I–ii–iii–IV loop.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I–ii–iii–IV",
+          "chords": [
+            "A",
+            "Bm",
+            "C#m",
+            "D"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–IV–vi–I65–IV",
+          "chords": [
+            "Ab",
+            "Db",
+            "Fm",
+            "Abmaj7/C",
+            "Db"
+          ],
+          "shapeChords": [
+            "Ab",
+            "Db",
+            "Fm",
+            "Abmaj7/C",
+            "Db"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/jackson-5/i-want-you-back",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "I–V6(add11)–vi7–V(add11)–IV",
+          "chords": [
+            "Ab",
+            "Ebadd11/G",
+            "Fm7",
+            "Ebadd11",
+            "Db"
+          ],
+          "shapeChords": [
+            "Ab",
+            "Ebadd11/G",
+            "Fm7",
+            "Ebadd11",
+            "Db"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/jackson-5/i-want-you-back",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "a-change-is-gonna-come-sam-cooke",
+      "type": "song",
+      "title": "A Change Is Gonna Come",
+      "artist": "Sam Cooke",
+      "year": 1964,
+      "styles": [
+        "rnb",
+        "soul",
+        "gospel"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified I–vi–IV–V progression.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "G",
+            "Em",
+            "C",
+            "D"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I(add9)–ii6–IV64–vi–I64",
+          "chords": [
+            "Bbadd9",
+            "Cm/Eb",
+            "Eb/Bb",
+            "Gm",
+            "Bb/F"
+          ],
+          "shapeChords": [
+            "Bbadd9",
+            "Cm/Eb",
+            "Eb/Bb",
+            "Gm",
+            "Bb/F"
+          ],
+          "keyLabel": "Bb major",
+          "tonicPc": 10,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Bb major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/sam-cooke/a-change-is-gonna-come",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "at-last-etta-james",
+      "type": "song",
+      "title": "At Last",
+      "artist": "Etta James",
+      "year": 1960,
+      "styles": [
+        "rnb",
+        "soul",
+        "jazz"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified I–vi–ii–V jazz/soul progression.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I–vi–ii–V",
+          "chords": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–vi7–ii7–V7(#5b9)–I",
+          "chords": [
+            "F",
+            "Dm7",
+            "Gm7",
+            "C7#5b9",
+            "F"
+          ],
+          "shapeChords": [
+            "F",
+            "Dm7",
+            "Gm7",
+            "C7#5b9",
+            "F"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/etta-james/at-last",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "ii7(add11)–V7–I9–V7/iii–iii7",
+          "chords": [
+            "Gm7add11",
+            "C7",
+            "Fmaj9",
+            "E7",
+            "Am7"
+          ],
+          "shapeChords": [
+            "Gm7add11",
+            "C7",
+            "Fmaj9",
+            "E7",
+            "Am7"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/etta-james/at-last",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "lets-stay-together-al-green",
+      "type": "song",
+      "title": "Let's Stay Together",
+      "artist": "Al Green",
+      "year": 1972,
+      "styles": [
+        "rnb",
+        "soul"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified I–V soul vamp; the bridge is omitted.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I–V",
+          "chords": [
+            "Dmaj7",
+            "Amaj7"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "I–vi7sus2–IV–iv65–iii",
+          "chords": [
+            "F",
+            "D7sus2",
+            "Bb",
+            "Bbm7/Db",
+            "Am"
+          ],
+          "shapeChords": [
+            "F",
+            "D7sus2",
+            "Bb",
+            "Bbm7/Db",
+            "Am"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/al-green/lets-stay-together",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "ii9–iii7–ii7–IV7–iii7",
+          "chords": [
+            "Gm9",
+            "Am7",
+            "Gm7",
+            "Bbmaj7",
+            "Am7"
+          ],
+          "shapeChords": [
+            "Gm9",
+            "Am7",
+            "Gm7",
+            "Bbmaj7",
+            "Am7"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/al-green/lets-stay-together",
+          "note": ""
+        },
+        {
+          "name": "Bridge",
+          "roman": "ii9–bIII7",
+          "chords": [
+            "Gm9",
+            "Abmaj7"
+          ],
+          "shapeChords": [
+            "Gm9",
+            "Abmaj7"
+          ],
+          "keyLabel": "F major",
+          "tonicPc": 5,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "F major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/al-green/lets-stay-together",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "respect-aretha-franklin",
+      "type": "song",
+      "title": "Respect",
+      "artist": "Aretha Franklin",
+      "year": 1967,
+      "styles": [
+        "rnb",
+        "soul",
+        "motown"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified I–IV loop.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I–IV",
+          "chords": [
+            "C",
+            "F",
+            "C",
+            "F"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Chorus",
+          "roman": "V7–IV7",
+          "chords": [
+            "G7",
+            "F7"
+          ],
+          "shapeChords": [
+            "G7",
+            "F7"
+          ],
+          "keyLabel": "C dorian",
+          "tonicPc": 0,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "C dorian",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/aretha-franklin/respect",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "killing-me-softly-with-his-song-roberta-flack",
+      "type": "song",
+      "title": "Killing Me Softly with His Song",
+      "artist": "Roberta Flack",
+      "year": 1973,
+      "styles": [
+        "rnb",
+        "soul"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified i–iv–VII–III loop.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "i–iv–VII–III",
+          "chords": [
+            "Em",
+            "Am",
+            "D",
+            "G"
+          ],
+          "keyLabel": "E minor",
+          "tonicPc": 4,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "E minor"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "ii7–V7–I7–IV7–ii7",
+          "chords": [
+            "Bbm7",
+            "Eb7",
+            "Abmaj7",
+            "Dbmaj7",
+            "Bbm7"
+          ],
+          "shapeChords": [
+            "Bbm7",
+            "Eb7",
+            "Abmaj7",
+            "Dbmaj7",
+            "Bbm7"
+          ],
+          "keyLabel": "Ab major",
+          "tonicPc": 8,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Ab major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/roberta-flack/killing-me-softly",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "i–iv7–VII–III–VII6",
+          "chords": [
+            "Fm",
+            "Bbm7",
+            "Eb",
+            "Ab",
+            "Eb/G"
+          ],
+          "shapeChords": [
+            "Fm",
+            "Bbm7",
+            "Eb",
+            "Ab",
+            "Eb/G"
+          ],
+          "keyLabel": "F minor",
+          "tonicPc": 5,
+          "mode": "minor",
+          "isReference": false,
+          "originalKey": "F minor",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/roberta-flack/killing-me-softly",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "sexual-healing-marvin-gaye",
+      "type": "song",
+      "title": "Sexual Healing",
+      "artist": "Marvin Gaye",
+      "year": 1982,
+      "styles": [
+        "rnb",
+        "soul"
+      ],
+      "lists": [],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Simplified I–vi–IV–V loop.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I–vi–IV–V",
+          "chords": [
+            "Eb",
+            "Cm",
+            "Ab",
+            "Bb"
+          ],
+          "keyLabel": "Eb major",
+          "tonicPc": 3,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Eb major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Verse",
+          "roman": "V–vi–iii–IV–I",
+          "chords": [
+            "Bb",
+            "Cm",
+            "Gm",
+            "Ab",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Bb",
+            "Cm",
+            "Gm",
+            "Ab",
+            "Eb"
+          ],
+          "keyLabel": "Eb major",
+          "tonicPc": 3,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Eb major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/marvin-gaye/sexual-healing",
+          "note": ""
+        },
+        {
+          "name": "Chorus",
+          "roman": "V–vi–iii–IV–I",
+          "chords": [
+            "Bb",
+            "Cm",
+            "Gm",
+            "Ab",
+            "Eb"
+          ],
+          "shapeChords": [
+            "Bb",
+            "Cm",
+            "Gm",
+            "Ab",
+            "Eb"
+          ],
+          "keyLabel": "Eb major",
+          "tonicPc": 3,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "Eb major",
+          "source": "Hooktheory TheoryTab",
+          "sourceUrl": "https://www.hooktheory.com/theorytab/view/marvin-gaye/sexual-healing",
+          "note": ""
+        }
+      ],
+      "actualFallback": false,
+      "actualFallbackKind": null
+    },
+    {
+      "id": "mustang-sally-wilson-pickett",
+      "type": "song",
+      "title": "Mustang Sally",
+      "artist": "Wilson Pickett",
+      "year": 1966,
+      "styles": [
+        "rnb",
+        "soul",
+        "blues"
+      ],
+      "lists": [],
+      "source": "Wikipedia: Twelve-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Twelve-bar_blues",
+      "notes": "12-bar blues form; repeat as needed.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "C7",
+            "F7",
+            "C7",
+            "C7",
+            "F7",
+            "F7",
+            "C7",
+            "C7",
+            "G7",
+            "F7",
+            "C7",
+            "G7"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "C7",
+            "F7",
+            "C7",
+            "C7",
+            "F7",
+            "F7",
+            "C7",
+            "C7",
+            "G7",
+            "F7",
+            "C7",
+            "G7"
+          ],
+          "shapeChords": [
+            "C7",
+            "F7",
+            "C7",
+            "C7",
+            "F7",
+            "F7",
+            "C7",
+            "C7",
+            "G7",
+            "F7",
+            "C7",
+            "G7"
+          ],
+          "keyLabel": "C major",
+          "tonicPc": 0,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "C major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "pride-and-joy-stevie-ray-vaughan",
+      "type": "song",
+      "title": "Pride and Joy",
+      "artist": "Stevie Ray Vaughan",
+      "year": 1983,
+      "styles": [
+        "blues",
+        "rock"
+      ],
+      "lists": [],
+      "source": "Wikipedia: Twelve-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Twelve-bar_blues",
+      "notes": "12-bar blues form; repeat as needed.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "E7",
+            "A7",
+            "E7",
+            "E7",
+            "A7",
+            "A7",
+            "E7",
+            "E7",
+            "B7",
+            "A7",
+            "E7",
+            "B7"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "E7",
+            "A7",
+            "E7",
+            "E7",
+            "A7",
+            "A7",
+            "E7",
+            "E7",
+            "B7",
+            "A7",
+            "E7",
+            "B7"
+          ],
+          "shapeChords": [
+            "E7",
+            "A7",
+            "E7",
+            "E7",
+            "A7",
+            "A7",
+            "E7",
+            "E7",
+            "B7",
+            "A7",
+            "E7",
+            "B7"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "crossroads-cream",
+      "type": "song",
+      "title": "Crossroads",
+      "artist": "Cream",
+      "year": 1968,
+      "styles": [
+        "blues",
+        "rock"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Wikipedia: Twelve-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Twelve-bar_blues",
+      "notes": "12-bar blues form; repeat as needed.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "shapeChords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "the-sky-is-crying-stevie-ray-vaughan",
+      "type": "song",
+      "title": "The Sky Is Crying",
+      "artist": "Stevie Ray Vaughan",
+      "year": 1984,
+      "styles": [
+        "blues"
+      ],
+      "lists": [],
+      "source": "Wikipedia: Twelve-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Twelve-bar_blues",
+      "notes": "Slow 12-bar blues form; repeat as needed.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "D7",
+            "G7",
+            "D7",
+            "D7",
+            "G7",
+            "G7",
+            "D7",
+            "D7",
+            "A7",
+            "G7",
+            "D7",
+            "A7"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "D7",
+            "G7",
+            "D7",
+            "D7",
+            "G7",
+            "G7",
+            "D7",
+            "D7",
+            "A7",
+            "G7",
+            "D7",
+            "A7"
+          ],
+          "shapeChords": [
+            "D7",
+            "G7",
+            "D7",
+            "D7",
+            "G7",
+            "G7",
+            "D7",
+            "D7",
+            "A7",
+            "G7",
+            "D7",
+            "A7"
+          ],
+          "keyLabel": "D major",
+          "tonicPc": 2,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "D major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "stormy-monday-t-bone-walker",
+      "type": "song",
+      "title": "Stormy Monday",
+      "artist": "T-Bone Walker",
+      "year": 1947,
+      "styles": [
+        "blues",
+        "jazz"
+      ],
+      "lists": [],
+      "source": "Common chord reference (jazz blues)",
+      "sourceUrl": "",
+      "notes": "Jazz blues form with a ii–V turnaround; simplified.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–iim7–V7–I7–I7",
+          "chords": [
+            "G7",
+            "C7",
+            "G7",
+            "G7",
+            "C7",
+            "C7",
+            "G7",
+            "G7",
+            "Am7",
+            "D7",
+            "G7",
+            "G7"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–iim7–V7–I7–I7",
+          "chords": [
+            "G7",
+            "C7",
+            "G7",
+            "G7",
+            "C7",
+            "C7",
+            "G7",
+            "G7",
+            "Am7",
+            "D7",
+            "G7",
+            "G7"
+          ],
+          "shapeChords": [
+            "G7",
+            "C7",
+            "G7",
+            "G7",
+            "C7",
+            "C7",
+            "G7",
+            "G7",
+            "Am7",
+            "D7",
+            "G7",
+            "G7"
+          ],
+          "keyLabel": "G major",
+          "tonicPc": 7,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "G major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "red-house-jimi-hendrix",
+      "type": "song",
+      "title": "Red House",
+      "artist": "Jimi Hendrix",
+      "year": 1967,
+      "styles": [
+        "blues",
+        "rock"
+      ],
+      "lists": [],
+      "source": "Wikipedia: Twelve-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Twelve-bar_blues",
+      "notes": "Slow 12-bar blues form; repeat as needed.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "B7",
+            "E7",
+            "B7",
+            "B7",
+            "E7",
+            "E7",
+            "B7",
+            "B7",
+            "F#7",
+            "E7",
+            "B7",
+            "F#7"
+          ],
+          "keyLabel": "B major",
+          "tonicPc": 11,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "B major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "B7",
+            "E7",
+            "B7",
+            "B7",
+            "E7",
+            "E7",
+            "B7",
+            "B7",
+            "F#7",
+            "E7",
+            "B7",
+            "F#7"
+          ],
+          "shapeChords": [
+            "B7",
+            "E7",
+            "B7",
+            "B7",
+            "E7",
+            "E7",
+            "B7",
+            "B7",
+            "F#7",
+            "E7",
+            "B7",
+            "F#7"
+          ],
+          "keyLabel": "B major",
+          "tonicPc": 11,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "B major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "key-to-the-highway-eric-clapton",
+      "type": "song",
+      "title": "Key to the Highway",
+      "artist": "Eric Clapton",
+      "year": 1970,
+      "styles": [
+        "blues"
+      ],
+      "lists": [],
+      "source": "Wikipedia: Eight-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Eight-bar_blues",
+      "notes": "8-bar blues form; simplified.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–V7–IV7–IV7–I7–V7–I7–V7",
+          "chords": [
+            "A7",
+            "E7",
+            "D7",
+            "D7",
+            "A7",
+            "E7",
+            "A7",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–V7–IV7–IV7–I7–V7–I7–V7",
+          "chords": [
+            "A7",
+            "E7",
+            "D7",
+            "D7",
+            "A7",
+            "E7",
+            "A7",
+            "E7"
+          ],
+          "shapeChords": [
+            "A7",
+            "E7",
+            "D7",
+            "D7",
+            "A7",
+            "E7",
+            "A7",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "voodoo-child-slight-return-jimi-hendrix",
+      "type": "song",
+      "title": "Voodoo Child (Slight Return)",
+      "artist": "Jimi Hendrix",
+      "year": 1968,
+      "styles": [
+        "blues",
+        "rock"
+      ],
+      "lists": [
+        "rolling-stone-500"
+      ],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "Blues-rock vamp; simplified.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–bIII–IV",
+          "chords": [
+            "E7",
+            "G",
+            "A"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–bIII–IV",
+          "chords": [
+            "E7",
+            "G",
+            "A"
+          ],
+          "shapeChords": [
+            "E7",
+            "G",
+            "A"
+          ],
+          "keyLabel": "E major",
+          "tonicPc": 4,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "E major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "hoochie-coochie-man-muddy-waters",
+      "type": "song",
+      "title": "Hoochie Coochie Man",
+      "artist": "Muddy Waters",
+      "year": 1954,
+      "styles": [
+        "blues"
+      ],
+      "lists": [],
+      "source": "Wikipedia: Twelve-bar blues",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Twelve-bar_blues",
+      "notes": "12-bar blues form; repeat as needed.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "shapeChords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
+    },
+    {
+      "id": "id-rather-go-blind-etta-james",
+      "type": "song",
+      "title": "I'd Rather Go Blind",
+      "artist": "Etta James",
+      "year": 1967,
+      "styles": [
+        "rnb",
+        "blues",
+        "soul"
+      ],
+      "lists": [],
+      "source": "Common chord reference",
+      "sourceUrl": "",
+      "notes": "12-bar blues form; simplified.",
+      "sections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major"
+        }
+      ],
+      "actualSections": [
+        {
+          "name": "Main",
+          "roman": "I7–IV7–I7–I7–IV7–IV7–I7–I7–V7–IV7–I7–V7",
+          "chords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "shapeChords": [
+            "A7",
+            "D7",
+            "A7",
+            "A7",
+            "D7",
+            "D7",
+            "A7",
+            "A7",
+            "E7",
+            "D7",
+            "A7",
+            "E7"
+          ],
+          "keyLabel": "A major",
+          "tonicPc": 9,
+          "mode": "major",
+          "isReference": false,
+          "originalKey": "A major",
+          "source": "Standard blues chord symbols",
+          "sourceUrl": "",
+          "note": "No Hooktheory page found; standard blues chord symbols are shown."
+        }
+      ],
+      "actualFallback": true,
+      "actualFallbackKind": "standard-blues"
     }
   ]
 }

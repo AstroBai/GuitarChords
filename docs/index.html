@@ -122,7 +122,12 @@
     .prog-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
     .tag { font-size: 12px; border: 1px solid var(--line); background: #eef6f0; color: #26533a; border-radius: 999px; padding: 2px 8px; }
     .tag.rs { background: #fff3d9; border-color: #e7c98a; color: #6b4b05; }
+    .tag.actual { background: #e6f0ff; border-color: #b3c9ef; color: #1d3f7a; }
+    .tag.warn { background: #fff0e6; border-color: #e7b98a; color: #7a3c00; }
     .tag-button { cursor: pointer; font: inherit; }
+    .simplified-ref { margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 10px; }
+    .simplified-ref .prog-section { border-top: none; margin-top: 4px; padding-top: 4px; }
+    .simplified-ref .chord-strip { margin: 4px 0; }
     .prog-section { border-top: 1px dashed var(--line); margin-top: 12px; padding-top: 12px; }
     .prog-section:first-of-type { border-top: none; margin-top: 8px; padding-top: 0; }
     .section-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
@@ -188,10 +193,11 @@
     </div>
     <div id="progressions-view" class="hidden">
       <div class="meta">
-        <div><strong>Chord progressions:</strong> common patterns and famous songs. This is a simplified harmonic reference; arrangements and recorded keys can differ. Songs show verified sections; <em>Main</em> means one representative section.</div>
-        <div><strong>Fingering:</strong> one low-position shape per chord. Click <em>All shapes</em> to open the full chord browser.</div>
+        <div><strong>Chord progressions:</strong> common patterns and famous songs. Song cards show actual chord symbols from Hooktheory TheoryTab where available, alongside a simplified reference. Actual sections can use different keys; each section shows its own key.</div>
+        <div><strong>Coverage:</strong> 72 songs use Hooktheory actual chords, 12 jazz/blues standards use standard symbols, and 6 songs without an extended-chord source remain simplified. Fallback cards are labelled.</div>
+        <div><strong>Fingering:</strong> one low-position shape per chord. Extended symbols may use the nearest standard voicing; click <em>All shapes</em> to open the full chord browser.</div>
         <div><strong>Transpose:</strong> choose a key and optional capo. Diagrams show the capo-relative shapes; audio plays the sounding chords. For minor progressions, the selected note is the minor tonic.</div>
-        <div><strong>Sources:</strong> Wikipedia chord-progression pages and public song references. Chord progressions are functional facts; no lyrics or tablature are included.</div>
+        <div><strong>Sources:</strong> Hooktheory TheoryTab, Wikipedia chord-progression pages, and public song references. Chord progressions are functional facts; no lyrics or tablature are included.</div>
       </div>
       <div class="prog-controls">
         <label>Style <select id="progression-style"><option value="all">All styles</option></select></label>
@@ -206,7 +212,8 @@
           <span class="key-stepper">
             <button type="button" id="progression-key-down" title="Transpose down one semitone">−</button>
             <select id="progression-key">
-              <option value="0" selected>C</option>
+              <option value="original" selected>Original</option>
+              <option value="0">C</option>
               <option value="1">C#/Db</option>
               <option value="2">D</option>
               <option value="3">D#/Eb</option>
@@ -241,8 +248,8 @@
       <div id="progression-groups"></div>
       <div class="prog-pager" id="progression-pager"></div>
       <div class="prog-sources">
-        <div><strong>Data sources:</strong> <a href="https://en.wikipedia.org/wiki/List_of_chord_progressions" target="_blank" rel="noopener">List of chord progressions</a> · <a href="https://en.wikipedia.org/wiki/I%E2%80%93V%E2%80%93vi%E2%80%93IV_progression" target="_blank" rel="noopener">I–V–vi–IV</a> · <a href="https://en.wikipedia.org/wiki/%2750s_progression" target="_blank" rel="noopener">'50s progression</a> · <a href="https://en.wikipedia.org/wiki/List_of_popular_music_songs_featuring_Andalusian_cadences" target="_blank" rel="noopener">Andalusian cadences</a> · <a href="https://en.wikipedia.org/wiki/Ii%E2%80%93V%E2%80%93I_progression" target="_blank" rel="noopener">ii–V–I</a> · <a href="https://en.wikipedia.org/wiki/Rolling_Stone%27s_500_Greatest_Songs_of_All_Time" target="_blank" rel="noopener">Rolling Stone 500</a></div>
-        <div>Song progressions are simplified and may vary by section, arrangement, or recording. Use them as a starting point, not as a transcription.</div>
+        <div><strong>Data sources:</strong> <a href="https://www.hooktheory.com/theorytab" target="_blank" rel="noopener">Hooktheory TheoryTab</a> · <a href="https://en.wikipedia.org/wiki/List_of_chord_progressions" target="_blank" rel="noopener">List of chord progressions</a> · <a href="https://en.wikipedia.org/wiki/I%E2%80%93V%E2%80%93vi%E2%80%93IV_progression" target="_blank" rel="noopener">I–V–vi–IV</a> · <a href="https://en.wikipedia.org/wiki/%2750s_progression" target="_blank" rel="noopener">'50s progression</a> · <a href="https://en.wikipedia.org/wiki/List_of_popular_music_songs_featuring_Andalusian_cadences" target="_blank" rel="noopener">Andalusian cadences</a> · <a href="https://en.wikipedia.org/wiki/Ii%E2%80%93V%E2%80%93I_progression" target="_blank" rel="noopener">ii–V–I</a> · <a href="https://en.wikipedia.org/wiki/Twelve-bar_blues" target="_blank" rel="noopener">12-bar blues</a> · <a href="https://en.wikipedia.org/wiki/Eight-bar_blues" target="_blank" rel="noopener">8-bar blues</a> · <a href="https://en.wikipedia.org/wiki/Rolling_Stone%27s_500_Greatest_Songs_of_All_Time" target="_blank" rel="noopener">Rolling Stone 500</a></div>
+        <div>Actual chord symbols are community analyses from Hooktheory where available. They may still be simplified, arrangement-specific, or contain modal annotations; the simplified reference is kept for comparison. Use this as a starting point, not as a transcription.</div>
       </div>
     </div>
     <div id="exam-view" class="hidden">
@@ -283,7 +290,7 @@
       style: 'all',
       source: 'all',
       search: '',
-      keyPc: 0,
+      keyPc: 'original',
       capo: 0,
       page: 1
     };
@@ -303,7 +310,8 @@
       metal: 'Metal', punk: 'Punk', indie: 'Indie', dance: 'Dance', 'hip-hop': 'Hip-Hop',
       grunge: 'Grunge', britpop: 'Britpop', funk: 'Funk', flamenco: 'Flamenco',
       classical: 'Classical', alternative: 'Alternative', 'hard rock': 'Hard Rock',
-      'southern rock': 'Southern Rock'
+      'southern rock': 'Southern Rock', rnb: 'R&B', motown: 'Motown', gospel: 'Gospel',
+      'neo-soul': 'Neo-Soul'
     };
     const progressionShapeCache = new Map();
     let progressionShapeQueue = Promise.resolve();
@@ -476,7 +484,7 @@
       if (pyReady) return pyReady;
       pyReady = (async () => {
         pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.5/full/' });
-        const pySrc = await (await fetch('./GuitarChords.py?v=20261119b', { cache: 'no-store' })).text();
+        const pySrc = await (await fetch('./GuitarChords.py?v=20261119d', { cache: 'no-store' })).text();
 
         // Static mode: execute only the chord engine section, skip Flask route registration.
         const splitMarker = '\nvisualizer_web = GuitarChords()\n';
@@ -873,13 +881,16 @@
       return [...new Set(chords)];
     }
 
-    function sectionKeyLabel(section, keyPc, capo) {
+    function sectionKeyLabel(section, keyPc) {
       if (keyPc === section.tonicPc) {
         return section.isReference
           ? `Reference: ${section.keyLabel}`
           : `Original: ${section.originalKey || section.keyLabel}`;
       }
-      return `Key: ${keyModeLabel(keyPc, section.mode)}`;
+      const base = `Key: ${keyModeLabel(keyPc, section.mode)}`;
+      return section.isReference
+        ? `${base} (reference ${section.keyLabel})`
+        : `${base} (original ${section.originalKey || section.keyLabel})`;
     }
 
     function chordStripHtml(chords) {
@@ -902,6 +913,15 @@
       if (entry.commonCapo) {
         tags.push(`<button type="button" class="tag tag-button" data-set-capo="${entry.commonCapo}" title="Use capo ${entry.commonCapo}">Common capo ${entry.commonCapo}</button>`);
       }
+      if (entry.actualSections && entry.actualSections.length) {
+        if (entry.actualFallbackKind === 'simplified') {
+          tags.push('<span class="tag warn">Simplified only</span>');
+        } else if (entry.actualFallback) {
+          tags.push('<span class="tag">Standard symbols</span>');
+        } else {
+          tags.push('<span class="tag actual">Actual: Hooktheory</span>');
+        }
+      }
       return tags.join('');
     }
 
@@ -914,17 +934,20 @@
     }
 
     function chordBlockHtml(section, keyPc, capo, playLabel, showName) {
-      const sounding = transposeChords(section.chords, section.tonicPc, keyPc, section.mode, 0);
-      const shape = capo > 0
-        ? transposeChords(section.chords, section.tonicPc, keyPc, section.mode, capo)
-        : sounding;
-      const shapeKey = keyModeLabel((keyPc - capo + 120) % 12, section.mode);
+      const targetKeyPc = progressionState.keyPc === 'original' ? section.tonicPc : keyPc;
+      const displayChords = section.chords || [];
+      const shapeSource = section.shapeChords || displayChords;
+      const sounding = transposeChords(displayChords, section.tonicPc, targetKeyPc, section.mode, 0);
+      const shape = shapeSource === displayChords
+        ? (capo > 0 ? transposeChords(displayChords, section.tonicPc, targetKeyPc, section.mode, capo) : sounding)
+        : transposeChords(shapeSource, section.tonicPc, targetKeyPc, section.mode, capo);
+      const shapeKey = keyModeLabel((targetKeyPc - capo + 120) % 12, section.mode);
       return `
         <div class="prog-section">
           <div class="section-head">
             ${showName ? `<span class="section-name">${escapeHtml(section.name)}</span>` : ''}
             <span class="section-roman">${escapeHtml(section.roman)}</span>
-            <span class="prog-sub">${escapeHtml(sectionKeyLabel(section, keyPc, capo))}</span>
+            <span class="prog-sub">${escapeHtml(sectionKeyLabel(section, targetKeyPc))}</span>
           </div>
           ${section.note ? `<div class="prog-sub">${escapeHtml(section.note)}</div>` : ''}
           ${chordStripHtml(sounding)}
@@ -933,8 +956,35 @@
           <div class="prog-actions">
             <button class="play-progression" data-shape-chords="${escapeHtml(shape.join(' '))}" data-capo="${capo}">${escapeHtml(playLabel)}</button>
           </div>
+          ${section.source ? `<div class="prog-sub">Source: ${sourceHtml(section)}</div>` : ''}
         </div>
       `;
+    }
+
+    function simplifiedSectionHtml(section, keyPc) {
+      const targetKeyPc = progressionState.keyPc === 'original' ? section.tonicPc : keyPc;
+      const sounding = transposeChords(section.chords, section.tonicPc, targetKeyPc, section.mode, 0);
+      return `
+        <div class="prog-section simplified">
+          <div class="section-head">
+            <span class="section-name">${escapeHtml(section.name)}</span>
+            <span class="section-roman">${escapeHtml(section.roman)}</span>
+            <span class="prog-sub">${escapeHtml(sectionKeyLabel(section, targetKeyPc))}</span>
+          </div>
+          ${section.note ? `<div class="prog-sub">${escapeHtml(section.note)}</div>` : ''}
+          ${chordStripHtml(sounding)}
+        </div>
+      `;
+    }
+
+    function sameActualAndSimplified(entry) {
+      const actual = entry.actualSections || [];
+      const simplified = entry.sections || [];
+      if (!actual.length || actual.length !== simplified.length) return false;
+      return actual.every((section, index) => (
+        section.name === simplified[index].name &&
+        JSON.stringify(section.chords) === JSON.stringify(simplified[index].chords)
+      ));
     }
 
     function commonCardHtml(entry) {
@@ -969,7 +1019,10 @@
     }
 
     function songCardHtml(entry) {
-      const sections = (entry.sections || []).map(section => (
+      const actualSections = entry.actualSections || [];
+      const simplifiedSections = entry.sections || [];
+      const primarySections = actualSections.length ? actualSections : simplifiedSections;
+      const actualBlocks = primarySections.map(section => (
         chordBlockHtml(
           section,
           progressionState.keyPc,
@@ -978,6 +1031,19 @@
           true
         )
       )).join('');
+      const showSimplified = simplifiedSections.length > 0 && !sameActualAndSimplified(entry);
+      const simplifiedBlocks = showSimplified ? (
+        `<div class="simplified-ref">
+          <div class="prog-sub"><strong>Simplified reference</strong></div>
+          ${simplifiedSections.map(section => simplifiedSectionHtml(section, progressionState.keyPc)).join('')}
+        </div>`
+      ) : '';
+      let actualLabel = 'Actual chord symbols from Hooktheory TheoryTab.';
+      if (entry.actualFallback) {
+        actualLabel = entry.actualFallbackKind === 'simplified'
+          ? 'Actual chords unavailable; simplified symbols are shown.'
+          : 'Standard chord symbols (no Hooktheory page found).';
+      }
       return `
         <div class="prog-card">
           <div class="prog-head">
@@ -988,8 +1054,10 @@
             <div class="prog-tags">${tagsHtml(entry)}</div>
           </div>
           ${entry.notes ? `<div class="prog-desc">${escapeHtml(entry.notes)}</div>` : ''}
-          ${sections}
-          <div class="prog-sub">Source: ${sourceHtml(entry)}</div>
+          <div class="prog-sub"><strong>Actual chords:</strong> ${escapeHtml(actualLabel)}</div>
+          ${actualBlocks}
+          ${simplifiedBlocks}
+          <div class="prog-sub">Simplified source: ${sourceHtml(entry)}</div>
         </div>
       `;
     }
@@ -1006,9 +1074,11 @@
         (entry.chords || []).join(' '),
         (entry.styles || []).join(' '),
         (entry.examples || []).join(' '),
-        ...(entry.sections || []).flatMap(section => [section.name, section.roman, (section.chords || []).join(' ')])
+        ...(entry.sections || []).flatMap(section => [section.name, section.roman, (section.chords || []).join(' ')]),
+        ...(entry.actualSections || []).flatMap(section => [section.name, section.roman, (section.chords || []).join(' ')])
       ].filter(Boolean).join(' ').toLowerCase();
-      return haystack.includes(search);
+      const normalize = value => String(value || '').replace(/[^a-z0-9]+/g, ' ').trim();
+      return normalize(haystack).includes(normalize(search));
     }
 
     function renderProgressionPager(totalPages, songCount) {
@@ -1061,7 +1131,9 @@
       }
       const groups = document.getElementById('progression-groups');
       groups.innerHTML = parts.join('');
-      const keyLabel = PROGRESSION_KEY_NAMES[progressionState.keyPc] || 'C';
+      const keyLabel = progressionState.keyPc === 'original'
+        ? 'Original'
+        : (PROGRESSION_KEY_NAMES[progressionState.keyPc] || 'C');
       document.getElementById('progression-count').textContent =
         `${common.length} common · ${songs.length} songs · Key ${keyLabel}` +
         (progressionState.capo ? ` · Capo ${progressionState.capo}` : '');
@@ -1091,7 +1163,7 @@
       const count = document.getElementById('progression-count');
       count.textContent = 'Loading progressions...';
       try {
-        const res = await fetch('./progressions.json?v=20261119b', { cache: 'no-store' });
+        const res = await fetch('./progressions.json?v=20261119e', { cache: 'no-store' });
         if (!res.ok) throw new Error('progressions.json not found');
         progressionState.data = await res.json();
         progressionState.loaded = true;
@@ -1107,19 +1179,23 @@
       progressionState.style = 'all';
       progressionState.source = 'all';
       progressionState.search = '';
-      progressionState.keyPc = 0;
+      progressionState.keyPc = 'original';
       progressionState.capo = 0;
       progressionState.page = 1;
       document.getElementById('progression-style').value = 'all';
       document.getElementById('progression-source').value = 'all';
-      document.getElementById('progression-key').value = '0';
+      document.getElementById('progression-key').value = 'original';
       document.getElementById('progression-capo').value = '0';
       document.getElementById('progression-search').value = '';
       renderProgressions();
     }
 
     function shiftProgressionKey(delta) {
-      progressionState.keyPc = (progressionState.keyPc + delta + 12) % 12;
+      if (progressionState.keyPc === 'original') {
+        progressionState.keyPc = 0;
+      } else {
+        progressionState.keyPc = (progressionState.keyPc + delta + 12) % 12;
+      }
       document.getElementById('progression-key').value = String(progressionState.keyPc);
       renderProgressions();
     }
@@ -1277,7 +1353,7 @@
     });
 
     document.getElementById('progression-key').addEventListener('change', (e) => {
-      progressionState.keyPc = parseInt(e.target.value, 10) || 0;
+      progressionState.keyPc = e.target.value === 'original' ? 'original' : (parseInt(e.target.value, 10) || 0);
       renderProgressions();
     });
 

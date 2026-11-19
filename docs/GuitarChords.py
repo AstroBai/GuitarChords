@@ -112,6 +112,12 @@ class GuitarChords:
         "madd11": [0, 3, 7, 5],
         "madd13": [0, 3, 7, 9],
         "alt": [0, 4, 10, 1, 3, 6, 8],
+        "7add11": [0, 4, 7, 10, 5],
+        "maj7add11": [0, 4, 7, 11, 5],
+        "m7add11": [0, 3, 7, 10, 5],
+        "m11b5": [0, 3, 6, 10, 2, 5],
+        "seven_sharp5_b9": [0, 4, 8, 10, 1],
+        "m6/9": [0, 3, 7, 9, 2],
     }
 
     CHORD_ALIASES = {
@@ -170,6 +176,12 @@ class GuitarChords:
         "madd13": "madd13",
         "7alt": "alt",
         "alt": "alt",
+        "7add11": "7add11",
+        "maj7add11": "maj7add11",
+        "m7add11": "m7add11",
+        "m11b5": "m11b5",
+        "7#5b9": "seven_sharp5_b9",
+        "m6/9": "m6/9",
     }
 
     # Universal major-shape frames used as positional windows.
