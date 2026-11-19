@@ -1286,6 +1286,53 @@ class GuitarChords:
         parts.append("</svg>")
         return "".join(parts)
 
+    def _common_shape_score(self, shape):
+        fretted = [fret for fret in shape if fret > 0]
+        max_fret = max(fretted) if fretted else 0
+        min_fret = min(fretted) if fretted else 0
+        position = 0 if max_fret <= 4 else min_fret
+        span = max_fret - min_fret
+        mute_count = sum(1 for fret in shape if fret < 0)
+        open_count = sum(1 for fret in shape if fret == 0)
+        sounding_count = sum(1 for fret in shape if fret >= 0)
+        return (
+            1 if position > 0 else 0,
+            mute_count,
+            max_fret,
+            min_fret,
+            span,
+            -open_count,
+            -sounding_count,
+        )
+
+    def get_shape_preview(self, chord_name):
+        _, dedup, _ = self._collect_visible_shapes(chord_name)
+        if not dedup:
+            raise ValueError(f"No shapes found for chord: {chord_name}")
+
+        candidates = [item for item in dedup if item[0] == 0]
+        if not candidates:
+            candidates = dedup
+
+        inv_rank, root_string_idx, shape, label = min(
+            candidates,
+            key=lambda item: self._common_shape_score(item[2]),
+        )
+        shape_midi = self._shape_midi_notes(shape)
+        unique_midi = sorted(set(shape_midi))
+        return {
+            "chord": chord_name,
+            "label": label,
+            "shape": list(shape),
+            "fingering": " ".join("x" if fret < 0 else str(fret) for fret in shape),
+            "root_string": None if root_string_idx is None else 6 - root_string_idx,
+            "inversion": self._inversion_name(inv_rank),
+            "notes": [self._midi_to_note_name(note) for note in unique_midi],
+            "freqs": [self._midi_to_freq(note) for note in unique_midi],
+            "midi": unique_midi,
+            "svg": self._shape_to_svg(shape, chord_name),
+        }
+
     def get_shapes_grouped(self, chord_name, max_shapes=None, inversion=None, inversion_filter="all", root_string_filter="all"):
         info, dedup, visible_shapes = self._collect_visible_shapes(
             chord_name,
@@ -1335,11 +1382,11 @@ class GuitarChords:
             root_key = self._root_string_key(root_string_idx)
             root_string_counts[root_key] = root_string_counts.get(root_key, 0) + 1
 
-        root_key = str(root_string_filter or "all").strip().lower()
-        if root_key not in root_string_counts:
-            root_key = "all"
-        if root_key != "all":
-            visible_shapes = [item for item in visible_shapes if self._root_string_key(item[1]) == root_key]
+        selected_root_key = str(root_string_filter or "all").strip().lower()
+        if selected_root_key not in root_string_counts:
+            selected_root_key = "all"
+        if selected_root_key != "all":
+            visible_shapes = [item for item in visible_shapes if self._root_string_key(item[1]) == selected_root_key]
 
         grouped = {"6": [], "5": [], "4": [], "3": [], "2": [], "1": [], "unknown": []}
         chord_tone_set = set(info["chord_notes"])
@@ -1391,7 +1438,7 @@ class GuitarChords:
             "total_found": len(dedup),
             "total_visible": len(visible_shapes),
             "inversion_filter": key,
-            "root_string_filter": root_key,
+            "root_string_filter": selected_root_key,
             "inversion_counts": inversion_counts,
             "root_string_counts": root_string_counts,
             "groups": grouped,

@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Guitar Chords</title>
+  <link rel="icon" href="data:," />
   <script>
     (function normalizeProjectPathCase() {
       const canonicalSegment = 'GuitarChords';
@@ -106,40 +107,143 @@
     .exam-inputs { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 8px; }
     .exam-result { margin-top: 12px; font-size: 16px; font-weight: 700; }
     .exam-answer-key { margin-top: 8px; font-size: 13px; color: #335343; max-height: 200px; overflow-y: auto; padding: 8px; background: #f9f7fc; border-radius: 6px; }
+    .toolbar-group { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .toolbar-group.hidden { display: none; }
+    .prog-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; margin: 10px 0; }
+    .prog-controls label { display: flex; gap: 6px; align-items: center; font-size: 14px; }
+    .key-stepper { display: inline-flex; gap: 4px; align-items: center; }
+    .key-stepper button { padding: 6px 9px; line-height: 1; }
+    .prog-group-title { margin: 18px 0 8px; font-size: 20px; font-weight: 700; }
+    .prog-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin: 12px 0; }
+    .prog-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+    .prog-title { font-size: 18px; font-weight: 800; }
+    .prog-sub { font-size: 13px; color: #47614f; line-height: 1.5; }
+    .prog-desc { font-size: 14px; margin: 6px 0; line-height: 1.5; }
+    .prog-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .tag { font-size: 12px; border: 1px solid var(--line); background: #eef6f0; color: #26533a; border-radius: 999px; padding: 2px 8px; }
+    .tag.rs { background: #fff3d9; border-color: #e7c98a; color: #6b4b05; }
+    .tag-button { cursor: pointer; font: inherit; }
+    .prog-section { border-top: 1px dashed var(--line); margin-top: 12px; padding-top: 12px; }
+    .prog-section:first-of-type { border-top: none; margin-top: 8px; padding-top: 0; }
+    .section-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+    .section-name { font-weight: 700; }
+    .section-roman { font-size: 13px; color: #47614f; }
+    .chord-strip { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+    .chord-pill { background: #0f5e3f; color: #fff; border-radius: 8px; padding: 4px 9px; font-weight: 700; font-size: 14px; font-family: "Courier New", monospace; }
+    .shape-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 10px 0; }
+    .shape-card { border: 1px solid #e8efe8; border-radius: 10px; padding: 6px; background: #fff; }
+    .shape-card svg { width: 100%; height: auto; display: block; }
+    .shape-name { text-align: center; font-weight: 700; font-size: 13px; margin-bottom: 2px; }
+    .shape-meta { font-size: 12px; color: #47614f; text-align: center; margin-top: 2px; }
+    .shape-more { font-size: 12px; color: #0b57d0; background: none; border: none; padding: 2px; cursor: pointer; text-decoration: underline; }
+    .shape-loading { font-size: 12px; color: #777; padding: 10px; text-align: center; }
+    .shape-error { font-size: 12px; color: #9b1c1c; padding: 10px; text-align: center; }
+    .prog-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+    .prog-actions button { font-size: 13px; padding: 6px 10px; }
+    .prog-pager { display: flex; gap: 10px; align-items: center; justify-content: center; margin: 16px 0; }
+    .prog-empty { padding: 20px; text-align: center; color: #666; }
+    .prog-sources { font-size: 12px; color: #47614f; line-height: 1.6; margin: 20px 0; border-top: 1px solid var(--line); padding-top: 12px; }
+    .prog-sources a { color: #0b57d0; }
     @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 700px) {
+      .shape-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+      .prog-controls label { width: 100%; }
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="toolbar">
-      <label>Chord <input id="chord" value="Cmaj" /></label>
-      <label>Inversion Filter
-        <select id="inversion-filter">
-          <option value="all" selected>All</option>
-          <option value="root">Root position</option>
-          <option value="1st">1st inversion</option>
-          <option value="2nd">2nd inversion</option>
-          <option value="3rd">3rd inversion</option>
-        </select>
-      </label>
-      <label>Root String
-        <select id="root-string-filter">
-          <option value="all" selected>All</option>
-          <option value="6">String 6</option>
-          <option value="5">String 5</option>
-          <option value="4">String 4</option>
-          <option value="3">String 3</option>
-          <option value="2">String 2</option>
-          <option value="1">String 1</option>
-        </select>
-      </label>
-      <button id="search">Generate</button>
+      <div class="toolbar-group" id="browse-controls">
+        <label>Chord <input id="chord" value="Cmaj" /></label>
+        <label>Inversion Filter
+          <select id="inversion-filter">
+            <option value="all" selected>All</option>
+            <option value="root">Root position</option>
+            <option value="1st">1st inversion</option>
+            <option value="2nd">2nd inversion</option>
+            <option value="3rd">3rd inversion</option>
+          </select>
+        </label>
+        <label>Root String
+          <select id="root-string-filter">
+            <option value="all" selected>All</option>
+            <option value="6">String 6</option>
+            <option value="5">String 5</option>
+            <option value="4">String 4</option>
+            <option value="3">String 3</option>
+            <option value="2">String 2</option>
+            <option value="1">String 1</option>
+          </select>
+        </label>
+        <button id="search">Generate</button>
+      </div>
+      <button id="progressions-mode">Progressions</button>
       <button id="exam-mode">Exam Mode</button>
     </div>
     <div id="browse-view">
       <div class="meta" id="meta">Loading Python engine...</div>
       <div class="jump" id="jump"></div>
       <div id="groups"></div>
+    </div>
+    <div id="progressions-view" class="hidden">
+      <div class="meta">
+        <div><strong>Chord progressions:</strong> common patterns and famous songs. This is a simplified harmonic reference; arrangements and recorded keys can differ. Songs show verified sections; <em>Main</em> means one representative section.</div>
+        <div><strong>Fingering:</strong> one low-position shape per chord. Click <em>All shapes</em> to open the full chord browser.</div>
+        <div><strong>Transpose:</strong> choose a key and optional capo. Diagrams show the capo-relative shapes; audio plays the sounding chords. For minor progressions, the selected note is the minor tonic.</div>
+        <div><strong>Sources:</strong> Wikipedia chord-progression pages and public song references. Chord progressions are functional facts; no lyrics or tablature are included.</div>
+      </div>
+      <div class="prog-controls">
+        <label>Style <select id="progression-style"><option value="all">All styles</option></select></label>
+        <label>Library
+          <select id="progression-source">
+            <option value="all" selected>All</option>
+            <option value="common">Common patterns</option>
+            <option value="songs">Songs</option>
+          </select>
+        </label>
+        <label>Key
+          <span class="key-stepper">
+            <button type="button" id="progression-key-down" title="Transpose down one semitone">−</button>
+            <select id="progression-key">
+              <option value="0" selected>C</option>
+              <option value="1">C#/Db</option>
+              <option value="2">D</option>
+              <option value="3">D#/Eb</option>
+              <option value="4">E</option>
+              <option value="5">F</option>
+              <option value="6">F#/Gb</option>
+              <option value="7">G</option>
+              <option value="8">G#/Ab</option>
+              <option value="9">A</option>
+              <option value="10">A#/Bb</option>
+              <option value="11">B</option>
+            </select>
+            <button type="button" id="progression-key-up" title="Transpose up one semitone">+</button>
+          </span>
+        </label>
+        <label>Capo
+          <select id="progression-capo">
+            <option value="0" selected>0 (none)</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+        </label>
+        <label>Search <input id="progression-search" placeholder="Song, artist, or progression" /></label>
+        <button id="progression-reset">Reset</button>
+      </div>
+      <div class="meta" id="progression-count">Loading progressions...</div>
+      <div id="progression-groups"></div>
+      <div class="prog-pager" id="progression-pager"></div>
+      <div class="prog-sources">
+        <div><strong>Data sources:</strong> <a href="https://en.wikipedia.org/wiki/List_of_chord_progressions" target="_blank" rel="noopener">List of chord progressions</a> · <a href="https://en.wikipedia.org/wiki/I%E2%80%93V%E2%80%93vi%E2%80%93IV_progression" target="_blank" rel="noopener">I–V–vi–IV</a> · <a href="https://en.wikipedia.org/wiki/%2750s_progression" target="_blank" rel="noopener">'50s progression</a> · <a href="https://en.wikipedia.org/wiki/List_of_popular_music_songs_featuring_Andalusian_cadences" target="_blank" rel="noopener">Andalusian cadences</a> · <a href="https://en.wikipedia.org/wiki/Ii%E2%80%93V%E2%80%93I_progression" target="_blank" rel="noopener">ii–V–I</a> · <a href="https://en.wikipedia.org/wiki/Rolling_Stone%27s_500_Greatest_Songs_of_All_Time" target="_blank" rel="noopener">Rolling Stone 500</a></div>
+        <div>Song progressions are simplified and may vary by section, arrangement, or recording. Use them as a starting point, not as a transcription.</div>
+      </div>
     </div>
     <div id="exam-view" class="hidden">
       <div class="meta" id="exam-meta">
@@ -172,6 +276,39 @@
   <script>
     let state = { chord: 'Cmaj', inversionFilter: 'all', rootStringFilter: 'all' };
     let examState = { active: false, questions: [], difficulty: 'easy' };
+    let progressionState = {
+      active: false,
+      data: null,
+      loaded: false,
+      style: 'all',
+      source: 'all',
+      search: '',
+      keyPc: 0,
+      capo: 0,
+      page: 1
+    };
+    const PROGRESSION_PAGE_SIZE = 10;
+    const PROGRESSION_KEY_NAMES = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'];
+    const NOTE_PC = { C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5, 'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11 };
+    const SPELLING_MAPS = {
+      sharp: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
+      flat: ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'],
+      mixed: ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
+    };
+    const MAJOR_TARGET_SPELLING = ['mixed', 'flat', 'sharp', 'flat', 'sharp', 'flat', 'sharp', 'sharp', 'flat', 'sharp', 'flat', 'sharp'];
+    const MINOR_TARGET_SPELLING = ['flat', 'flat', 'flat', 'flat', 'sharp', 'flat', 'sharp', 'flat', 'sharp', 'mixed', 'flat', 'sharp'];
+    const STYLE_LABELS = {
+      pop: 'Pop', rock: 'Rock', blues: 'Blues', jazz: 'Jazz', folk: 'Folk', country: 'Country',
+      soul: 'Soul', 'doo-wop': 'Doo-wop', reggae: 'Reggae', latin: 'Latin', jpop: 'J-Pop',
+      metal: 'Metal', punk: 'Punk', indie: 'Indie', dance: 'Dance', 'hip-hop': 'Hip-Hop',
+      grunge: 'Grunge', britpop: 'Britpop', funk: 'Funk', flamenco: 'Flamenco',
+      classical: 'Classical', alternative: 'Alternative', 'hard rock': 'Hard Rock',
+      'southern rock': 'Southern Rock'
+    };
+    const progressionShapeCache = new Map();
+    let progressionShapeQueue = Promise.resolve();
+    let progressionShapeObserver = null;
+    let progressionSearchTimer = null;
     let pyodide = null;
     let pyReady = null;
     const EXAM_QUESTION_COUNT = 10;
@@ -264,7 +401,7 @@
       return sampleBuffer;
     }
 
-    function scheduleFreqWithBuffer(buf, freq, when = 0, velocity = 0.95) {
+    function scheduleFreqWithBuffer(buf, freq, when = 0, velocity = 0.95, duration = FIXED_NOTE_DURATION) {
       const src = audioCtx.createBufferSource();
       src.buffer = buf;
       const loweredFreq = freq * 0.5;
@@ -272,8 +409,7 @@
       src.playbackRate.value = rate;
       const gain = audioCtx.createGain();
       const t0 = audioCtx.currentTime + when;
-      const duration = FIXED_NOTE_DURATION;
-      const release = Math.min(0.03, duration * 0.2);
+      const release = Math.min(0.05, duration * 0.2);
       const releaseStart = Math.max(t0 + 0.01, t0 + duration - release);
       gain.gain.setValueAtTime(0.0001, t0);
       gain.gain.exponentialRampToValueAtTime(velocity, t0 + 0.01);
@@ -340,7 +476,7 @@
       if (pyReady) return pyReady;
       pyReady = (async () => {
         pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.5/full/' });
-        const pySrc = await (await fetch('./GuitarChords.py?v=20260330c', { cache: 'no-store' })).text();
+        const pySrc = await (await fetch('./GuitarChords.py?v=20261119b', { cache: 'no-store' })).text();
 
         // Static mode: execute only the chord engine section, skip Flask route registration.
         const splitMarker = '\nvisualizer_web = GuitarChords()\n';
@@ -413,11 +549,22 @@
       });
     }
 
-    function switchMode(examMode) {
-      examState.active = examMode;
-      document.getElementById('browse-view').classList.toggle('hidden', examMode);
-      document.getElementById('exam-view').classList.toggle('hidden', !examMode);
-      document.getElementById('exam-mode').textContent = examMode ? 'Search Mode' : 'Exam Mode';
+    function setView(view) {
+      const isBrowse = view === 'browse';
+      const isExam = view === 'exam';
+      const isProgressions = view === 'progressions';
+      examState.active = isExam;
+      progressionState.active = isProgressions;
+      document.getElementById('browse-view').classList.toggle('hidden', !isBrowse);
+      document.getElementById('exam-view').classList.toggle('hidden', !isExam);
+      document.getElementById('progressions-view').classList.toggle('hidden', !isProgressions);
+      document.getElementById('browse-controls').classList.toggle('hidden', !isBrowse);
+      document.getElementById('exam-mode').textContent = isExam ? 'Search Mode' : 'Exam Mode';
+      document.getElementById('progressions-mode').textContent = isProgressions ? 'Search Mode' : 'Progressions';
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      if (isProgressions) {
+        loadProgressions();
+      }
     }
 
     async function buildQuestion(params, index) {
@@ -663,6 +810,446 @@
       load();
     }
 
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
+    }
+
+    function formatStyle(style) {
+      return STYLE_LABELS[style] || String(style || '').replace(/(^|-)([a-z])/g, (m, p, c) => (p ? ' ' : '') + c.toUpperCase());
+    }
+
+    function targetSpelling(tonicPc, mode) {
+      const map = mode === 'minor' ? MINOR_TARGET_SPELLING : MAJOR_TARGET_SPELLING;
+      return map[((tonicPc % 12) + 12) % 12];
+    }
+
+    function noteNameFor(tonicPc, mode) {
+      const spelling = targetSpelling(tonicPc, mode);
+      return SPELLING_MAPS[spelling][((tonicPc % 12) + 12) % 12];
+    }
+
+    function keyModeLabel(tonicPc, mode) {
+      return `${noteNameFor(tonicPc, mode)} ${mode}`;
+    }
+
+    function transposeChordName(chord, semitones, spelling) {
+      const names = SPELLING_MAPS[spelling] || SPELLING_MAPS.mixed;
+      const cleaned = String(chord || '').replace(/♭/g, 'b').replace(/♯/g, '#').trim();
+      const match = cleaned.match(/^([A-Ga-g])([#b]?)(.*)$/);
+      if (!match) return chord;
+      const rootName = match[1].toUpperCase() + match[2];
+      const rootPc = NOTE_PC[rootName];
+      if (rootPc === undefined) return chord;
+      let suffix = match[3];
+      let bass = '';
+      const slashPos = suffix.lastIndexOf('/');
+      if (slashPos >= 0) {
+        const bassPart = suffix.slice(slashPos + 1);
+        const bassMatch = bassPart.match(/^([A-Ga-g])([#b]?)$/);
+        if (bassMatch) {
+          const bassName = bassMatch[1].toUpperCase() + bassMatch[2];
+          const bassPc = NOTE_PC[bassName];
+          if (bassPc !== undefined) {
+            bass = '/' + names[(bassPc + semitones + 120) % 12];
+            suffix = suffix.slice(0, slashPos);
+          }
+        }
+      }
+      const shifted = (rootPc + semitones + 120) % 12;
+      return names[shifted] + suffix + bass;
+    }
+
+    function transposeChords(chords, fromPc, toPc, mode, capo = 0) {
+      const targetPc = ((toPc - capo) % 12 + 12) % 12;
+      const shift = ((targetPc - fromPc) % 12 + 12) % 12;
+      if (shift === 0) return chords.slice();
+      const spelling = targetSpelling(targetPc, mode);
+      return chords.map(chord => transposeChordName(chord, shift, spelling));
+    }
+
+    function uniqueChords(chords) {
+      return [...new Set(chords)];
+    }
+
+    function sectionKeyLabel(section, keyPc, capo) {
+      if (keyPc === section.tonicPc) {
+        return section.isReference
+          ? `Reference: ${section.keyLabel}`
+          : `Original: ${section.originalKey || section.keyLabel}`;
+      }
+      return `Key: ${keyModeLabel(keyPc, section.mode)}`;
+    }
+
+    function chordStripHtml(chords) {
+      return `<div class="chord-strip">${chords.map(chord => `<span class="chord-pill">${escapeHtml(chord)}</span>`).join('')}</div>`;
+    }
+
+    function shapeGridHtml(shapeChords) {
+      const unique = uniqueChords(shapeChords);
+      if (!unique.length) return '';
+      return `<div class="shape-grid">${unique.map(chord => (
+        `<div class="shape-card" data-chord="${escapeHtml(chord)}"><div class="shape-name">${escapeHtml(chord)}</div><div class="shape-loading">Loading...</div></div>`
+      )).join('')}</div>`;
+    }
+
+    function tagsHtml(entry) {
+      const tags = (entry.styles || []).map(style => `<span class="tag">${escapeHtml(formatStyle(style))}</span>`);
+      if ((entry.lists || []).includes('rolling-stone-500')) {
+        tags.push('<span class="tag rs">Rolling Stone 500</span>');
+      }
+      if (entry.commonCapo) {
+        tags.push(`<button type="button" class="tag tag-button" data-set-capo="${entry.commonCapo}" title="Use capo ${entry.commonCapo}">Common capo ${entry.commonCapo}</button>`);
+      }
+      return tags.join('');
+    }
+
+    function sourceHtml(entry) {
+      if (!entry.source) return '';
+      if (entry.sourceUrl) {
+        return `<a href="${escapeHtml(entry.sourceUrl)}" target="_blank" rel="noopener">${escapeHtml(entry.source)}</a>`;
+      }
+      return escapeHtml(entry.source);
+    }
+
+    function chordBlockHtml(section, keyPc, capo, playLabel, showName) {
+      const sounding = transposeChords(section.chords, section.tonicPc, keyPc, section.mode, 0);
+      const shape = capo > 0
+        ? transposeChords(section.chords, section.tonicPc, keyPc, section.mode, capo)
+        : sounding;
+      const shapeKey = keyModeLabel((keyPc - capo + 120) % 12, section.mode);
+      return `
+        <div class="prog-section">
+          <div class="section-head">
+            ${showName ? `<span class="section-name">${escapeHtml(section.name)}</span>` : ''}
+            <span class="section-roman">${escapeHtml(section.roman)}</span>
+            <span class="prog-sub">${escapeHtml(sectionKeyLabel(section, keyPc, capo))}</span>
+          </div>
+          ${section.note ? `<div class="prog-sub">${escapeHtml(section.note)}</div>` : ''}
+          ${chordStripHtml(sounding)}
+          ${capo > 0 ? `<div class="prog-sub">Capo ${capo} shapes (${escapeHtml(shapeKey)}): ${escapeHtml(shape.join(' – '))}</div>` : ''}
+          ${shapeGridHtml(shape)}
+          <div class="prog-actions">
+            <button class="play-progression" data-shape-chords="${escapeHtml(shape.join(' '))}" data-capo="${capo}">${escapeHtml(playLabel)}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function commonCardHtml(entry) {
+      const section = {
+        name: 'Main',
+        roman: entry.roman,
+        chords: entry.chords,
+        keyLabel: entry.referenceKey,
+        tonicPc: entry.tonicPc,
+        mode: entry.mode,
+        isReference: true,
+        originalKey: null
+      };
+      const examples = (entry.examples || []).length
+        ? `<div class="prog-sub">Examples: ${escapeHtml(entry.examples.join(' · '))}</div>`
+        : '';
+      return `
+        <div class="prog-card">
+          <div class="prog-head">
+            <div>
+              <div class="prog-title">${escapeHtml(entry.name)}</div>
+              <div class="prog-sub">${escapeHtml(entry.roman)}</div>
+            </div>
+            <div class="prog-tags">${tagsHtml(entry)}</div>
+          </div>
+          <div class="prog-desc">${escapeHtml(entry.description)}</div>
+          ${chordBlockHtml(section, progressionState.keyPc, progressionState.capo, 'Play progression', false)}
+          ${examples}
+          <div class="prog-sub">Source: ${sourceHtml(entry)}</div>
+        </div>
+      `;
+    }
+
+    function songCardHtml(entry) {
+      const sections = (entry.sections || []).map(section => (
+        chordBlockHtml(
+          section,
+          progressionState.keyPc,
+          progressionState.capo,
+          section.name === 'Main' ? 'Play progression' : `Play ${section.name}`,
+          true
+        )
+      )).join('');
+      return `
+        <div class="prog-card">
+          <div class="prog-head">
+            <div>
+              <div class="prog-title">${escapeHtml(entry.title)}</div>
+              <div class="prog-sub">${escapeHtml(entry.artist)} · ${escapeHtml(entry.year)}</div>
+            </div>
+            <div class="prog-tags">${tagsHtml(entry)}</div>
+          </div>
+          ${entry.notes ? `<div class="prog-desc">${escapeHtml(entry.notes)}</div>` : ''}
+          ${sections}
+          <div class="prog-sub">Source: ${sourceHtml(entry)}</div>
+        </div>
+      `;
+    }
+
+    function progressionMatches(entry, style, search) {
+      if (style !== 'all' && !(entry.styles || []).includes(style)) return false;
+      if (!search) return true;
+      const haystack = [
+        entry.name,
+        entry.title,
+        entry.artist,
+        entry.roman,
+        entry.description,
+        (entry.chords || []).join(' '),
+        (entry.styles || []).join(' '),
+        (entry.examples || []).join(' '),
+        ...(entry.sections || []).flatMap(section => [section.name, section.roman, (section.chords || []).join(' ')])
+      ].filter(Boolean).join(' ').toLowerCase();
+      return haystack.includes(search);
+    }
+
+    function renderProgressionPager(totalPages, songCount) {
+      const pager = document.getElementById('progression-pager');
+      if (progressionState.source === 'common' || songCount <= PROGRESSION_PAGE_SIZE) {
+        pager.innerHTML = '';
+        return;
+      }
+      pager.innerHTML = `
+        <button id="prog-prev" ${progressionState.page <= 1 ? 'disabled' : ''}>Prev</button>
+        <span class="prog-sub">Page ${progressionState.page} / ${totalPages}</span>
+        <button id="prog-next" ${progressionState.page >= totalPages ? 'disabled' : ''}>Next</button>
+      `;
+      document.getElementById('prog-prev').onclick = () => {
+        progressionState.page = Math.max(1, progressionState.page - 1);
+        renderProgressions();
+      };
+      document.getElementById('prog-next').onclick = () => {
+        progressionState.page = Math.min(totalPages, progressionState.page + 1);
+        renderProgressions();
+      };
+    }
+
+    function renderProgressions() {
+      if (!progressionState.data) return;
+      const style = progressionState.style;
+      const source = progressionState.source;
+      const search = progressionState.search.trim().toLowerCase();
+      const common = (source === 'songs' ? [] : progressionState.data.common)
+        .filter(entry => progressionMatches(entry, style, search));
+      const songs = (source === 'common' ? [] : progressionState.data.songs)
+        .filter(entry => progressionMatches(entry, style, search));
+      const totalPages = Math.max(1, Math.ceil(songs.length / PROGRESSION_PAGE_SIZE));
+      progressionState.page = Math.min(Math.max(1, progressionState.page), totalPages);
+      const pageSongs = songs.slice(
+        (progressionState.page - 1) * PROGRESSION_PAGE_SIZE,
+        progressionState.page * PROGRESSION_PAGE_SIZE
+      );
+      const parts = [];
+      if (source !== 'songs' && common.length) {
+        parts.push(`<div class="prog-group-title">Common progressions (${common.length})</div>`);
+        parts.push(common.map(commonCardHtml).join(''));
+      }
+      if (source !== 'common' && songs.length) {
+        parts.push(`<div class="prog-group-title">Songs (${songs.length})</div>`);
+        parts.push(pageSongs.map(songCardHtml).join(''));
+      }
+      if (!parts.length) {
+        parts.push('<div class="prog-empty">No progressions match these filters.</div>');
+      }
+      const groups = document.getElementById('progression-groups');
+      groups.innerHTML = parts.join('');
+      const keyLabel = PROGRESSION_KEY_NAMES[progressionState.keyPc] || 'C';
+      document.getElementById('progression-count').textContent =
+        `${common.length} common · ${songs.length} songs · Key ${keyLabel}` +
+        (progressionState.capo ? ` · Capo ${progressionState.capo}` : '');
+      renderProgressionPager(totalPages, songs.length);
+      bindProgressionPlayButtons(groups);
+      observeShapeCards(groups);
+    }
+
+    function populateProgressionStyles() {
+      const select = document.getElementById('progression-style');
+      const styles = new Set();
+      [...progressionState.data.common, ...progressionState.data.songs].forEach(entry => {
+        (entry.styles || []).forEach(style => styles.add(style));
+      });
+      const sorted = [...styles].sort((a, b) => formatStyle(a).localeCompare(formatStyle(b)));
+      select.innerHTML = '<option value="all">All styles</option>' + sorted.map(style => (
+        `<option value="${escapeHtml(style)}">${escapeHtml(formatStyle(style))}</option>`
+      )).join('');
+      select.value = progressionState.style;
+    }
+
+    async function loadProgressions() {
+      if (progressionState.loaded) {
+        renderProgressions();
+        return;
+      }
+      const count = document.getElementById('progression-count');
+      count.textContent = 'Loading progressions...';
+      try {
+        const res = await fetch('./progressions.json?v=20261119b', { cache: 'no-store' });
+        if (!res.ok) throw new Error('progressions.json not found');
+        progressionState.data = await res.json();
+        progressionState.loaded = true;
+        populateProgressionStyles();
+        renderProgressions();
+      } catch (error) {
+        count.textContent = `Unable to load progressions: ${error.message}`;
+        document.getElementById('progression-groups').innerHTML = '';
+      }
+    }
+
+    function resetProgressions() {
+      progressionState.style = 'all';
+      progressionState.source = 'all';
+      progressionState.search = '';
+      progressionState.keyPc = 0;
+      progressionState.capo = 0;
+      progressionState.page = 1;
+      document.getElementById('progression-style').value = 'all';
+      document.getElementById('progression-source').value = 'all';
+      document.getElementById('progression-key').value = '0';
+      document.getElementById('progression-capo').value = '0';
+      document.getElementById('progression-search').value = '';
+      renderProgressions();
+    }
+
+    function shiftProgressionKey(delta) {
+      progressionState.keyPc = (progressionState.keyPc + delta + 12) % 12;
+      document.getElementById('progression-key').value = String(progressionState.keyPc);
+      renderProgressions();
+    }
+
+    function getShapePreview(chord) {
+      if (progressionShapeCache.has(chord)) {
+        return Promise.resolve(progressionShapeCache.get(chord));
+      }
+      const task = progressionShapeQueue.then(async () => {
+        if (progressionShapeCache.has(chord)) {
+          return progressionShapeCache.get(chord);
+        }
+        await ensurePyReady();
+        pyodide.globals.set('arg_chord_preview', chord);
+        const payloadJson = await pyodide.runPythonAsync(`import json\n_p = visualizer_static.get_shape_preview(arg_chord_preview)\njson.dumps(_p, ensure_ascii=False)`);
+        const data = JSON.parse(payloadJson);
+        progressionShapeCache.set(chord, data);
+        return data;
+      });
+      progressionShapeQueue = task.catch(() => {});
+      return task;
+    }
+
+    async function loadShapeCard(card) {
+      if (card.dataset.loaded === '1') return;
+      const chord = card.dataset.chord;
+      try {
+        const preview = await getShapePreview(chord);
+        card.innerHTML = `<div class="shape-name">${escapeHtml(preview.label || chord)}</div>${preview.svg}<div class="shape-meta">${escapeHtml(preview.fingering)}</div><button type="button" class="shape-more" data-chord="${escapeHtml(chord)}">All shapes</button>`;
+        card.dataset.loaded = '1';
+        const more = card.querySelector('.shape-more');
+        if (more) {
+          more.onclick = () => openChordInBrowser(chord);
+        }
+      } catch (error) {
+        card.innerHTML = `<div class="shape-error">${escapeHtml(chord)}: ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    function observeShapeCards(container) {
+      if (progressionShapeObserver) {
+        progressionShapeObserver.disconnect();
+      }
+      const cards = [...container.querySelectorAll('.shape-card[data-chord]')];
+      if (!cards.length) return;
+      if (!('IntersectionObserver' in window)) {
+        cards.forEach(loadShapeCard);
+        return;
+      }
+      progressionShapeObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            loadShapeCard(entry.target);
+          }
+        });
+      }, { rootMargin: '300px 0px', threshold: 0.01 });
+      cards.forEach(card => {
+        if (progressionShapeCache.has(card.dataset.chord)) {
+          loadShapeCard(card);
+        } else {
+          progressionShapeObserver.observe(card);
+        }
+      });
+    }
+
+    function openChordInBrowser(chord) {
+      const input = document.getElementById('chord');
+      input.value = chord;
+      state.chord = chord;
+      state.inversionFilter = 'all';
+      state.rootStringFilter = 'all';
+      document.getElementById('inversion-filter').value = 'all';
+      document.getElementById('root-string-filter').value = 'all';
+      setView('browse');
+      load();
+    }
+
+    async function playProgressionChordList(shapeChords, capo = 0) {
+      if (!shapeChords.length) return;
+      if (isMobileAudio) {
+        showMobileAudioUnsupported();
+        return;
+      }
+      await autoUnlockAudio();
+      const buf = await ensureSampleLoaded();
+      if (!buf) return;
+      const previews = [];
+      for (const chord of shapeChords) {
+        previews.push(await getShapePreview(chord));
+      }
+      const pitchRatio = Math.pow(2, capo / 12);
+      const step = shapeChords.length > 8 ? 0.6 : 0.9;
+      const start = SCHEDULE_LEAD;
+      previews.forEach((preview, index) => {
+        const when = start + index * step;
+        preview.freqs.forEach(freq => {
+          scheduleFreqWithBuffer(buf, freq * pitchRatio, when, 0.9, step);
+        });
+      });
+    }
+
+    function bindProgressionPlayButtons(container) {
+      container.querySelectorAll('[data-set-capo]').forEach(button => {
+        button.onclick = () => {
+          const capo = parseInt(button.dataset.setCapo, 10) || 0;
+          progressionState.capo = capo;
+          document.getElementById('progression-capo').value = String(capo);
+          renderProgressions();
+        };
+      });
+      container.querySelectorAll('.play-progression').forEach(button => {
+        button.onclick = async () => {
+          if (button.disabled) return;
+          const originalText = button.textContent;
+          button.disabled = true;
+          button.textContent = 'Loading...';
+          try {
+            const chords = (button.dataset.shapeChords || '').split(/\s+/).filter(Boolean);
+            await playProgressionChordList(chords, parseInt(button.dataset.capo || '0', 10));
+          } catch (error) {
+            document.getElementById('progression-count').textContent = `Audio error: ${error.message}`;
+          } finally {
+            button.disabled = false;
+            button.textContent = originalText;
+          }
+        };
+      });
+    }
+
     document.getElementById('search').onclick = () => runSearch();
     document.getElementById('chord').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -673,8 +1260,53 @@
     document.getElementById('inversion-filter').addEventListener('change', () => runSearch());
     document.getElementById('root-string-filter').addEventListener('change', () => runSearch());
 
+    document.getElementById('progressions-mode').addEventListener('click', () => {
+      setView(progressionState.active ? 'browse' : 'progressions');
+    });
+
+    document.getElementById('progression-style').addEventListener('change', (e) => {
+      progressionState.style = e.target.value;
+      progressionState.page = 1;
+      renderProgressions();
+    });
+
+    document.getElementById('progression-source').addEventListener('change', (e) => {
+      progressionState.source = e.target.value;
+      progressionState.page = 1;
+      renderProgressions();
+    });
+
+    document.getElementById('progression-key').addEventListener('change', (e) => {
+      progressionState.keyPc = parseInt(e.target.value, 10) || 0;
+      renderProgressions();
+    });
+
+    document.getElementById('progression-key-down').addEventListener('click', () => {
+      shiftProgressionKey(-1);
+    });
+
+    document.getElementById('progression-key-up').addEventListener('click', () => {
+      shiftProgressionKey(1);
+    });
+
+    document.getElementById('progression-capo').addEventListener('change', (e) => {
+      progressionState.capo = parseInt(e.target.value, 10) || 0;
+      renderProgressions();
+    });
+
+    document.getElementById('progression-search').addEventListener('input', (e) => {
+      progressionState.search = e.target.value || '';
+      progressionState.page = 1;
+      clearTimeout(progressionSearchTimer);
+      progressionSearchTimer = setTimeout(() => renderProgressions(), 180);
+    });
+
+    document.getElementById('progression-reset').addEventListener('click', () => {
+      resetProgressions();
+    });
+
     document.getElementById('exam-mode').addEventListener('click', () => {
-      switchMode(!examState.active);
+      setView(examState.active ? 'browse' : 'exam');
     });
 
     document.getElementById('exam-difficulty').addEventListener('change', (e) => {

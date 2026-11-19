@@ -6,6 +6,7 @@ This site is fully static and runs the Python chord engine in the browser via Py
 - `docs/index.html`
 - `docs/GuitarChords.py`
 - `docs/guitar.wav`
+- `docs/progressions.json`
 
 ## Publish steps
 1. Push repository to GitHub.
@@ -22,6 +23,7 @@ Whenever you modify `GuitarChords.py` in project root, sync it to docs:
 cp GuitarChords.py docs/GuitarChords.py
 ```
 
+Chord-progression content lives directly in `docs/progressions.json`.
 Then commit and push.
 
 ## Local preview
